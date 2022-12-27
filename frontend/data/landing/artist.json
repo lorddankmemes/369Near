@@ -1,0 +1,16 @@
+{
+      "result": [
+        {
+          "artist_public_address": "0x2De5cf8788e002EEfa135047C3f839Ca2761Cd7d",
+          "recent_sales_of_artist": "36000000000000000",
+          "user_follow_count": 0,
+          "curated_info_of_user": {
+            "user_public_address": "0x2De5cf8788e002EEfa135047C3f839Ca2761Cd7d",
+            "username": "teal_arts",
+            "profile_photo_path": "https://ipfs.io/ipfs/QmbrDSxUySGYynLAWc9AfmHiD1Nc81VkF9A5fH2nh827Za",
+            "cover_photo_path": "https://ipfs.io/ipfs/Qmb5qERNjXV87rPUXAFifSzotxDRU9t8sirvd46siA8EfQ",
+            "about_desc": "An intuitive, self-taught artist who loves expressing her artwork through floral and nature-related abstracts."
+          }
+        }
+      ]
+  }

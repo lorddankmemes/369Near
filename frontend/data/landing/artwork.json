@@ -1,0 +1,383 @@
+{
+      "rows": [
+        {
+          "slider_order": 10,
+          "featured_collectible_info": {
+            "id": 100,
+            "collectionId": 6,
+            "collectible_uuid": "4eadea72-b1bf-4d60-9c2c-a18d217152a9",
+            "artist_wallet_address": "0x6E1d220f752eDA7926d63402eab392D3fB74C556",
+            "collectible_name": "Utopia on garbage island",
+            "collectible_category": "Art",
+            "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmWszMEaLgdoiZ529AkrwQMkd2BtsyYGvozpgNpAjeKDqY",
+            "created_at_cost": 25000000000000000,
+            "collectible_type": "erc721",
+            "token_id": 19,
+            "total_copies_created": 1,
+            "token_address": "0xEaf3EDad931EEfB7876C0b3D94d9044C898c3d8d",
+            "collectible_image_mime_type": "image/png",
+            "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/9318a509d348a1d39e0d75caf9ee272b",
+            "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/9318a509d348a1d39e0d75caf9ee272b-medium",
+            "alternative_media_path_og": "",
+            "ipfs_animation_media_path": null,
+            "alternative_animation_media_path": null,
+            "animation_media_mime_type": "",
+            "collectibles_user": {
+              "fullName": "ck lai",
+              "user_public_address": "0x6E1d220f752eDA7926d63402eab392D3fB74C556",
+              "username": "ck_lai",
+              "profile_photo_path": "https://ipfs.io/ipfs/QmVTa4ed7A655aGUN4xz9ygNAGa1qCH79rrM4Q5af2oNco",
+              "cover_photo_path": "QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
+              "user_first_name": "ck",
+              "user_last_name": "lai"
+            },
+            "collectible_collection": {
+              "tokenName": "Simplifying Art ",
+              "tokenType": "erc721",
+              "tokenAddress": "0xEaf3EDad931EEfB7876C0b3D94d9044C898c3d8d",
+              "tokenLogo": "QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
+              "collectiontype": "user"
+            },
+            "collectible_saleinfo": [
+              {
+                "onsale_quantity": 1,
+                "onsale": true,
+                "onsale_current_price": "25000000000000000",
+                "onsale_date": "2022-09-11T03:14:28.000Z"
+              }
+            ]
+          }
+        },
+        {
+          "slider_order": 12,
+          "featured_collectible_info": {
+            "id": 98,
+            "collectionId": 6,
+            "collectible_uuid": "5e938d47-a91a-4d19-9a08-08db2e171311",
+            "artist_wallet_address": "0x6E1d220f752eDA7926d63402eab392D3fB74C556",
+            "collectible_name": "Trash Bin",
+            "collectible_category": "Art",
+            "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmeHeKUQhDytAvcHhrrowkvaybMAbv8SVV7i1Q7oAaHRpq",
+            "created_at_cost": 25000000000000000,
+            "collectible_type": "erc721",
+            "token_id": 18,
+            "total_copies_created": 1,
+            "token_address": "0xEaf3EDad931EEfB7876C0b3D94d9044C898c3d8d",
+            "collectible_image_mime_type": "image/png",
+            "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/3e024a87805fbda3a28853e61cadd25f",
+            "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/3e024a87805fbda3a28853e61cadd25f-medium",
+            "alternative_media_path_og": "",
+            "ipfs_animation_media_path": null,
+            "alternative_animation_media_path": null,
+            "animation_media_mime_type": "",
+            "collectibles_user": {
+              "fullName": "ck lai",
+              "user_public_address": "0x6E1d220f752eDA7926d63402eab392D3fB74C556",
+              "username": "ck_lai",
+              "profile_photo_path": "https://ipfs.io/ipfs/QmVTa4ed7A655aGUN4xz9ygNAGa1qCH79rrM4Q5af2oNco",
+              "cover_photo_path": "QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
+              "user_first_name": "ck",
+              "user_last_name": "lai"
+            },
+            "collectible_collection": {
+              "tokenName": "Simplifying Art ",
+              "tokenType": "erc721",
+              "tokenAddress": "0xEaf3EDad931EEfB7876C0b3D94d9044C898c3d8d",
+              "tokenLogo": "QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
+              "collectiontype": "user"
+            },
+            "collectible_saleinfo": [
+              {
+                "onsale_quantity": 1,
+                "onsale": true,
+                "onsale_current_price": "25000000000000000",
+                "onsale_date": "2022-08-25T12:21:52.000Z"
+              }
+            ]
+          }
+        },
+        {
+          "slider_order": 13,
+          "featured_collectible_info": {
+            "id": 99,
+            "collectionId": 1,
+            "collectible_uuid": "d7dda679-480e-4280-8917-aae7d1591bd5",
+            "artist_wallet_address": "0x814AbE87633C2F62E7fC68c2c6c3c4e45f5837E0",
+            "collectible_name": "Creative Tiger #1",
+            "collectible_category": "Collectibles",
+            "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmTaE7HA2qtufvESziuUHghXrh7Xq9RaP5AP5iijEm15rR",
+            "created_at_cost": 0,
+            "collectible_type": "erc721",
+            "token_id": 65,
+            "total_copies_created": 1,
+            "token_address": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+            "collectible_image_mime_type": "image/png",
+            "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/4f305579f5bcd76c23e3e5f1ebcdcf3c",
+            "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/4f305579f5bcd76c23e3e5f1ebcdcf3c-medium",
+            "alternative_media_path_og": "",
+            "ipfs_animation_media_path": null,
+            "alternative_animation_media_path": null,
+            "animation_media_mime_type": "",
+            "collectibles_user": {
+              "fullName": "Wesley Chong",
+              "user_public_address": "0x814AbE87633C2F62E7fC68c2c6c3c4e45f5837E0",
+              "username": "wesleychong",
+              "profile_photo_path": "https://ipfs.io/ipfs/QmUn5CpYcejVBERWSQy7FBEy9uyVkKRTAxmCNFAK4cYmWY",
+              "cover_photo_path": "QmWsp8JFPbRfp8TEfEY1PkABDjXBUJhJSXuaoTJYHD7Crr",
+              "user_first_name": "Wesley",
+              "user_last_name": "Chong"
+            },
+            "collectible_collection": {
+              "tokenName": "3six9 NFT",
+              "tokenType": "erc721",
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+              "collectiontype": "system"
+            },
+            "collectible_saleinfo": [
+              
+            ]
+          }
+        },
+        {
+          "slider_order": 14,
+          "featured_collectible_info": {
+            "id": 62,
+            "collectionId": 1,
+            "collectible_uuid": "3a098aca-fb6f-4b75-b4f1-1b3416be764a",
+            "artist_wallet_address": "0x0d849dc09F9943dC6B6Bc0b25B588105625f044C",
+            "collectible_name": "Sundown in Pai",
+            "collectible_category": "Art",
+            "ipfs_media_path": "https://ipfs.infura.io/ipfs/Qmf4LTYgCeKToP3HtmXkHWP953Y81ZEVY7EfMR5iod7RpQ",
+            "created_at_cost": 15000000000000000,
+            "collectible_type": "erc721",
+            "token_id": 58,
+            "total_copies_created": 1,
+            "token_address": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+            "collectible_image_mime_type": "image/jpeg",
+            "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/a57924c62816c088f1d90f43630f6a91",
+            "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/a57924c62816c088f1d90f43630f6a91-medium",
+            "alternative_media_path_og": "",
+            "ipfs_animation_media_path": null,
+            "alternative_animation_media_path": null,
+            "animation_media_mime_type": "",
+            "collectibles_user": {
+              "fullName": "Mei Zi Luo",
+              "user_public_address": "0x0d849dc09F9943dC6B6Bc0b25B588105625f044C",
+              "username": "meizi",
+              "profile_photo_path": "https://ipfs.io/ipfs/QmYj28oYGNCZojDPzqi4r8dSzSjYs7KWu8ozSwfgU11nJz",
+              "cover_photo_path": "QmNsSigKb2sgjJZZkP3ifg7ZT1y2sPJHaHpcaxFCPeavXM",
+              "user_first_name": "Mei Zi",
+              "user_last_name": "Luo"
+            },
+            "collectible_collection": {
+              "tokenName": "3six9 NFT",
+              "tokenType": "erc721",
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+              "collectiontype": "system"
+            },
+            "collectible_saleinfo": [
+              {
+                "onsale_quantity": 1,
+                "onsale": true,
+                "onsale_current_price": "15000000000000000",
+                "onsale_date": "2022-07-27T14:41:58.000Z"
+              }
+            ]
+          }
+        },
+        {
+          "slider_order": 15,
+          "featured_collectible_info": {
+            "id": 58,
+            "collectionId": 1,
+            "collectible_uuid": "89b6edf8-0b32-4493-a9b7-10b360453d17",
+            "artist_wallet_address": "0xC317954209357199495A597890944158e14FE942",
+            "collectible_name": "Genesis Fail Subject",
+            "collectible_category": "Collectibles",
+            "ipfs_media_path": "https://ipfs.infura.io/ipfs/QmdntXpXmkRFSf7qeLZaGBbRabNuiu2VvdQz7inaZRSKQC",
+            "created_at_cost": 1000000000000000000,
+            "collectible_type": "erc721",
+            "token_id": 53,
+            "total_copies_created": 1,
+            "token_address": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+            "collectible_image_mime_type": "image/jpeg",
+            "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/f598f7c4a0146f30cb991255b08c3253",
+            "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/f598f7c4a0146f30cb991255b08c3253-medium",
+            "alternative_media_path_og": "",
+            "ipfs_animation_media_path": null,
+            "alternative_animation_media_path": null,
+            "animation_media_mime_type": "",
+            "collectibles_user": {
+              "fullName": "Fadd .",
+              "user_public_address": "0xC317954209357199495A597890944158e14FE942",
+              "username": "officialfadd",
+              "profile_photo_path": "https://ipfs.io/ipfs/QmUmE5aLQnxbmCroaCEEdDwZTqJPU9jhKSQ3RUtjfD1FnP",
+              "cover_photo_path": "QmSenk2QKWeegGiViC2Ba1b8ydXGNa8UDA7JMo9Jedk57m",
+              "user_first_name": "Fadd",
+              "user_last_name": "."
+            },
+            "collectible_collection": {
+              "tokenName": "3six9 NFT",
+              "tokenType": "erc721",
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+              "collectiontype": "system"
+            },
+            "collectible_saleinfo": [
+              {
+                "onsale_quantity": 1,
+                "onsale": true,
+                "onsale_current_price": "1000000000000000000",
+                "onsale_date": "2022-07-17T18:07:28.000Z"
+              }
+            ]
+          }
+        },
+        {
+          "slider_order": 16,
+          "featured_collectible_info": {
+            "id": 54,
+            "collectionId": 4,
+            "collectible_uuid": "038151fe-964e-494a-9962-2ffe13efaf76",
+            "artist_wallet_address": "0xc7615A2E41390Faf244035cF71c296637C4939D6",
+            "collectible_name": "Shardeez Aurora #5",
+            "collectible_category": "Art",
+            "ipfs_media_path": "https://ipfs.infura.io/ipfs/QmWi6MnVkwmmJJaQXqV1Cz6CREgQRHcRLZXb63Xziv1CCB",
+            "created_at_cost": 10000000000000000,
+            "collectible_type": "erc721",
+            "token_id": 7,
+            "total_copies_created": 1,
+            "token_address": "0x9B6a47ebb1D9F710D7E8d69fbCB3370e6A42e9e2",
+            "collectible_image_mime_type": "image/png",
+            "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/5809f89e9b170fcaefc3b14c4d656946",
+            "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/5809f89e9b170fcaefc3b14c4d656946-medium",
+            "alternative_media_path_og": "",
+            "ipfs_animation_media_path": null,
+            "alternative_animation_media_path": null,
+            "animation_media_mime_type": "",
+            "collectibles_user": {
+              "fullName": "Shardeez NFT",
+              "user_public_address": "0xc7615A2E41390Faf244035cF71c296637C4939D6",
+              "username": "shardeeznft",
+              "profile_photo_path": "https://ipfs.io/ipfs/Qmd2k2cc4SngAjCt8ANkMGAbmnmsHMUiKkxXfd8nmP7wZ5",
+              "cover_photo_path": "Qma9ViaDg9Zs7n4RratkXn4NzarqQrtjFCibAM7zkYYezB",
+              "user_first_name": "Shardeez",
+              "user_last_name": "NFT"
+            },
+            "collectible_collection": {
+              "tokenName": "Shardeez",
+              "tokenType": "erc721",
+              "tokenAddress": "0x9B6a47ebb1D9F710D7E8d69fbCB3370e6A42e9e2",
+              "tokenLogo": "QmRvB7iwZCzZiXJ3BYJiT8d4C1mB4d4Y4yhBcS3QvSvYQa",
+              "collectiontype": "user"
+            },
+            "collectible_saleinfo": [
+              {
+                "onsale_quantity": 1,
+                "onsale": true,
+                "onsale_current_price": "10000000000000000",
+                "onsale_date": "2022-07-15T18:19:17.000Z"
+              }
+            ]
+          }
+        },
+        {
+          "slider_order": 17,
+          "featured_collectible_info": {
+            "id": 114,
+            "collectionId": 1,
+            "collectible_uuid": "e49f3081-b09d-4745-a830-0cc0446fd2cb",
+            "artist_wallet_address": "0x0e84D8eaD6B4c9c5C54A005393C33E8868887CdA",
+            "collectible_name": "FineTuning #6",
+            "collectible_category": "Collectibles",
+            "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmSrZHucwJK29GkK7P7sha9YkTubNnEGwqDSvZsWggQz58",
+            "created_at_cost": 0,
+            "collectible_type": "erc721",
+            "token_id": 73,
+            "total_copies_created": 1,
+            "token_address": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+            "collectible_image_mime_type": "image/png",
+            "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/19c995d76646eadd16609541f8ea0912",
+            "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/19c995d76646eadd16609541f8ea0912-medium",
+            "alternative_media_path_og": "",
+            "ipfs_animation_media_path": null,
+            "alternative_animation_media_path": null,
+            "animation_media_mime_type": "",
+            "collectibles_user": {
+              "fullName": "Fine  Tuning ",
+              "user_public_address": "0x0e84D8eaD6B4c9c5C54A005393C33E8868887CdA",
+              "username": "finetuning",
+              "profile_photo_path": "https://ipfs.io/ipfs/QmesMXE7sQLX3rGshDKgdTzCd1no9RryjoVKkxqSgtiHkr",
+              "cover_photo_path": "QmXDjaWDptDgrP7gu57mjcFrBjVakKHASZ7QEDif4uyjye",
+              "user_first_name": "Fine ",
+              "user_last_name": "Tuning "
+            },
+            "collectible_collection": {
+              "tokenName": "3six9 NFT",
+              "tokenType": "erc721",
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+              "collectiontype": "system"
+            },
+            "collectible_saleinfo": [
+              {
+                "onsale_quantity": 1,
+                "onsale": true,
+                "onsale_current_price": "30000000000000000",
+                "onsale_date": "2022-10-16T04:46:53.000Z"
+              }
+            ]
+          }
+        },
+        {
+          "slider_order": 18,
+          "featured_collectible_info": {
+            "id": 136,
+            "collectionId": 6,
+            "collectible_uuid": "af2b6635-f3e0-4aaa-9c0e-6427290e5ea2",
+            "artist_wallet_address": "0x6E1d220f752eDA7926d63402eab392D3fB74C556",
+            "collectible_name": "Manifestation",
+            "collectible_category": "Art",
+            "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmPutF5jcHRYpsb21xAi3uBYAktxkMswTH6FjNyzwPKHLn",
+            "created_at_cost": 25000000000000000,
+            "collectible_type": "erc721",
+            "token_id": 29,
+            "total_copies_created": 1,
+            "token_address": "0xEaf3EDad931EEfB7876C0b3D94d9044C898c3d8d",
+            "collectible_image_mime_type": "image/png",
+            "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/4c7f6ba9e72aed036fb4cb54b1904021",
+            "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/4c7f6ba9e72aed036fb4cb54b1904021-medium",
+            "alternative_media_path_og": "",
+            "ipfs_animation_media_path": null,
+            "alternative_animation_media_path": null,
+            "animation_media_mime_type": "",
+            "collectibles_user": {
+              "fullName": "ck lai",
+              "user_public_address": "0x6E1d220f752eDA7926d63402eab392D3fB74C556",
+              "username": "ck_lai",
+              "profile_photo_path": "https://ipfs.io/ipfs/QmVTa4ed7A655aGUN4xz9ygNAGa1qCH79rrM4Q5af2oNco",
+              "cover_photo_path": "QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
+              "user_first_name": "ck",
+              "user_last_name": "lai"
+            },
+            "collectible_collection": {
+              "tokenName": "Simplifying Art ",
+              "tokenType": "erc721",
+              "tokenAddress": "0xEaf3EDad931EEfB7876C0b3D94d9044C898c3d8d",
+              "tokenLogo": "QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
+              "collectiontype": "user"
+            },
+            "collectible_saleinfo": [
+              {
+                "onsale_quantity": 1,
+                "onsale": true,
+                "onsale_current_price": "25000000000000000",
+                "onsale_date": "2022-11-13T15:27:58.000Z"
+              }
+            ]
+          }
+        }
+      ]
+  }
