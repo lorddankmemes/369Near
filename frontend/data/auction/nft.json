@@ -1,0 +1,458 @@
+{
+      "result": [
+        {
+          "fullName": "World Stamp",
+          "id": 204,
+          "user_uuid": "60184503-1e3d-4355-b0b8-659453172586",
+          "username": "jia_yi",
+          "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+          "user_first_name": "World",
+          "user_last_name": "Stamp",
+          "email": "jackyeoh6136@gmail.com",
+          "location": null,
+          "city": null,
+          "cover_photo_path": null,
+          "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+          "website_url": null,
+          "about_section_title": "About Me",
+          "about_desc": "World Stamp Creator",
+          "twitter_url": null,
+          "telegram_url": null,
+          "dribble_url": null,
+          "linkedin_url": null,
+          "instagram_url": null,
+          "youtube_url": null,
+          "is_ban": false,
+          "createdAt": "2022-12-13T07:52:21.000Z",
+          "updatedAt": "2022-12-13T11:07:57.000Z",
+          "user_collectible_balance_info": [
+            {
+              "tokenId": 182,
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+              "quantity": 1,
+              "collectible_balance_user": {
+                "fullName": "World Stamp",
+                "username": "jia_yi",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                "cover_photo_path": null,
+                "user_first_name": "World",
+                "user_last_name": "Stamp"
+              },
+              "collectible_balance_of_collectible": {
+                "collectible_category": "Collectibles",
+                "collectible_image_mime_type": "image/png",
+                "collectible_name": "One World Stamp - Pandemic Series",
+                "collectible_type": "erc721",
+                "collectible_uuid": "2405c805-920e-4b05-9cc5-f1f8bd82a95e",
+                "cost": 50000000000000000,
+                "createdAt": "2022-12-13T10:06:56.000Z",
+                "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmPPW8AsZ62hXncCQZ1yPsqP5qLRCTRMGVMbvDSTzwGZnW",
+                "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/a65c034919a7c89be86845f68f47eb70",
+                "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/a65c034919a7c89be86845f68f47eb70-medium",
+                "lock_status": 0,
+                "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "tokenID": 182,
+                "noOfCopies": 1,
+                "ipfs_animation_media_path": null,
+                "alternative_animation_media_path": null,
+                "animation_media_mime_type": "",
+                "collectibles_user": {
+                  "fullName": "World Stamp",
+                  "username": "jia_yi",
+                  "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                  "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                  "cover_photo_path": null,
+                  "user_first_name": "World",
+                  "user_last_name": "Stamp"
+                },
+                "collectible_saleinfo": [
+                  {
+                    "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                    "onsale": true,
+                    "onsale_current_price": "50000000000000000",
+                    "onsale_old_price": "0",
+                    "quantity": 1,
+                    "ownership_type": 1,
+                    "is_current_owner": true,
+                    "collectible_saleuser": {
+                      "fullName": "World Stamp",
+                      "username": "jia_yi",
+                      "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                      "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                      "cover_photo_path": null,
+                      "user_first_name": "World",
+                      "user_last_name": "Stamp"
+                    }
+                  }
+                ],
+                "collectible_collection": {
+                  "tokenName": "3six9 NFT",
+                  "tokenType": "erc721",
+                  "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                  "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+                  "collectiontype": "system"
+                }
+              }
+            },
+            {
+              "tokenId": 183,
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+              "quantity": 1,
+              "collectible_balance_user": {
+                "fullName": "World Stamp",
+                "username": "jia_yi",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                "cover_photo_path": null,
+                "user_first_name": "World",
+                "user_last_name": "Stamp"
+              },
+              "collectible_balance_of_collectible": {
+                "collectible_category": "Collectibles",
+                "collectible_image_mime_type": "image/png",
+                "collectible_name": "One World Stamp - Pandemic Series",
+                "collectible_type": "erc721",
+                "collectible_uuid": "3474ed98-4e7f-46f6-9bbe-ece035289368",
+                "cost": 50000000000000000,
+                "createdAt": "2022-12-13T10:12:23.000Z",
+                "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmehvXiTRRY4tVMUHJbQsm895cQ1DD3zKoHT7rKhoYvh4c",
+                "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/77427f4d44a7e7f24c5de123de4f5898",
+                "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/77427f4d44a7e7f24c5de123de4f5898-medium",
+                "lock_status": 0,
+                "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "tokenID": 183,
+                "noOfCopies": 1,
+                "ipfs_animation_media_path": null,
+                "alternative_animation_media_path": null,
+                "animation_media_mime_type": "",
+                "collectibles_user": {
+                  "fullName": "World Stamp",
+                  "username": "jia_yi",
+                  "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                  "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                  "cover_photo_path": null,
+                  "user_first_name": "World",
+                  "user_last_name": "Stamp"
+                },
+                "collectible_saleinfo": [
+                  {
+                    "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                    "onsale": true,
+                    "onsale_current_price": "50000000000000000",
+                    "onsale_old_price": "0",
+                    "quantity": 1,
+                    "ownership_type": 1,
+                    "is_current_owner": true,
+                    "collectible_saleuser": {
+                      "fullName": "World Stamp",
+                      "username": "jia_yi",
+                      "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                      "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                      "cover_photo_path": null,
+                      "user_first_name": "World",
+                      "user_last_name": "Stamp"
+                    }
+                  }
+                ],
+                "collectible_collection": {
+                  "tokenName": "3six9 NFT",
+                  "tokenType": "erc721",
+                  "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                  "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+                  "collectiontype": "system"
+                }
+              }
+            },
+            {
+              "tokenId": 184,
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+              "quantity": 1,
+              "collectible_balance_user": {
+                "fullName": "World Stamp",
+                "username": "jia_yi",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                "cover_photo_path": null,
+                "user_first_name": "World",
+                "user_last_name": "Stamp"
+              },
+              "collectible_balance_of_collectible": {
+                "collectible_category": "Collectibles",
+                "collectible_image_mime_type": "image/png",
+                "collectible_name": "One World Stamp - Pandemic Series",
+                "collectible_type": "erc721",
+                "collectible_uuid": "bebf317c-662c-48db-a7f0-6040a9a93cf0",
+                "cost": 50000000000000000,
+                "createdAt": "2022-12-13T10:25:53.000Z",
+                "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmWA2furVnmcEkrmSB9xeq1SF3zmVvdEB1i2XcCj2yhn2q",
+                "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/6eea2b2dea7cba74af93d1541475d1c3",
+                "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/6eea2b2dea7cba74af93d1541475d1c3-medium",
+                "lock_status": 0,
+                "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "tokenID": 184,
+                "noOfCopies": 1,
+                "ipfs_animation_media_path": null,
+                "alternative_animation_media_path": null,
+                "animation_media_mime_type": "",
+                "collectibles_user": {
+                  "fullName": "World Stamp",
+                  "username": "jia_yi",
+                  "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                  "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                  "cover_photo_path": null,
+                  "user_first_name": "World",
+                  "user_last_name": "Stamp"
+                },
+                "collectible_saleinfo": [
+                  {
+                    "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                    "onsale": true,
+                    "onsale_current_price": "50000000000000000",
+                    "onsale_old_price": "0",
+                    "quantity": 1,
+                    "ownership_type": 1,
+                    "is_current_owner": true,
+                    "collectible_saleuser": {
+                      "fullName": "World Stamp",
+                      "username": "jia_yi",
+                      "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                      "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                      "cover_photo_path": null,
+                      "user_first_name": "World",
+                      "user_last_name": "Stamp"
+                    }
+                  }
+                ],
+                "collectible_collection": {
+                  "tokenName": "3six9 NFT",
+                  "tokenType": "erc721",
+                  "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                  "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+                  "collectiontype": "system"
+                }
+              }
+            },
+            {
+              "tokenId": 187,
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+              "quantity": 1,
+              "collectible_balance_user": {
+                "fullName": "World Stamp",
+                "username": "jia_yi",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                "cover_photo_path": null,
+                "user_first_name": "World",
+                "user_last_name": "Stamp"
+              },
+              "collectible_balance_of_collectible": {
+                "collectible_category": "Collectibles",
+                "collectible_image_mime_type": "image/png",
+                "collectible_name": "One World Stamp - Pandemic Series",
+                "collectible_type": "erc721",
+                "collectible_uuid": "131c2015-6e04-4856-a71a-2d03e8a5ef25",
+                "cost": 50000000000000000,
+                "createdAt": "2022-12-13T10:45:09.000Z",
+                "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmVcZMWeRgn6nZffC38zxJxT4hNtYPgGJqT9gGkMR8XbpC",
+                "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/460107c5c11d7f95f8ab5b01b93e23e1",
+                "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/460107c5c11d7f95f8ab5b01b93e23e1-medium",
+                "lock_status": 0,
+                "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "tokenID": 187,
+                "noOfCopies": 1,
+                "ipfs_animation_media_path": null,
+                "alternative_animation_media_path": null,
+                "animation_media_mime_type": "",
+                "collectibles_user": {
+                  "fullName": "World Stamp",
+                  "username": "jia_yi",
+                  "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                  "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                  "cover_photo_path": null,
+                  "user_first_name": "World",
+                  "user_last_name": "Stamp"
+                },
+                "collectible_saleinfo": [
+                  {
+                    "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                    "onsale": true,
+                    "onsale_current_price": "50000000000000000",
+                    "onsale_old_price": "0",
+                    "quantity": 1,
+                    "ownership_type": 1,
+                    "is_current_owner": true,
+                    "collectible_saleuser": {
+                      "fullName": "World Stamp",
+                      "username": "jia_yi",
+                      "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                      "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                      "cover_photo_path": null,
+                      "user_first_name": "World",
+                      "user_last_name": "Stamp"
+                    }
+                  }
+                ],
+                "collectible_collection": {
+                  "tokenName": "3six9 NFT",
+                  "tokenType": "erc721",
+                  "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                  "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+                  "collectiontype": "system"
+                }
+              }
+            },
+            {
+              "tokenId": 190,
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+              "quantity": 1,
+              "collectible_balance_user": {
+                "fullName": "World Stamp",
+                "username": "jia_yi",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                "cover_photo_path": null,
+                "user_first_name": "World",
+                "user_last_name": "Stamp"
+              },
+              "collectible_balance_of_collectible": {
+                "collectible_category": "Collectibles",
+                "collectible_image_mime_type": "image/png",
+                "collectible_name": "One World Stamp - Pandemic Series",
+                "collectible_type": "erc721",
+                "collectible_uuid": "1cc91891-060c-418d-bb0f-aa5fe43e30b9",
+                "cost": 50000000000000000,
+                "createdAt": "2022-12-13T10:47:28.000Z",
+                "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmNz5K8DYdCCJxwfa6TFLAWEydd3oUiyzPcDZjXiVH5fKe",
+                "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/86d0fbf79cc5a3369bcc91af2c632a8d",
+                "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/86d0fbf79cc5a3369bcc91af2c632a8d-medium",
+                "lock_status": 0,
+                "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "tokenID": 190,
+                "noOfCopies": 1,
+                "ipfs_animation_media_path": null,
+                "alternative_animation_media_path": null,
+                "animation_media_mime_type": "",
+                "collectibles_user": {
+                  "fullName": "World Stamp",
+                  "username": "jia_yi",
+                  "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                  "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                  "cover_photo_path": null,
+                  "user_first_name": "World",
+                  "user_last_name": "Stamp"
+                },
+                "collectible_saleinfo": [
+                  {
+                    "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                    "onsale": true,
+                    "onsale_current_price": "50000000000000000",
+                    "onsale_old_price": "0",
+                    "quantity": 1,
+                    "ownership_type": 1,
+                    "is_current_owner": true,
+                    "collectible_saleuser": {
+                      "fullName": "World Stamp",
+                      "username": "jia_yi",
+                      "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                      "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                      "cover_photo_path": null,
+                      "user_first_name": "World",
+                      "user_last_name": "Stamp"
+                    }
+                  }
+                ],
+                "collectible_collection": {
+                  "tokenName": "3six9 NFT",
+                  "tokenType": "erc721",
+                  "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                  "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+                  "collectiontype": "system"
+                }
+              }
+            },
+            {
+              "tokenId": 191,
+              "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+              "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+              "quantity": 1,
+              "collectible_balance_user": {
+                "fullName": "World Stamp",
+                "username": "jia_yi",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                "cover_photo_path": null,
+                "user_first_name": "World",
+                "user_last_name": "Stamp"
+              },
+              "collectible_balance_of_collectible": {
+                "collectible_category": "Collectibles",
+                "collectible_image_mime_type": "image/png",
+                "collectible_name": "One World Stamp - Pandemic Series",
+                "collectible_type": "erc721",
+                "collectible_uuid": "58e840c8-646a-4ead-b177-f8f8ebdfa414",
+                "cost": 50000000000000000,
+                "createdAt": "2022-12-13T10:48:57.000Z",
+                "ipfs_media_path": "https://3six9.infura-ipfs.io/ipfs/QmQUFf8F4dFbZbkPuY7VDqq9AmoJKg1SipMSJvYRWkYFVC",
+                "alternative_media_path": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/6192ed525af0d0f48df511e8653e24fd",
+                "alternative_media_path_medium": "https://3six9.s3.ap-southeast-1.amazonaws.com/aurora/media/6192ed525af0d0f48df511e8653e24fd-medium",
+                "lock_status": 0,
+                "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                "tokenID": 191,
+                "noOfCopies": 1,
+                "ipfs_animation_media_path": null,
+                "alternative_animation_media_path": null,
+                "animation_media_mime_type": "",
+                "collectibles_user": {
+                  "fullName": "World Stamp",
+                  "username": "jia_yi",
+                  "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                  "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                  "cover_photo_path": null,
+                  "user_first_name": "World",
+                  "user_last_name": "Stamp"
+                },
+                "collectible_saleinfo": [
+                  {
+                    "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                    "onsale": true,
+                    "onsale_current_price": "50000000000000000",
+                    "onsale_old_price": "0",
+                    "quantity": 1,
+                    "ownership_type": 1,
+                    "is_current_owner": true,
+                    "collectible_saleuser": {
+                      "fullName": "World Stamp",
+                      "username": "jia_yi",
+                      "user_public_address": "0xCc4d415DADACAF881286e76879D66c6496Ed3317",
+                      "profile_photo_path": "Qmam3chQU7gzB7u3kEdGhuas31EHsf6iax82AaWasCTnrc",
+                      "cover_photo_path": null,
+                      "user_first_name": "World",
+                      "user_last_name": "Stamp"
+                    }
+                  }
+                ],
+                "collectible_collection": {
+                  "tokenName": "3six9 NFT",
+                  "tokenType": "erc721",
+                  "tokenAddress": "0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773",
+                  "tokenLogo": "Qmf9cS499bCwCxwkChkHyQLonWwe73g2rgJdj4jivoMRyY",
+                  "collectiontype": "system"
+                }
+              }
+            }
+          ]
+        }
+      ]
+  }

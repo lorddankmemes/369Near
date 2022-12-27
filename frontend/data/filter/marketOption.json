@@ -1,0 +1,22 @@
+[
+    {
+      "value": "",
+      "label": "Filter & Sort"
+    },
+    {
+      "value": "recent",
+      "label": "Recently added"
+    },
+    {
+      "value": "lowest",
+      "label": "Lowest Price"
+    },
+    {
+      "value": "highest",
+      "label": "Highest Price"
+    },
+    {
+      "value": "oldest",
+      "label": "Oldest"
+    }
+  ]
