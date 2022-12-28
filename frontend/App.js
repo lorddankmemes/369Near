@@ -1,5 +1,5 @@
 import 'regenerator-runtime/runtime';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Landing from './pages/Landing';
@@ -18,8 +18,24 @@ import { CreateCollectible } from './pages/CreateCollectible';
 import { SingleNFTMarketplace } from './pages/SingleNFTMarketplace';
 import { UpdateProfile } from './pages/UpdateProfile';
 import { HeaderLayout } from './components/Layout/HeaderLayout';
+import useIpfsFactory from './hooks/useIpfsFactory';
 
 export default function App() {
+
+  const { ipfs, ipfsInitError } = useIpfsFactory();
+  // const id = useIpfs(ipfs, 'id')
+  const [version, setVersion] = useState();
+
+  useEffect(() => {
+    if (!ipfs) return;
+
+    const getVersion = async () => {
+      const nodeId = await ipfs.version();
+      setVersion(nodeId);
+    };
+
+    getVersion();
+  }, [ipfs]);
 
   return (
     <>
@@ -42,7 +58,7 @@ export default function App() {
             <Route exact path="profile" element={<MainProfile />}/>
             
             <Route exact index path="create" element={<CreateCollectible />} />
-            <Route exact path="create/:id/single" element={<CreateSingle />} />
+            <Route exact path="create/nft" element={<CreateSingle />} />
             <Route exact path="create/:id/multiple" element={<CreateMultiple />} />
 
             <Route  exact path="updateprofile" element={<UpdateProfile/>}/>

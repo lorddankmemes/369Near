@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import { images } from '../constant';
 import { useWallet } from '../hooks/useWallet';
 import { Wallet } from '../near-wallet';
@@ -12,6 +13,9 @@ export function SignInPrompt({onClick}) {
 }
 
 export function SignOutButton({ onHandleSignOut }) {
+  
+  const navigate = useNavigate()
+  
   const [open, setOpen] = useState(false);
   
   const OnSignOut = () => {
@@ -21,6 +25,11 @@ export function SignOutButton({ onHandleSignOut }) {
 
   const onToggleDropdown = () => {
     setOpen(!open)
+  }
+
+  const goTo = (to) => {
+    setOpen(false)
+    navigate(to)
   }
 
   return (
@@ -41,7 +50,7 @@ export function SignOutButton({ onHandleSignOut }) {
         <ul className="py-1 flex flex-col px-6 text-sm text-gray-700 dark:text-gray-200">
           <li className='flex pt-6'>
             <span><img src={images.setting}/></span>
-            <a href="/profile" className="block pt-1 px-4">Dashboard</a>
+            <a onClick={() => goTo('profile')} className="block pt-1 px-4">Dashboard</a>
           </li>
           <li className='flex pt-6'>
             <span><img src={images.setting}/></span>

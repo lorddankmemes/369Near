@@ -7,7 +7,7 @@ export const CreateCollectible = () => {
     const navigate = useNavigate();
 
     const handleSingleClick = () => {
-        navigate('/create/:id/single')
+        navigate('/create/nft')
       }
 
     const handleMultipleClick = () => {

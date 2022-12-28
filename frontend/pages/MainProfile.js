@@ -25,10 +25,7 @@ export const MainProfile = () => {
       }
 
     const [currentComponent, setCurrentComponent] = useState(1);
-
-    useEffect(() => {
-      }, [currentComponent]);
-
+    
   return (
     
     <div className='lg:mx-16 mt-4'>
