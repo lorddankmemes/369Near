@@ -16,9 +16,9 @@ export function SignOutButton({onClick}) {
 
   return (
     <div>
-      <button onClick={() => setOpen(true)}  id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="flex mx-3 text-sm bg-orange-600 rounded-full md:mr-0" type="button">
+      <div onClick={() => setOpen(true)}  id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="flex mx-3 text-sm bg-orange-600 rounded-full md:mr-0" type="button">
         <img class="w-8 h-8 rounded-full" src={images.avatar} />
-      </button>
+      </div>
 
   { open ?  
     <div id="dropdownAvatar" class="z-50 w-56 absolute m-2 right-10 mt-2 bg-white rounded-xl">
@@ -61,6 +61,12 @@ export const ConnectWallet = () => {
     setSignIn(await wallet.startUp())
     setWallet(wallet)
   }
+/* 
+  useEffect(() => {
+     setSignIn(await wallet.startUp())
+    setWallet(wallet)
+  }); */
+
 
   if (signIn == false) {
     return <SignInPrompt onClick={() => wallet.signIn()}/>;
