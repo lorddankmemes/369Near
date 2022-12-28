@@ -14,7 +14,7 @@ function FeaturedArtworks() {
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-14 my-16">
 
        {artwork.rows.map((data, index) => (
-         <div className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
+         <div key={index} className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
            <div>      
             <img className="object-cover object-center h-40 md:h-60 w-full rounded-lg" src={data.featured_collectible_info.alternative_media_path} />
           </div>

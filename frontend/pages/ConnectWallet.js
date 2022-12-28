@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { images } from '../constant';
+import { useWallet } from '../hooks/useWallet';
 import { Wallet } from '../near-wallet';
 
 export function SignInPrompt({onClick}) {
@@ -10,18 +11,26 @@ export function SignInPrompt({onClick}) {
   );
 }
 
-export function SignOutButton({onClick}) {
+export function SignOutButton({ onHandleSignOut }) {
   const [open, setOpen] = useState(false);
   
+  const OnSignOut = () => {
+    setOpen(false)
+    onHandleSignOut()
+  }
+
+  const onToggleDropdown = () => {
+    setOpen(!open)
+  }
 
   return (
     <div>
-      <div onClick={() => setOpen(true)}  id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="flex mx-3 text-sm bg-orange-600 rounded-full md:mr-0" type="button">
-        <img class="w-8 h-8 rounded-full" src={images.avatar} />
+      <div onClick={() => onToggleDropdown()}  id="dropdownUserAvatarButton" className="flex mx-3 text-sm bg-orange-600 rounded-full md:mr-0">
+        <img className="w-8 h-8 rounded-full" src={images.avatar} />
       </div>
 
   { open ?  
-    <div id="dropdownAvatar" class="z-50 w-56 absolute m-2 right-10 mt-2 bg-white rounded-xl">
+    <div id="dropdownAvatar" className="z-50 w-56 absolute m-2 right-10 mt-2 bg-white rounded-xl">
       <div className='border-b-2 border-gray-200 rounded-xl shadow-lg'>
         <div className="p-2 flex gap-x-3 border-2 border-orange-600 m-3 rounded-lg text-black">
           <img className="w-8 h-8 rounded-full" src={images.avatar} />
@@ -29,22 +38,21 @@ export function SignOutButton({onClick}) {
         </div>
       </div>
 
-        <ul class="py-1 flex flex-col px-6 text-sm text-gray-700 dark:text-gray-200">
+        <ul className="py-1 flex flex-col px-6 text-sm text-gray-700 dark:text-gray-200">
           <li className='flex pt-6'>
             <span><img src={images.setting}/></span>
-            <a href="/profile" class="block pt-1 px-4">Dashboard</a>
+            <a href="/profile" className="block pt-1 px-4">Dashboard</a>
           </li>
           <li className='flex pt-6'>
             <span><img src={images.setting}/></span>
-            <a href="#" class="block pt-1 px-4">Bids</a>
+            <a href="#" className="block pt-1 px-4">Bids</a>
           </li>
           <li className='flex py-6'>
             <span><img src={images.logout}/></span>
-            <span onClick={onClick} class="block pt-1 px-4">Sign out</span>
+            <a onClick={OnSignOut} className="block pt-1 px-4">Sign out</a>
           </li>
         </ul>
-    </div>
-    : null }
+    </div> : <></> }
 </div>
   );
 } 
@@ -53,24 +61,24 @@ export function SignOutButton({onClick}) {
 
 export const ConnectWallet = () => {
 
-  const CONTRACT_ADDRESS = process.env.CONTRACT_NAME
-  const [wallet, setWallet] = useState(new Wallet({ createAccessKeyFor: CONTRACT_ADDRESS }))
-  const [signIn, setSignIn] = useState(false);
+  const {accountId, signIn, signOut} = useWallet();
+  const [loaded, setLoaded] = useState(false)
 
-  window.onload = async () => {
-    setSignIn(await wallet.startUp())
-    setWallet(wallet)
+  const onHandleLogin = () => {
+    signIn(process.env.CONTRACT_NAME || "seed.bonebon.testnet");
   }
-/* 
+
+  const onHandleSignOut = () => {
+    signOut()
+  }
+
   useEffect(() => {
-     setSignIn(await wallet.startUp())
-    setWallet(wallet)
-  }); */
-
-
-  if (signIn == false) {
-    return <SignInPrompt onClick={() => wallet.signIn()}/>;
+    if(accountId) { console.log(accountId); setLoaded(true)}
+  }, [accountId, loaded])
+  
+  if (!accountId) {
+    return <SignInPrompt onClick={() => onHandleLogin()}/>;
   } else {
-    return <SignOutButton onClick={() => wallet.signOut()}/>
+    return <SignOutButton onHandleSignOut={onHandleSignOut}/>
   }
 }

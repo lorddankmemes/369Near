@@ -24,7 +24,7 @@ function Marketplace() {
 
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-14 my-16">
           {test.result.map((data, index) => (
-              <div class="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
+              <div key={index} className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
                 <div className='bg-white rounded-lg'>
                   <div
                     onClick={() => handleNFTClick(data)}  

@@ -23,15 +23,6 @@ export default function App() {
 
   return (
     <>
-     {/*  <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/>
-      <div className={uiPleaseWait ? 'please-wait' : ''}> */}
-        <BrowserRouter>
-
-        {/* {location.pathname == "/" && (
-          <HeaderText/>
-        )}
-         */}
-     
         <Routes>
           <Route element={<HeaderLayout />}>
             <Route index path="/" element={<Landing />}/>
@@ -62,9 +53,6 @@ export default function App() {
         {location.pathname == "/" && (
           <Footer />
         )}
-
-      </BrowserRouter>
-      {/* </div> */}
     </>
   );
 } 
