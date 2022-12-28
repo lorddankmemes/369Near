@@ -11,8 +11,7 @@ import { CoverProfile } from '../components/ProfileContent/CoverProfile'
 import { images } from '../constant'
 
 
-
-export const Profile = () => {
+export const MainProfile = () => {
 
     const profile = {
         user_public_address: "0x0727c18d9dA74F36eaF8bAB25614F465D4498a7f"
@@ -25,15 +24,15 @@ export const Profile = () => {
         return mask;
       }
 
-    const [currentComponent, setCurrentComponent] = useState('A');
+    const [currentComponent, setCurrentComponent] = useState(1);
 
     useEffect(() => {
       }, [currentComponent]);
 
   return (
-    <>
+    
     <div className='lg:mx-16 mt-4'>
-    <div><CoverProfile/></div>
+    <div><CoverProfile /></div>
 
     <div className='grid grid-cols-1 lg:grid-cols-4 relative gap-6 pl-0 lg:pl-16 pr-10 mt-16'>
 
@@ -88,32 +87,32 @@ export const Profile = () => {
     {/* button */}
         <div className="flex flex-col col-span-4 lg:col-span-3 -translate-y-24 md:translate-y-0">
             <div className='flex justify-between gap-3 bg-none rounded-full h-10 px-8 text-sm font-semibold overflow-x-auto'>
-                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent('A')}>DASHBOARD</button>
-                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent('B')}>CREATION</button>
-                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent('C')}>COLLECTION</button>
-                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent('D')}>ON SALE</button>
-                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent('E')}>MY AUCTIONS</button>
-                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent('F')}>FAVOURITE</button>
-                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent('G')}>PROFILE</button>
+                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent(1)}>DASHBOARD</button>
+                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent(2)}>CREATION</button>
+                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent(3)}>COLLECTION</button>
+                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent(4)}>ON SALE</button>
+                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent(5)}>MY AUCTIONS</button>
+                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent(6)}>FAVOURITE</button>
+                <button className='button-profile rounded-full h-10 px-4' onClick={() => setCurrentComponent(7)}>PROFILE</button>
             </div>
 
             <div className='py-6'>
 
         {/* Content */}
                 <div>
-                    {currentComponent === 'A' ? <Dashboard/> : null}
-                    {currentComponent === 'B' ? <Creation /> : null}
-                    {currentComponent === 'C' ? <Collection /> : null}
-                    {currentComponent === 'D' ? <OnSale /> : null}
-                    {currentComponent === 'E' ? <MyAuction /> : null}
-                    {currentComponent === 'F' ? <Favourite /> : null}
-                    {currentComponent === 'G' ? <Profile /> : null}
+                    {currentComponent === 1 && <Dashboard/>}
+                    {currentComponent === 2 && <Creation /> }
+                    {currentComponent === 3 && <Collection /> }
+                    {currentComponent === 4 && <OnSale /> }
+                    {currentComponent === 5 && <MyAuction /> }
+                    {currentComponent === 6 && <Favourite /> }
+                    {currentComponent === 7 && <Profile /> }
                 </div>
             
             </div>
         </div>
     </div>
     </div>
-    </>
+    
   )
 }

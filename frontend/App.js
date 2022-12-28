@@ -13,7 +13,7 @@ import { CreateMultiple } from './pages/CreateMultiple';
 import './assets/global.css';
 
 import Footer from './components/Container/Footer';
-import { Profile } from './pages/Profile';
+import { MainProfile } from './pages/MainProfile';
 import { CreateCollectible } from './pages/CreateCollectible';
 import { SingleNFTMarketplace } from './pages/SingleNFTMarketplace';
 import { UpdateProfile } from './pages/UpdateProfile';
@@ -23,9 +23,15 @@ export default function App() {
 
   return (
     <>
-
+     {/*  <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/>
+      <div className={uiPleaseWait ? 'please-wait' : ''}> */}
         <BrowserRouter>
 
+        {/* {location.pathname == "/" && (
+          <HeaderText/>
+        )}
+         */}
+     
         <Routes>
           <Route element={<HeaderLayout />}>
             <Route index path="/" element={<Landing />}/>
@@ -42,7 +48,7 @@ export default function App() {
               <Route path=":id" element={<SingleAuction />} />
             </Route>
 
-            <Route exact path="profile" element={<Profile />}/>
+            <Route exact path="profile" element={<MainProfile />}/>
             
             <Route exact index path="create" element={<CreateCollectible />} />
             <Route exact path="create/:id/single" element={<CreateSingle />} />
@@ -58,6 +64,7 @@ export default function App() {
         )}
 
       </BrowserRouter>
+      {/* </div> */}
     </>
   );
 } 

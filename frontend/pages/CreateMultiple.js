@@ -8,11 +8,12 @@ export const CreateMultiple = () => {
 
     const [showModal, setShowModal] = useState(false);
  
-    const navigate = useNavigate();
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
+    const [category, setCategory] = useState('')
+    const [onSale, setOnSale] = useState(false)
+    const [onAuction, setOnAuction] = useState(false)
 
-    const handleSingleClick = () => {
-        navigate('/create/:id/single')
-      }
 
     const handleMultipleClick = () => {
         navigate('/create/:id/multiple')
@@ -177,123 +178,161 @@ export const CreateMultiple = () => {
             </div>
 
 
-            <div class="flex col-span-4 lg:col-span-2 px-10 pt-10 lg:pt-0 w-full">
-                <div class="relative">
-                    <div class="flex flex-col gap-y-6 text-sm">
-                        <label>
-                            Name
-                            <div>
-                            <input
-                                type="search"
-                                name="search-form"
-                                id="search-form"
-                                className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
-                                placeholder="Name your artwork"
-                                style={{ padding:"20px"}}
-                                />
-                                </div>
-                        </label>
+            <div class="flex col-span-4 lg:col-span-2 px-10 w-full">
+                <form onSubmit={e => { handleSubmit(e) }}>
 
-                        <label>
-                            Description
-                            <div>
-                            <input
-                                type="search"
-                                name="search-form"
-                                id="search-form"
-                                className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
-                                placeholder="Describe your NFT item and any unlockable content.
-                                E.g. Physical print unlocked with purchase."
-                                style={{ padding:"20px"}}
-                                />
+                    <div class="relative">
+                        <div class="flex flex-col gap-y-6 text-sm">
+                            <label>
+                                Name
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={name}
+                                        onChange={e => setName(e.target.value)}
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
+                                        placeholder="Name your artwork"
+                                        style={{ padding:"20px"}}
+                                    />
                                 </div>
-                        </label>
+                            </label>
 
-                        <label>
-                            Royalties
-                            <div>
-                            <input
-                                type="search"
-                                name="search-form"
-                                id="search-form"
-                                className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
-                                placeholder="Name your artwork"
-                                style={{ padding:"20px"}}
-                                />
+                            <label>
+                                Description
+                                <div>
+                                    <textarea
+                                        type="text"
+                                        name="description"
+                                        value={description}
+                                        onChange={e => setDescription(e.target.value)}
+                                        className="bg-white outline-orange-600 w-full rounded-md mt-2 text-overflow"
+                                        placeholder="Describe your NFT item and any unlockable content.
+                                        E.g. Physical print unlocked with purchase."
+                                        style={{ padding:"10px"}}
+                                    />
                                 </div>
-                        </label>
+                            </label>
 
-                        <label>
-                            Category
-                            <div>
-                            <input
-                                type="search"
-                                name="search-form"
-                                id="search-form"
-                                className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
-                                placeholder="Name your artwork"
-                                style={{ padding:"20px"}}
-                                />
+                            <label>
+                                Royalties
+                                <div className='flex gap-4 mt-2'>
+                                    <input
+                                        type="search"
+                                        name="search-form"
+                                        id="search-form"
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md"
+                                        placeholder="Name your artwork"
+                                        style={{ padding:"20px"}}
+                                        />
+                                    <input
+                                        type="search"
+                                        name="search-form"
+                                        id="search-form"
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md"
+                                        placeholder="Name your artwork"
+                                        style={{ padding:"20px"}}
+                                        />
                                 </div>
-                        </label>
+                            
+                            </label>
 
-                        <label>
-                            Properties
-                            <div className='flex gap-4 mt-2'>
-                            <input
-                                type="search"
-                                name="search-form"
-                                id="search-form"
-                                className="bg-white outline-orange-600 h-10 w-full rounded-md"
-                                placeholder="Name your artwork"
-                                style={{ padding:"20px"}}
-                                />
-                            <input
-                                type="search"
-                                name="search-form"
-                                id="search-form"
-                                className="bg-white outline-orange-600 h-10 w-full rounded-md"
-                                placeholder="Name your artwork"
-                                style={{ padding:"20px"}}
-                                />
-                                <button>Add</button>
+                            <label>
+                                Category
+                                <select
+                                        name="category"
+                                        value={category}
+                                        onChange={e => setCategory(e.target.value)}
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                                        placeholder="Name your artwork"
+                                        style={{ padding:"20px"}}
+                                        >
+                                            <option selected>Select category</option>
+                                            <option value="collectibles">Collectibles</option>
+                                            <option value="membership">Membership</option>
+                                            <option value="ticketing">Ticketing</option>
+                                            <option value="animation">Animation</option>
+                                            <option value="arts">Arts</option>
+                                            <option value="IRLart">IRL art</option>
+                                            <option value="Trading Cards">Trading Cards</option>
+                                            <option value="memes">Memes</option>
+                                            <option value="music">Music</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                Properties
+                                <div className='flex gap-4 mt-2'>
+                                <input
+                                    type="text"
+                                    name="dimension"
+                                    className="bg-white outline-orange-600 h-10 w-full rounded-md"
+                                    placeholder="E.g. Dimension"
+                                    style={{ padding:"20px"}}
+                                    />
+                                <input
+                                    type="text"
+                                    name="size"
+                                    className="bg-white outline-orange-600 h-10 w-full rounded-md"
+                                    placeholder="E.g. 1200px x 2000px"
+                                    style={{ padding:"20px"}}
+                                    />
+                                    <button>Add</button>
+                                    </div>
+                            </label>
+
+                            <div className="flex justify-between w-full mt-4 mb-2">
+                                <div class="text-gray-400 font-semibold text-md">
+                                Put on Sale
                                 </div>
-                        </label>
-                        
-                        <div className="flex justify-between w-full mt-4 mb-2">
-                            <div class="text-gray-400 font-semibold text-md">
-                            Put on Sale
+
+                                <label class="flex items-center cursor-pointer">
+                                    <div class="relative">
+                                        <input 
+                                            type="checkbox"
+                                            value={onSale}
+                                            onChange={e => setOnSale(e.target.value)}
+                                            className="sr-only" 
+                                        />
+
+                                        <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                    </div>             
+                                </label>
                             </div>
 
-                            <label class="flex items-center cursor-pointer">
-                                <div class="relative">
-                                    <input type="checkbox" id="toggleB" class="sr-only" />
+                            <div className="flex justify-between w-full mb-2">
+                                <div class="text-gray-400 font-semibold text-md">
+                                Put on Auction
+                                </div>
 
-                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                                </div>             
-                            </label>
-                        </div>
+                                <label class="flex items-center cursor-pointer">
+                                    <div class="relative">
+                                        <input 
+                                            type="checkbox"
+                                            value={onAuction}
+                                            onChange={e => setOnAuction(e.target.value)}
+                                            className="sr-only" 
+                                        />
 
-                        <div className="flex justify-between w-full">
-                            <div class="text-gray-400 font-semibold text-md">
-                            Put on Auction
+                                        <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                    </div>             
+                                </label>
                             </div>
 
-                            <label class="flex items-center cursor-pointer">
-                                <div class="relative">
-                                    <input type="checkbox" id="toggleB" class="sr-only" />
-
-                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                                </div>             
-                            </label>
+                            <div className='flex flex-col md:col-span-2 my-2'>
+                                <button
+                                    type="submit"
+                                    value="submit"
+                                    className='py-6 border-2 border-orange-600 bg-white text-black text-lg'
+                                >
+                                    Create
+                                </button>
+                            </div>
                         </div>
-
-                        <button className='py-6 border-2 border-orange-600 bg-white text-black text-lg'>Create</button>
-
-                    </div>
-                </div>
+                        </div>
+                </form>
             </div>
 
         </div>
