@@ -11,7 +11,8 @@ export const CreateSingle = () => {
     const [metadata, setMetadata] = useState({
         title: '',
         description: '',
-        media: ''
+        media: '',
+        perpetual_royalties: {}
     })
     const [preview, setPreview] = useState()
 
@@ -52,6 +53,7 @@ export const CreateSingle = () => {
     }, [image])
 
     const [category, setCategory] = useState('')
+    const [royalty, setRoyalty] = useState(0)
     const [onSale, setOnSale] = useState(false)
     const [onAuction, setOnAuction] = useState(false)
 
@@ -61,14 +63,23 @@ export const CreateSingle = () => {
         try {
             const cid = await ipfs.add(image)
             if(cid.path) {
+
+                // add cid
                 setMetadata({
                     ...metadata,
                     media: cid.path
                 })
 
+                // add royalty
+                const meta = {
+                    ...metadata
+                }
+
+                meta.perpetual_royalties[`${accountId}`] = royalty
+
                 const args = {
                     token_id: `${Date.now()}`,
-                    metadata,
+                    metadata: meta,
                     receiver_id: accountId
                 }
 
@@ -277,11 +288,11 @@ return (
                                 Royalties
                                 <div className='flex gap-4 mt-2'>
                                     <input
-                                        type="search"
-                                        name="search-form"
-                                        id="search-form"
+                                        type="number"
+                                        name="royalty"
+                                        id="royalty"
+                                        onChange={e => setRoyalty(e.target.value)}
                                         className="bg-white outline-orange-600 h-10 w-full rounded-md"
-                                        placeholder="Name your artwork"
                                         style={{ padding:"20px"}}
                                         />
                                 </div>
