@@ -98,7 +98,7 @@ return (
     <>
     <div className='body-container'>
 
-    {showModal ? (
+    {/* {showModal ? (
         <div className="fixed inset-0 z-10 overflow-y-auto">
             <div
                 className="fixed inset-0 w-full h-full bg-black opacity-40"
@@ -130,7 +130,7 @@ return (
                                     <input
                                         name="search-form"
                                         id="search-form"
-                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2"
+                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
                                         placeholder="Enter token name"
                                         style={{ padding:"20px"}}
                                         />
@@ -144,7 +144,7 @@ return (
                                         type="search"
                                         name="search-form"
                                         id="search-form"
-                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2"
+                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
                                         placeholder="Enter symbol"
                                         style={{ padding:"20px"}}
                                         />
@@ -155,10 +155,10 @@ return (
                                     Description
                                     <div>
                                     <input
-                                        type="search"
-                                        name="search-form"
+                                        type="text"
+                                        name="description"
                                         id="search-form"
-                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2"
+                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
                                         placeholder="Spread some words about your token"
                                         style={{ padding:"20px"}}
                                         />
@@ -204,7 +204,7 @@ return (
                     </div>
                 </div>
             </div>
-    ) : <></>}
+    ) : <></>} */}
 
         <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
             <div className="col-span-4 lg:col-span-2">
@@ -261,7 +261,7 @@ return (
                                         name="title"
                                         value={metadata.title}
                                         onChange={onHandleChanged}
-                                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
                                         placeholder="Name your artwork"
                                         style={{ padding:"20px"}}
                                     />
@@ -276,7 +276,7 @@ return (
                                         name="description"
                                         value={metadata.description}
                                         onChange={onHandleChanged}
-                                        className="bg-white outline-orange-600 w-full rounded-md mt-2 text-overflow"
+                                        className="bg-white outline-orange-600 w-full rounded-md mt-2 text-overflow text-black"
                                         placeholder="Describe your NFT item and any unlockable content.
                                         E.g. Physical print unlocked with purchase."
                                         style={{ padding:"10px"}}
@@ -292,7 +292,7 @@ return (
                                         name="royalty"
                                         id="royalty"
                                         onChange={e => setRoyalty(e.target.value)}
-                                        className="bg-white outline-orange-600 h-10 w-full rounded-md"
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
                                         style={{ padding:"20px"}}
                                         />
                                 </div>
@@ -328,14 +328,14 @@ return (
                                 <input
                                     type="text"
                                     name="dimension"
-                                    className="bg-white outline-orange-600 h-10 w-full rounded-md"
+                                    className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
                                     placeholder="E.g. Dimension"
                                     style={{ padding:"20px"}}
                                     />
                                 <input
                                     type="text"
                                     name="size"
-                                    className="bg-white outline-orange-600 h-10 w-full rounded-md"
+                                    className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
                                     placeholder="E.g. 1200px x 2000px"
                                     style={{ padding:"20px"}}
                                     />

@@ -47,7 +47,7 @@ export function SignOutButton({ onHandleSignOut }) {
         </div>
       </div>
 
-        <ul className="py-1 flex flex-col px-6 text-sm text-gray-700 dark:text-gray-200">
+        <ul className="py-1 flex flex-col px-6 text-sm text-gray-700">
           <li className='flex pt-6'>
             <span><img src={images.setting}/></span>
             <a onClick={() => goTo('profile')} className="block pt-1 px-4">Dashboard</a>
