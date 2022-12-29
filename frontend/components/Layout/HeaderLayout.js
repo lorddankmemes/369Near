@@ -21,6 +21,13 @@ export const HeaderLayout = () => {
 
             <div className='flex gap-2'>
                 <span className='flex gap-2'>
+                <NavLink className="navbar grid content-center">
+                <span
+                    class="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700"
+                >
+                NEAR
+                </span>
+                </NavLink>
                 <NavLink className="navbar grid content-center" to="/Marketplace">Marketplace</NavLink>
                 <NavLink className="navbar grid content-center" to="/Auctions">Auctions</NavLink>
                 <NavLink className="navbar grid content-center" to="/Activity">Activity</NavLink>
@@ -93,6 +100,14 @@ export const HeaderLayout = () => {
                     </div>
                     <div className="flex-1">
                         <ul className="pt-2 pb-4 space-y-1 text-sm px-4">
+                            <li className="rounded-sm">
+                                <a
+                                    href="https://app.3six9.space"
+                                    className="flex items-center p-2 space-x-3 rounded-md"
+                                >
+                                    <span>Aurora</span>
+                                </a>
+                            </li>
                             <li className="rounded-sm">
                                 <a
                                     href="/marketplace"

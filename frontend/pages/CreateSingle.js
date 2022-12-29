@@ -62,6 +62,7 @@ export const CreateSingle = () => {
 
         try {
             const cid = await ipfs.add(image)
+            console.log(cid)
             if(cid.path) {
 
                 // add cid

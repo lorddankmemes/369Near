@@ -9,13 +9,12 @@ import { Profile } from '../components/ProfileContent/Profile'
 import { MyAuction } from '../components/ProfileContent/MyAuction'
 import { CoverProfile } from '../components/ProfileContent/CoverProfile'
 import { images } from '../constant'
+import { useWallet } from '../hooks/useWallet'
 
 
 export const MainProfile = () => {
 
-    const profile = {
-        user_public_address: "0x0727c18d9dA74F36eaF8bAB25614F465D4498a7f"
-    }
+    const { accountId } = useWallet()
 
     const padFunction = (number) => {
         let string = String(number)
@@ -37,9 +36,9 @@ export const MainProfile = () => {
         <div className='flex flex-col col-span-4 lg:col-span-1 bg-white rounded-2xl text-black py-10 px-6 ml-10 lg:ml-0 -translate-y-44'>
             <div className='profile-size'></div>
             <div className='text-2xl font-semibold text-center'>{/* @{profile.user_public_address.slice(-4).padStart(profile.user_public_address.length, ".")} */}
-                @0x07...8a7f
+                {accountId}
             </div>
-            <div className='text-center text-sm py-4'>@0x07...8a7f</div>
+            <div className='text-center text-sm py-4'>{accountId}</div>
 
             <a href='/updateprofile' 
                 className='my-16 text-center hover:border-orange-600 hover:border-2 hover:p-2 hover:rounded-lg'>
@@ -70,7 +69,6 @@ export const MainProfile = () => {
             </div>
 
             <div className='flex mt-48 mb-10 gap-x-4 justify-center'>
-                <span><img src={images.share}/></span>
                 <span><img src={images.share}/></span>
             </div>
 
