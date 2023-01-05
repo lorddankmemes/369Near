@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+/* import React, { useState }  from 'react'
 import marketOption from "../../data/filter/marketOption.json";
 
 function Filter() {
@@ -24,4 +24,19 @@ function Filter() {
   )
 }
 
-export default Filter
+export default Filter 
+ */
+
+import React from 'react';
+
+const Filter = ({handleClick}) => {
+
+
+  return (
+    <div>
+      <button onClick={handleClick}>Filter by lowest price</button>
+    </div>
+  );
+};
+
+export default Filter;

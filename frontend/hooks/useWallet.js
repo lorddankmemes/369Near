@@ -14,6 +14,7 @@ import MyNearIconUrl from '@near-wallet-selector/my-near-wallet/assets/my-near-w
 import { setupWalletSelector } from '@near-wallet-selector/core';
 import { setupLedger } from '@near-wallet-selector/ledger';
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
+import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 
 const WalletContext = createContext()
 
@@ -35,7 +36,10 @@ export const WalletProvider = ({ children }) => {
     const walletSelector = await setupWalletSelector({
       network: network,
       modules: [setupMyNearWallet({ iconUrl: MyNearIconUrl }),
-      setupLedger({ iconUrl: LedgerIconUrl })],
+      setupLedger({ iconUrl: LedgerIconUrl }),
+      setupNearWallet(),
+    ],
+      
     });
 
     setWalletSelector(walletSelector)
