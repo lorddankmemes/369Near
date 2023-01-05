@@ -7,6 +7,11 @@ import { Outlet } from 'react-router-dom';
 
 export const HeaderLayout = () => {
     const [open, setOpen] = useState(false);
+    const [toggleOpen, setToggleOpen] = useState(false);
+
+    const onToggleDropdown = () => {
+        setToggleOpen(!toggleOpen)
+      }
 
   return (
     <>
@@ -23,10 +28,35 @@ export const HeaderLayout = () => {
                 <span className='flex gap-2'>
                 <NavLink className="navbar grid content-center">
                 <span
-                    class="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700"
+                    onClick={() => onToggleDropdown()} 
+                    className="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700"
                 >
                 NEAR
                 </span>
+
+                { toggleOpen ?  
+                <div className="z-50 w-56 absolute translate-y-14 bg-white rounded-xl">
+                    <div className='relative m-6'>
+                    {/* <ul className="py-1 px-6 text-sm text-gray-700">
+                        <li className="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700">
+                            Aurora
+                        </li>
+                    </ul> */}
+                        <span
+                            onClick={() => onToggleDropdown()} 
+                            className="whitespace-nowrap rounded-full mx-4 bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700"
+                            >
+                            NEAR
+                        </span>
+                        <span
+                            onClick={() => onToggleDropdown()} 
+                            className="whitespace-nowrap rounded-full bg-green-100 px-2.5 py-0.5 text-sm text-green-700"
+                            >
+                            Aurora
+                        </span>
+                    </div>
+                </div> : <></> }
+
                 </NavLink>
                 <NavLink className="navbar grid content-center" to="/Marketplace">Marketplace</NavLink>
                 <NavLink className="navbar grid content-center" to="/Auctions">Auctions</NavLink>
