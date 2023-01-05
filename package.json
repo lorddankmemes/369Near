@@ -16,5 +16,8 @@
   "devDependencies": {
     "near-cli": "^3.3.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-calendar": "^4.0.0",
+    "react-datepicker": "^4.8.0"
+  }
 }

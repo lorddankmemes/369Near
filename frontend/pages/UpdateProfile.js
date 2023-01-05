@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+/* import React, { useState } from 'react'
 
 export const UpdateProfile = ({addProfileUpdate}) => {
     
@@ -136,9 +136,11 @@ export const UpdateProfile = ({addProfileUpdate}) => {
                     <div className="flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md h-[50vh] relative">
                         <div className='text-gray-400 px-10 pt-4 text-center'>Drag and drop an image here, or click to browse.</div>
                         <div className='mx-10'>
-                            <img src={image} className='object-cover h-60 w-96 rounded-md'/>
+                            <img src={image} className='object-cover h-[33vh] w-full bg-transparent rounded-md'/>
                         </div>
-                        <input type="file" files={image} onChange={onImageChange} className='m-auto relative left-2' />
+                        <div className='absolute bottom-0 left-28 pb-4'>
+                            <input type="file" files={image} onChange={onImageChange} />
+                        </div>
                     </div>
                 </div>
 
@@ -293,5 +295,362 @@ export const UpdateProfile = ({addProfileUpdate}) => {
         </div>
     </div>
     </>
+  )
+}
+ */
+
+import React, { useEffect, useRef, useState } from 'react'
+import useIpfsFactory from '../hooks/useIpfsFactory'
+import { useWallet } from '../hooks/useWallet'
+
+export const UpdateProfile = () => {
+   
+    const [profile, setProfile] = useState({
+        email: '',
+        firstname: '',
+        lastname: '',
+        username: '',
+        bio: '',
+        twitter: '',
+        website: '',
+        telegram: '',
+        instagram: '',
+        linkedin: '',
+        dribble: '',
+        youtube: '',
+    })
+    const [preview, setPreview] = useState()
+
+    const { ipfs } = useIpfsFactory()
+    const { accountId, callMethod } = useWallet()
+
+    const onHandleChanged = (evt) => {
+        const {value} = evt.target.value
+        setProfile({
+            ...profile,
+            [evt.target.name]: value
+        })
+    }
+
+    const [image, setImage] = useState()
+
+    const onFileChanged = (e) => {
+        console.log(e.target.files[0])
+        setImage(e.target.files[0])
+    }
+
+    const imageRef = useRef(null)
+
+    const onOpenFileDialog = (e) => {
+        imageRef.current.click()
+    }
+
+    useEffect(() => {
+        if (!image) {
+          setPreview(undefined)
+          return
+        }
+    
+        const objectUrl = URL.createObjectURL(image)
+        setPreview(objectUrl)
+    
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [image])
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+
+        try {
+            const cid = await ipfs.add(image)
+            console.log(cid)
+            if(cid.path) {
+
+                // add cid
+                setProfile({
+                    ...profile,
+                    media: cid.path
+                })
+
+                await callMethod({
+                    contractId: process.env.CONTRACT_NAME,
+                    method: 'nft_mint',
+                    args
+                })
+            }
+          } catch(e) {
+            console.log(e)
+          }
+    }
+
+  return (
+    <div>
+         <div class="grid grid-cols-1 md:grid-cols-1 mx-4 body-container mx-6 lg:mx-56">
+        <div className='my-12 text-5xl font-semibold'>Edit your profile</div>
+
+        <div className='grid bg-white rounded-lg my-6 p-10 '>
+            <form /* onSubmit={e => { handleSubmit(e) }} */>
+
+                <div className='grid grid-cols-2 md:grid-cols-4 px-6'>
+                    <div class="flex text-md col-span-2 md:col-span-2 font-semibold text-black ">
+                        Enter your details
+                    </div>
+                    <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                        <label>
+                            Email
+                                <div>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={profile.email}
+                                        onChange={onHandleChanged}
+                                        className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                                        placeholder="Enter your email"
+                                        style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                    />
+                                </div>
+                        </label>
+
+                        <label>
+                            First Name
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="firstname"
+                                        value={profile.firstname}
+                                        onChange={onHandleChanged}
+                                        className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                                        placeholder="Enter your First name"
+                                        style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                    />
+                                </div>
+                        </label>
+
+                        <label>
+                            Last Name
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="lastname"
+                                        value={profile.lastname}
+                                        onChange={onHandleChanged}
+                                        className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                                        placeholder="Enter your Last name"
+                                        style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                    />
+                                </div>
+                        </label>
+
+                        <label>
+                            Username
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        value={profile.username}
+                                        onChange={onHandleChanged}
+                                        className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                                        placeholder="Name your artwork"
+                                        style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                    />
+                                </div>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div className='grid grid-cols-2 md:grid-cols-4 pt-16 px-6'>
+                    <div class="flex text-md col-span-2 md:col-span-2 font-semibold text-black ">
+                        Add a short bio
+                    </div>
+                    <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                        <label>
+                            <div>
+                                <textarea
+                                    type="text"
+                                    name="bio"
+                                    value={profile.bio}
+                                    onChange={onHandleChanged}
+                                    className="w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                                    placeholder="Enter a short bio"
+                                    style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                />
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div className='grid md:grid-cols-4 pt-16 px-6'>
+                    <div class="flex flex-col md:col-span-2">
+                    <span className='font-semibold text-black'>Add a profile image</span>
+                    <span className='text-sm'>Recommended size:<br/>
+                        1000x1000px.<br/>
+                        JPG, PNG or GIF.<br/>
+                        10MB max size.</span>
+                    </div>
+
+                    <div className="flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md h-[52vh] relative">
+                        <div className='text-gray-400 px-10 pt-4 text-center'>Drag and drop an image here, or click to browse.</div>
+                        <div className='mx-10'>
+                            <img src={preview} alt="" className='object-cover h-[33vh] w-full bg-transparent rounded-md'/>
+                        </div>
+                        <div className='m-auto'>
+                            <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
+                            <button onClick={onOpenFileDialog} type="file" className='mt-2 px-16'>Choose File</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className='grid pt-20 px-6'>
+                    <div className='font-semibold text-black pb-8'>Add links to your<br/>social media profiles</div>
+                        <div className='flex flex-col gap-y-6'>
+                            <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200'>
+                                <div class="flex items-center md:col-span-2 px-4">
+                                    <span className='text-black text-sm'>Website</span>
+                                </div>
+                                <div className='flex flex-col md:col-span-2'>
+                                    <span>
+                                        <input
+                                            type="url"
+                                            name="website"
+                                            value={profile.website}
+                                            onChange={onHandleChanged}
+                                            className="h-12 w-full rounded-xl text-sm text-black"
+                                            placeholder="Enter name"
+                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+                            <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200'>
+                                <div class="flex items-center md:col-span-2 justify-between">
+                                    <span className='text-black text-sm px-4'>Twitter</span>
+                                    <span className='text-gray-400 text-xs px-4'>twitter.com/</span>
+                                </div>
+                                <div className='flex flex-col md:col-span-2'>
+                                    <span>
+                                        <input
+                                            type="url"
+                                            name="twitter"
+                                            value={profile.twitter}
+                                            onChange={onHandleChanged}
+                                            className="h-12 w-full rounded-xl text-sm text-black"
+                                            placeholder="Enter name"
+                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+                            <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200'>
+                                <div class="flex items-center md:col-span-2  justify-between">
+                                    <span className='text-black text-sm px-4'>Telegram</span>
+                                    <span className='text-gray-400 text-xs px-4'>t.me/</span>
+                                </div>
+                                <div className='flex flex-col  md:col-span-2'>
+                                    <span>
+                                        <input
+                                            type="url"
+                                            name="telegram"
+                                            value={profile.telegram}
+                                            onChange={onHandleChanged}
+                                            className="h-12 w-full rounded-xl text-sm text-black"
+                                            placeholder="Enter name"
+                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+                            <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200'>
+                                <div class="flex items-center md:col-span-2  justify-between">
+                                    <span className='text-black text-sm px-4'>Dribble</span>
+                                    <span className='text-gray-400 text-xs px-4'>dribble.com/</span>
+                                </div>
+                                <div className='flex flex-col md:col-span-2'>
+                                    <span>
+                                        <input
+                                            type="url"
+                                            name="dribble"
+                                            value={profile.dribble}
+                                            onChange={onHandleChanged}
+                                            className="h-12 w-full rounded-xl text-sm text-black"
+                                            placeholder="Enter name"
+                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+                            <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200'>
+                                <div class="flex items-center md:col-span-2 justify-between">
+                                    <span className='text-black text-sm px-4'>LinkedIn</span>
+                                    <span className='text-gray-400 text-xs px-4'>linkedin.com/</span>
+                                </div>
+                                <div className='flex flex-col md:col-span-2'>
+                                    <span>
+                                        <input
+                                            type="url"
+                                            name="linkedin"
+                                            value={profile.linkedin}
+                                            onChange={onHandleChanged}
+                                            className="h-12 w-full rounded-xl text-sm text-black"
+                                            placeholder="Enter name"
+                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+                            <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200'>
+                                <div class="flex items-center md:col-span-2 justify-between">
+                                    <span className='text-black text-sm px-4'>Instagram</span>
+                                    <span className='text-gray-400 text-xs px-4'>instagram.com/</span>
+                                </div>
+                                <div className='flex flex-col md:col-span-2'>
+                                    <span>
+                                        <input
+                                            type="url"
+                                            name="instagram"
+                                            value={profile.instagram}
+                                            onChange={onHandleChanged}
+                                            className="h-12 w-full rounded-xl text-sm text-black"
+                                            placeholder="Enter name"
+                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+                            <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200'>
+                                <div class="flex items-center md:col-span-2 justify-between">
+                                    <span className='text-black text-sm px-4'>Youtube</span>
+                                    <span className='text-gray-400 text-xs px-4'>youtube.com/</span>
+                                </div>
+                                <div className='flex flex-col md:col-span-2'>
+                                    <span>
+                                        <input
+                                            type="URL"
+                                            name="youtube"
+                                            value={profile.youtube}
+                                            onChange={onHandleChanged}
+                                            className="h-12 w-full rounded-xl text-sm text-black"
+                                            placeholder="Enter name"
+                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className='flex flex-col md:col-span-2 my-10'>
+                        <button
+                            type="submit"
+                            value="submit"
+                            className="rounded-xl text-md text-black "
+                            onClick={onSubmit}
+                        >
+                            Submit
+                        </button>
+                    </div>
+            </form>
+        </div>
+    </div>
+    </div>
   )
 }

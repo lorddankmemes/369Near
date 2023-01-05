@@ -4,9 +4,12 @@ import { images } from '../constant'
 import { HiPlusSm } from 'react-icons/hi'
 import useIpfsFactory from '../hooks/useIpfsFactory'
 import { useWallet } from '../hooks/useWallet'
+import DatePicker from "react-datepicker";
+import Calendar from 'react-calendar';
 
 export const CreateSingle = () => {
-
+    const [value, onChange] = useState(new Date());
+    const [startDate, setStartDate] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [metadata, setMetadata] = useState({
         title: '',
@@ -25,6 +28,16 @@ export const CreateSingle = () => {
             ...metadata,
             [evt.target.name]: value
         })
+    }
+
+    const onHandleSaleChanged = () => {
+        setOnSale(true)
+        setOnAuction(false)
+    }
+
+    const onHandleAuctionChanged = () => {
+        setOnAuction(true)
+        setOnSale(false)
     }
 
     const [image, setImage] = useState()
@@ -56,6 +69,7 @@ export const CreateSingle = () => {
     const [royalty, setRoyalty] = useState(0)
     const [onSale, setOnSale] = useState(false)
     const [onAuction, setOnAuction] = useState(false)
+    const [weth, setWeth] = useState(0)
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -94,6 +108,15 @@ export const CreateSingle = () => {
             console.log(e)
           }
     }
+
+    const onToggleCalendar = () => {
+        setStartDate(!startDate)
+      }
+    
+    const onToggleClosed = () => {
+        setStartDate(false)
+    }
+    
 
 return (
     <>
@@ -226,12 +249,13 @@ return (
             <div className="flex col-span-4 lg:col-span-2 mx-6">
                 <div className="relative w-full">
                 <div className='pb-8'>Preview</div>
-                    <div className='bg-white h-full rounded-xl'>
-                        <img src={preview} alt="" />
+                    <div className='bg-white rounded-xl h-full relative'>
+                        <img src={preview} alt="" className='object-cover' />
                     </div>
                 </div>
             </div>
         </div>
+
         <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
             <div className='col-span-4 lg:col-span-2 flex flex-col bg-white rounded-xl px-10 py-6 font-medium text-gray-500'>
                 <span>Unlock once purchased</span>
@@ -354,7 +378,8 @@ return (
                                         <input 
                                             type="checkbox"
                                             value={onSale}
-                                            onChange={e => setOnSale(e.target.value)}
+                                            onChange={onHandleSaleChanged}
+                                            /* onChange={e => setOnSale(e.target.value)} */
                                             className="sr-only" 
                                         />
 
@@ -374,7 +399,8 @@ return (
                                         <input 
                                             type="checkbox"
                                             value={onAuction}
-                                            onChange={e => setOnAuction(e.target.value)}
+                                            onChange={onHandleAuctionChanged}
+                                            /* onChange={e => setOnAuction(e.target.value)} */
                                             className="sr-only" 
                                         />
 
@@ -394,11 +420,163 @@ return (
                                 </button>
                             </div>
                         </div>
-                        </div>
+                    </div>
+
                 </form>
             </div>
         </div>
-    </div>
+
+
+            {/* onSale modal */}
+            { onSale === true && onAuction === false ?
+                <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black my-10">
+                    <div className="col-span-4 lg:col-span-2">
+                        <div className='text-4xl font-semibold pb-2'>Put on sale</div>
+                            <label>
+                            Enter the price in ETH for one item.
+                                <div className='flex gap-4 mt-2'>
+                                    <input
+                                        type="number"
+                                        name="weth"
+                                        className="bg-white outline-orange-600 h-10 w-1/2 rounded-md text-black"
+                                        value={weth}
+                                        onChange={e => setWeth(e.target.value)}
+                                        style={{ padding:"20px"}}
+                                    />
+                                    <div className='text-sm font-light'>
+                                        Platform Fee: 0% <br/>
+                                        You will receive Ξ 0.0001 (~$0.125)
+                                    </div>   
+                                </div>
+                            </label>
+                    </div>
+                    <div className='flex justify-center'>
+                        <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
+                        <button onClick={onOpenFileDialog} type="file" className='mt-6 px-16'>Put on Sale</button>
+                    </div>
+                </div>
+                : 
+                null
+            }   
+        
+            {/* onAuction modal */}
+            { onAuction ?
+                <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black">
+                    <div className='text-4xl font-semibold pb-2'>Put on auction</div>
+                        <div className='grid grid-cols-2 md:grid-cols-4 gap-20 mt-10'>
+                            <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                            <label>
+                                Reserved Price (WETH)
+                                        <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2'>
+                                            <div className="flex items-center md:col-span-2 justify-between">
+                                                <input
+                                                    /* type="number" */
+                                                    name="weth"
+                                                    className="h-16 w-full rounded-md pl-6 focus:outline-none"
+                                                    value={weth}
+                                                    onChange={e => setWeth(e.target.value)}
+                                                   /*  style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}} */
+                                                />
+                                            </div>
+                                            <div className='flex flex-col md:col-span-2'>
+                                            <span>
+                                                <select
+                                                    name="selectweth"
+                                                    value={weth}
+                                                    className="h-16 w-full rounded-xl text-sm text-black mr-4"
+                                                    placeholder="Enter name"
+                                                    style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                                 >
+                                                    <option selected>WETH</option>
+                                                    <option value="weth">Weth</option>
+                                                </select>
+                                            </span>
+                                            </div>
+                                        </div>
+                                </label>
+
+                                <label>
+                                    Start Date
+                                    <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2'>
+                                        <div className="flex items-center md:col-span-3">
+                                            <input
+                                                type="text"
+                                                name="firstname"
+                                                className="h-16 w-full rounded-md pl-6 focus:outline-none"
+                                                placeholder="Enter your First name"
+                                            /> 
+                                        </div>
+
+                                        <div className='flex items-center md:col-span-1'>
+                                            <div onClick={() => onToggleCalendar()}>
+                                                <img src={images.plus} />
+                                            </div>
+                                        </div>
+
+                                        { startDate ?
+                                            <div className='z-50 absolute bg-white shadow-2'>
+                                                <Calendar onChange={onChange} value={value}/>
+                                            </div>
+                                            :
+                                            <></>
+                                        }
+                                    </div>
+
+                                </label>
+
+                                
+
+                                <label>
+                                    End Date
+                                        <div>
+                                            <input
+                                                type="text"
+                                                name="lastname"
+                                                className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                                                placeholder="Enter your Last name"
+                                                style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            />
+                                        </div>
+                                </label>
+                            </div>
+                            <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                                <label>
+                                Starting price (WETH)
+                                        <div>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                                                placeholder="Enter your email"
+                                                style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            >                                               
+                                            </input>
+                                        </div>
+                                </label>
+
+                                <label>
+                                Bid Price increment (WETH)
+                                        <div>
+                                            <input
+                                                type="text"
+                                                name="firstname"
+                                                className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                                                placeholder="Enter your First name"
+                                                style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            />
+                                        </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div className='flex justify-center'>
+                            <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
+                            <button onClick={onOpenFileDialog} type="file" className='mt-6 px-16'>Put on Auction</button>
+                        </div>
+                </div>
+            :
+                null
+            }
+        </div>
     </>
   )
 }

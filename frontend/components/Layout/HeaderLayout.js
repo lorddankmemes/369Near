@@ -42,7 +42,7 @@ export const HeaderLayout = () => {
                     </span>
                 </button>
 
-                <button className='px-10'><ConnectWallet /></button>
+                <button><ConnectWallet /></button>
             </div>
         </div>
     </header>

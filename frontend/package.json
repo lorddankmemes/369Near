@@ -14,6 +14,7 @@
     "assert": "^2.0.0",
     "autoprefixer": "^10.4.13",
     "buffer": "^5.7.1",
+    "console-browserify": "^1.2.0",
     "constants-browserify": "^1.0.0",
     "env-cmd": "^10.1.0",
     "nodemon": "^2.0.16",

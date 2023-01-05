@@ -10,9 +10,11 @@ import { MyAuction } from '../components/ProfileContent/MyAuction'
 import { CoverProfile } from '../components/ProfileContent/CoverProfile'
 import { images } from '../constant'
 import { useWallet } from '../hooks/useWallet'
+import {useNavigate} from 'react-router-dom'
 
 
 export const MainProfile = () => {
+    const navigate = useNavigate();
 
     const { accountId } = useWallet()
 
@@ -34,46 +36,47 @@ export const MainProfile = () => {
 
     {/* left container */}
         <div className='flex flex-col col-span-4 lg:col-span-1 bg-white rounded-2xl text-black py-10 px-6 ml-10 lg:ml-0 -translate-y-44'>
-            <div className='profile-size'></div>
-            <div className='text-2xl font-semibold text-center'>{/* @{profile.user_public_address.slice(-4).padStart(profile.user_public_address.length, ".")} */}
-                {accountId}
-            </div>
-            <div className='text-center text-sm py-4'>{accountId}</div>
+            <div>
+                <div className='profile-size'></div>
+                <div className='text-2xl font-semibold text-center'>{/* @{profile.user_public_address.slice(-4).padStart(profile.user_public_address.length, ".")} */}
+                    {accountId}
+                </div>
+                <div className='text-center text-sm py-4'>{accountId}</div>
 
-            <a href='/updateprofile' 
-                className='my-16 text-center hover:border-orange-600 hover:border-2 hover:p-2 hover:rounded-lg'>
-                Edit Profile
-            </a>
-
-            <div className='flex justify-between pb-6'>
-                <div className='flex text-sm font-medium flex-col gap-y-3'>
-                    <span>Project Views</span>
-                    <span>Favourites</span>
-                    <span>Followers</span>
-                    <span>Following</span>
-                    <span className='font-semibold'>Contact Me</span>
+                <div onClick={()=>navigate("/updateprofile")}
+                    className='my-16 text-center hover:border-orange-600 hover:border-2 hover:p-2 hover:rounded-lg'>
+                    Edit Profile
                 </div>
 
-                <div className='flex flex-col text-sm font-medium text-gray-400 gap-y-3 text-right'>
-                    <span>N/A</span>
-                    <span>0</span>
-                    <span>0</span>
-                    <span>0</span>
+                <div className='flex justify-between pb-6'>
+                    <div className='flex text-sm font-medium flex-col gap-y-3'>
+                        <span>Project Views</span>
+                        <span>Favourites</span>
+                        <span>Followers</span>
+                        <span>Following</span>
+                        <span className='font-semibold'>Contact Me</span>
+                    </div>
+
+                    <div className='flex flex-col text-sm font-medium text-gray-400 gap-y-3 text-right'>
+                        <span>N/A</span>
+                        <span>0</span>
+                        <span>0</span>
+                        <span>0</span>
+                    </div>
+
                 </div>
 
+                <div className='py-10 text-sm font-semibold'>
+                    <span>About</span>
+                    <span></span>
+                </div>
+
+                <div className='flex mt-48 mb-10 gap-x-4 justify-center'>
+                    <span><img src={images.share}/></span>
+                </div>
+
+                <div className='my-8 text-xs text-center'>Member Since: November 4, 2022</div>
             </div>
-
-            <div className='py-10 text-sm font-semibold'>
-                <span>About</span>
-                <span></span>
-            </div>
-
-            <div className='flex mt-48 mb-10 gap-x-4 justify-center'>
-                <span><img src={images.share}/></span>
-            </div>
-
-            <div className='my-8 text-xs text-center'>Member Since: November 4, 2022</div>
-
         </div>
 
 
