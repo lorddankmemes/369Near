@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { images } from '../constant';
 import { useWallet } from '../hooks/useWallet';
@@ -17,6 +17,7 @@ export function SignOutButton({ onHandleSignOut }) {
   const navigate = useNavigate()
   
   const [open, setOpen] = useState(false);
+  const walletRef = useRef(null);
   
   const OnSignOut = () => {
     setOpen(false)
@@ -27,19 +28,34 @@ export function SignOutButton({ onHandleSignOut }) {
     setOpen(!open)
   }
 
+  useEffect(() => {
+    function handleClick(event) {
+      if (!walletRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, []);
+
   const goTo = (to) => {
     setOpen(false)
     navigate(to)
   }
 
+
   return (
-    <div>
-      <div onClick={() => onToggleDropdown()}  id="dropdownUserAvatarButton" className="flex mx-3 text-sm bg-orange-600 rounded-full md:mr-0">
+    <div ref={walletRef} onClick={() => onToggleDropdown()} >
+      <div id="dropdownUserAvatarButton" className="flex mx-3 text-sm bg-orange-600 rounded-full md:mr-0">
         <img className="w-8 h-8 rounded-full" src={images.avatar} />
       </div>
 
   { open ?  
-    <div id="dropdownAvatar" className="z-50 w-56 absolute m-2 right-10 mt-2 bg-white rounded-xl">
+    <div id="dropdownAvatar" className="z-50 w-56 absolute m-2 right-10 mt-4 bg-white rounded-xl">
       <div className='border-b-2 border-gray-200 rounded-xl shadow-lg'>
         <div className="p-2 flex gap-x-3 border-2 border-orange-600 m-3 rounded-lg text-black">
           <img className="w-8 h-8 rounded-full" src={images.avatar} />

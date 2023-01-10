@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { images } from '../constant';
+import { useLocation } from 'react-router-dom';
 
 //collectible auction info
 const auction = {
@@ -47,6 +48,8 @@ const info = {
 }
 
 function SingleAuction() {
+  const location = useLocation();
+  const { data } = location.state;
   const [open, setOpen] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [currentComponent, setCurrentComponent] = useState('A');
@@ -56,9 +59,10 @@ function SingleAuction() {
 
   return (
     <>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mx-4 text-white pt-20 m-10 md:m-16 lg:m-0">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mx-4 text-white pt-20 m-10 md:m-16 lg:m-0">
 
-      <div class="flex col-span-1 justify-center relative">
+      {/* left section */}
+      <div className="flex col-span-1 justify-center relative">
         { showModal ?
           <div className='flex bg-white py-10 text-black rounded-lg px-6 w-full lg:w-4/5 absolute z-3 bottom-0 lg:bottom-1/4' onClick={() => setShowModal(false)}>
              <div>
@@ -69,10 +73,10 @@ function SingleAuction() {
             </div>
           </div>
           : null}
-          <img className="rounded-xl w-full h-full md:full md:h-full lg:w-3/5 lg:h-4/5" src={info.ipfs_media_path}  />
+          <img className="rounded-xl w-full h-full md:full md:h-full lg:w-3/5 lg:h-4/5" src={data.auctions_of_collectible.ipfs_media_path}  />
       </div>
 
-      
+      {/* right section */}
       <div class="flex col-span-1 lg:w-4/5 justify-center">
         { !showModal ?
           <div className='flex flex-col w-full'>
@@ -86,11 +90,11 @@ function SingleAuction() {
             <div className='flex gap-x-4'>
                 <span><img src={auction.seller_profile_photo_path} className="creator-size"/></span>
                 <span>
-                    <div className='font-bold'>{auction.seller_username}</div>
+                    <div className='font-bold'>{data.auctions_of_collectible.collectibles_user.username}</div>
                 </span>
             </div>
 
-            <div className='text-5xl font-bold pb-12'>{info.collectible_name}</div>
+            <div className='text-5xl font-bold pb-12'>{data.auctions_of_collectible.collectible_name}</div>
 
             <div className='bg-white py-10 text-black rounded-lg px-6'>
                 Starting price
@@ -109,15 +113,19 @@ function SingleAuction() {
           <div className="flex flex-col w-full mr-10">
                       <div className='flex flex-col col-span-1'>
                       <div className='text-3xl lg:text-5xl  pb-10 pt-10 lg:pt-2 text-black font-semibold'>Place a bid</div>
-                          <div>
-                            <input
-                                type="search"
-                                name="search-form"
-                                id="search-form"
-                                className="bg-gray-100 outline-orange-600 h-16 w-4/5 rounded-md w-full"
-                                placeholder="Enter your email"
-                                style={{ padding:"20px"}}
-                                />
+                          <div className='grid md:grid-cols-4 rounded-xl border-[1px] bg-white border-gray-200 mt-2'>
+                                            <div className="flex items-center md:col-span-3 justify-between">
+                                                <input
+                                                    /* type="number" */
+                                                    name="reservedPrice"
+                                                    className="h-16 w-full rounded-md pl-6 focus:outline-none"
+                                                />
+                                            </div>
+                                            <div 
+                                                className='flex flex-col md:col-span-1 w-full text-2xl font-medium text-black text-center rounded-xl'
+                                                style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}>
+                                                WETH
+                                            </div>
                           </div>
 
                           <div className='text-sm pt-6 text-white'>$0.00</div>
@@ -144,8 +152,8 @@ function SingleAuction() {
 
                           <div className='h-20 w-100 bg-neutral-300 text-white rounded-xl mt-6 font-semibold text-md grid content-center'>
                             <div className='flex justify-between mx-8'>
-                              <div>Artworks Collected</div>
-                              <div>def</div>
+                              <div>Your Balance</div>
+                              <div>0 WETH</div>
                             </div>
                           </div>
 

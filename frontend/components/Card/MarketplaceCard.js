@@ -30,13 +30,13 @@ function MarketplaceCard() {
                 
                 <div className='py-4 text-lg font-semibold'>{data.sale_collectibles.collectible_name}</div>
                 <span className='text-sm text-gray-400'>{data.sale_collectibles.collectible_type.toUpperCase()}</span>
-                <p class="text-md font-medium">
+                <p className="text-md font-medium">
                   Edition { data.quantity } / { data.sale_collectibles.noOfCopies}
                 </p>
 
               <hr className='my-4'/>
 
-              <p class="text-md text-gray-400">List Price</p>
+              <p className="text-md text-gray-400">List Price</p>
                 <span>{data.onsale_current_price}</span>
               </div>
           ))}

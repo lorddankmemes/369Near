@@ -64,19 +64,10 @@ const getDeadTime = () => {
   return deadline;
 }
 
-// We can use useEffect so that when the component
-// mount the timer will start as soon as possible
-
-// We put empty array to act as componentDid
-// mount only
 useEffect(() => {
   clearTimer(getDeadTime());
 }, []);
 
-// Another way to call the clearTimer() to start
-// the countdown is via action event from the
-// button first we create function to be called
-// by the button
 const onClickReset = () => {
   clearTimer(getDeadTime());
 }
@@ -87,7 +78,7 @@ const navigate = useNavigate();
 
 const handleNFTClick = (data) => {
   setSelectedNFT(data)
-  navigate(`/auctions/${data.auctions_of_collectible.collectible_uuid}`)
+  navigate(`/auctions/${data.auctions_of_collectible.collectible_uuid}`, { state: { data } })
 }
 
   return (

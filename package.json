@@ -17,6 +17,7 @@
     "near-cli": "^3.3.0"
   },
   "dependencies": {
+    "github-like-avatar-generator": "^1.1.10",
     "react-calendar": "^4.0.0",
     "react-datepicker": "^4.8.0"
   }

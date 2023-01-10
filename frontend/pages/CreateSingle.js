@@ -4,19 +4,36 @@ import { images } from '../constant'
 import { HiPlusSm } from 'react-icons/hi'
 import useIpfsFactory from '../hooks/useIpfsFactory'
 import { useWallet } from '../hooks/useWallet'
-import DatePicker from "react-datepicker";
-import Calendar from 'react-calendar';
 
 export const CreateSingle = () => {
-    const [value, onChange] = useState(new Date());
-    const [startDate, setStartDate] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [category, setCategory] = useState('')
+    const [royalty, setRoyalty] = useState(0)
+
+    //lock state
+    const [onLock, setOnLock] = useState(false)
+
+    //sale modal state
+    const [onSale, setOnSale] = useState(false)
+    const [salePrice, setSalePrice] = useState(0)
+
+    //auction modal state
+    const [onAuction, setOnAuction] = useState(false)
+    const [reservedPrice, setReservedPrice] = useState(0)
+    const [selectWeth, setSelectWeth] = useState('')
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [startPrice, setStartPrice] = useState(0.0)
+    const [bidPrice, setBidPrice] = useState(0)
+    
+    //input state
     const [metadata, setMetadata] = useState({
         title: '',
         description: '',
         media: '',
         perpetual_royalties: {}
     })
+
     const [preview, setPreview] = useState()
 
     const { ipfs } = useIpfsFactory()
@@ -31,15 +48,20 @@ export const CreateSingle = () => {
     }
 
     const onHandleSaleChanged = () => {
-        setOnSale(true)
-        setOnAuction(false)
+        setOnSale(!onSale)
+        setOnAuction(onAuction)
     }
 
     const onHandleAuctionChanged = () => {
-        setOnAuction(true)
-        setOnSale(false)
+        setOnAuction(!onAuction)
+        setOnSale(onSale)
     }
 
+    const onHandleLockChanged = () => {
+        setOnLock(!onLock)
+    }
+
+    //image & preview logic
     const [image, setImage] = useState()
 
     const onFileChanged = (e) => {
@@ -65,12 +87,8 @@ export const CreateSingle = () => {
         return () => URL.revokeObjectURL(objectUrl)
     }, [image])
 
-    const [category, setCategory] = useState('')
-    const [royalty, setRoyalty] = useState(0)
-    const [onSale, setOnSale] = useState(false)
-    const [onAuction, setOnAuction] = useState(false)
-    const [weth, setWeth] = useState(0)
 
+    //submit function logic
     const onSubmit = async (e) => {
         e.preventDefault()
 
@@ -103,18 +121,14 @@ export const CreateSingle = () => {
                     method: 'nft_mint',
                     args
                 })
+
+                /* if(onSale) {
+
+                } */
             }
           } catch(e) {
             console.log(e)
           }
-    }
-
-    const onToggleCalendar = () => {
-        setStartDate(!startDate)
-      }
-    
-    const onToggleClosed = () => {
-        setStartDate(false)
     }
     
 
@@ -255,11 +269,47 @@ return (
                 </div>
             </div>
         </div>
-
+        
+        {/* collection white background section */}
         <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
-            <div className='col-span-4 lg:col-span-2 flex flex-col bg-white rounded-xl px-10 py-6 font-medium text-gray-500'>
-                <span>Unlock once purchased</span>
-                <span className='pt-6'>Content below and media file will be unlocked after successful transaction</span>
+            <div className='col-span-4 lg:col-span-2 flex flex-col bg-white rounded-xl px-10 py-6 font-normal'>
+                    <div className="flex justify-between w-full mt-4 mb-2">
+                        <div className="text-black font-semibold text-md">
+                                Unlock once purchase
+                        </div>
+        
+                            <label className="flex items-center cursor-pointer">
+                                <div className="relative">
+                                    <input 
+                                            type="checkbox"
+                                            value={onLock}
+                                            onClick={onHandleLockChanged}
+                                            /* onChange={e => setOnSale(e.target.value)} */
+                                            className="sr-only" 
+                                        />
+
+                                    <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>             
+                            </label>       
+                    </div>                
+                
+                { !onLock ?
+                <>
+                    <div className='pt-6 text-gray-400'>Provide the Links of the content which buyer can download, post purchase</div>
+                        <div className='mt-10'>
+                            <input
+                                type="text"
+                                name="externallink"
+                                className="h-20 w-full text-sm font-normal px-4 outline-orange-600 rounded-md mt-2 border-[1px] border-gray-200"
+                                placeholder="Tip: Markdown syntax is supported"
+                        />
+                    </div>
+                </>
+                :
+                <span className='pt-6 text-gray-400'>Content below and media file will be unlocked after successful transaction</span>
+                }
+
                 <span className='pt-16'>Collection</span>
 
                 <div className='grid grid-cols-2 text-orange-600 font-semibold text-md gap-10 py-10 text-center'>
@@ -274,6 +324,7 @@ return (
                 </div>
             </div>
 
+        {/* input form section */}
             <div className="flex col-span-4 lg:col-span-2 px-10 w-full">
                 <form onSubmit={e => { handleSubmit(e) }}>
 
@@ -378,7 +429,7 @@ return (
                                         <input 
                                             type="checkbox"
                                             value={onSale}
-                                            onChange={onHandleSaleChanged}
+                                            onClick={onHandleSaleChanged}
                                             /* onChange={e => setOnSale(e.target.value)} */
                                             className="sr-only" 
                                         />
@@ -399,7 +450,7 @@ return (
                                         <input 
                                             type="checkbox"
                                             value={onAuction}
-                                            onChange={onHandleAuctionChanged}
+                                            onClick={onHandleAuctionChanged}
                                             /* onChange={e => setOnAuction(e.target.value)} */
                                             className="sr-only" 
                                         />
@@ -437,10 +488,10 @@ return (
                                 <div className='flex gap-4 mt-2'>
                                     <input
                                         type="number"
-                                        name="weth"
+                                        name="salePrice"
                                         className="bg-white outline-orange-600 h-10 w-1/2 rounded-md text-black"
-                                        value={weth}
-                                        onChange={e => setWeth(e.target.value)}
+                                        value={salePrice}
+                                        onChange={e => setSalePrice(e.target.value)}
                                         style={{ padding:"20px"}}
                                     />
                                     <div className='text-sm font-light'>
@@ -461,8 +512,8 @@ return (
         
             {/* onAuction modal */}
             { onAuction ?
-                <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black">
-                    <div className='text-4xl font-semibold pb-2'>Put on auction</div>
+                <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black rounded-lg">
+                    <div className='text-4xl font-semibold pb-2'>Put on Auction</div>
                         <div className='grid grid-cols-2 md:grid-cols-4 gap-20 mt-10'>
                             <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
                             <label>
@@ -471,23 +522,22 @@ return (
                                             <div className="flex items-center md:col-span-2 justify-between">
                                                 <input
                                                     /* type="number" */
-                                                    name="weth"
+                                                    name="reservedPrice"
                                                     className="h-16 w-full rounded-md pl-6 focus:outline-none"
-                                                    value={weth}
-                                                    onChange={e => setWeth(e.target.value)}
-                                                   /*  style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}} */
+                                                    value={reservedPrice}
+                                                    onChange={e => setReservedPrice(e.target.value)}
                                                 />
                                             </div>
                                             <div className='flex flex-col md:col-span-2'>
                                             <span>
                                                 <select
-                                                    name="selectweth"
-                                                    value={weth}
+                                                    name="selectWeth"
+                                                    value={selectWeth}
                                                     className="h-16 w-full rounded-xl text-sm text-black mr-4"
                                                     placeholder="Enter name"
                                                     style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
                                                  >
-                                                    <option selected>WETH</option>
+                                                    <option onChange={e => setSelectWeth(e.target.value)} value>WETH</option>
                                                     <option value="weth">Weth</option>
                                                 </select>
                                             </span>
@@ -498,45 +548,32 @@ return (
                                 <label>
                                     Start Date
                                     <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2'>
-                                        <div className="flex items-center md:col-span-3">
+                                        <div className="flex items-center md:col-span-4">
                                             <input
-                                                type="text"
-                                                name="firstname"
-                                                className="h-16 w-full rounded-md pl-6 focus:outline-none"
-                                                placeholder="Enter your First name"
+                                                type="date" 
+                                                name="startDate"
+                                                value={startDate}
+                                                onChange={e => setStartDate(e.target.value)}
+                                                className="h-16 w-full rounded-md px-6 focus:outline-none"
                                             /> 
                                         </div>
-
-                                        <div className='flex items-center md:col-span-1'>
-                                            <div onClick={() => onToggleCalendar()}>
-                                                <img src={images.plus} />
-                                            </div>
-                                        </div>
-
-                                        { startDate ?
-                                            <div className='z-50 absolute bg-white shadow-2'>
-                                                <Calendar onChange={onChange} value={value}/>
-                                            </div>
-                                            :
-                                            <></>
-                                        }
                                     </div>
 
                                 </label>
 
-                                
-
                                 <label>
                                     End Date
-                                        <div>
-                                            <input
-                                                type="text"
-                                                name="lastname"
-                                                className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
-                                                placeholder="Enter your Last name"
-                                                style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
-                                            />
+                                    <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2'>
+                                        <div className="flex items-center md:col-span-4">
+                                        <input
+                                                type="date" 
+                                                name="endDate"
+                                                value={endDate}
+                                                onChange={e => setEndDate(e.target.value)}
+                                                className="h-16 w-full rounded-md px-6 focus:outline-none"
+                                            /> 
                                         </div>
+                                    </div>
                                 </label>
                             </div>
                             <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
@@ -544,10 +581,11 @@ return (
                                 Starting price (WETH)
                                         <div>
                                             <input
-                                                type="email"
-                                                name="email"
+                                                type="number"
+                                                name="startPrice"
+                                                value={startPrice}
+                                                onChange={e => setStartPrice(e.target.value)}
                                                 className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
-                                                placeholder="Enter your email"
                                                 style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
                                             >                                               
                                             </input>
@@ -558,10 +596,11 @@ return (
                                 Bid Price increment (WETH)
                                         <div>
                                             <input
-                                                type="text"
-                                                name="firstname"
+                                                type="number"
+                                                name="bidPrice"
+                                                value={bidPrice}
+                                                onChange={e => setBidPrice(e.target.value)}
                                                 className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
-                                                placeholder="Enter your First name"
                                                 style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
                                             />
                                         </div>

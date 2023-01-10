@@ -56,7 +56,7 @@
               "fullName": "ck lai",
               "user_public_address": "0x6E1d220f752eDA7926d63402eab392D3fB74C556",
               "username": "ck_lai",
-              "profile_photo_path": "QmVTa4ed7A655aGUN4xz9ygNAGa1qCH79rrM4Q5af2oNco",
+              "profile_photo_path": "https://ipfs.io/ipfs/QmVTa4ed7A655aGUN4xz9ygNAGa1qCH79rrM4Q5af2oNco",
               "cover_photo_path": "QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
               "user_first_name": "ck",
               "user_last_name": "lai"
@@ -65,7 +65,7 @@
               "tokenName": "Simplifying Art ",
               "tokenType": "erc721",
               "tokenAddress": "0xEaf3EDad931EEfB7876C0b3D94d9044C898c3d8d",
-              "tokenLogo": "QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
+              "tokenLogo": "https://ipfs.io/ipfs/QmduNXWaTCt2RvX3wJ7PmpSi1BCXVmoK2jGoc7yr2Uovjj",
               "collectiontype": "user"
             }
           }
