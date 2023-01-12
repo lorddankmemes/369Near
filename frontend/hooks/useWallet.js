@@ -32,30 +32,28 @@ export const WalletProvider = ({ children }) => {
     }
   }, [walletSelector])
 
-  const startUp = async (network = 'testnet') => {
-    const walletSelector = await setupWalletSelector({
-      network: network,
-      modules: [setupMyNearWallet({ iconUrl: MyNearIconUrl }),
-      setupLedger({ iconUrl: LedgerIconUrl }),
-      setupNearWallet(),
-    ],
-      
-    });
+const startUp = async (network = 'testnet') => {
+  const walletSelector = await setupWalletSelector({
+    network: network,
+    modules: [setupMyNearWallet({ iconUrl: MyNearIconUrl }),
+    setupLedger({ iconUrl: LedgerIconUrl }),
+    setupNearWallet(),
+  ],
+  });
+  setWalletSelector(walletSelector)
 
-    setWalletSelector(walletSelector)
+  const isSignedIn = walletSelector.isSignedIn();
 
-    const isSignedIn = walletSelector.isSignedIn();
+  if (isSignedIn) {
+    const wallet = await walletSelector.wallet();
+    const accountId = walletSelector.store.getState().accounts[0].accountId;
 
-    if (isSignedIn) {
-      const wallet = await walletSelector.wallet();
-      const accountId = walletSelector.store.getState().accounts[0].accountId;
-      
-      setWallet(wallet)
-      setAccountId(accountId)
-    }
-
-    return isSignedIn;
+    setWallet(wallet)
+    setAccountId(accountId)
   }
+
+  return isSignedIn;
+}
 
   // Sign-in method
   const signIn = (contractId) => {

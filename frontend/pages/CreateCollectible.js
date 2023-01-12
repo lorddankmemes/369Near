@@ -17,8 +17,8 @@ export const CreateCollectible = () => {
   return (
     <>
     <div className='mx-16'>
-      <div class="grid grid-cols-3 md:grid-cols-3 py-20">
-          <div class="md:col-span-2 mr-20">
+      <div className="grid grid-cols-3 md:grid-cols-3 py-20">
+          <div className="md:col-span-2 mr-20">
               <button className=''>Go Back</button>
               <div className='text-5xl font-bold py-8'>Create Collectible</div>
 
@@ -43,14 +43,14 @@ export const CreateCollectible = () => {
               </div>
           </div>
 
-          <div class="flex md:col-span-1">
-              <div class="relative">
+          <div className="flex md:col-span-1">
+              <div className="relative">
                     <img
-                      class="object-fill"
+                      className="object-fill"
                       alt="Artworks"
                       src={images.create}
                     />
-                    <div class="mt-10 mb-20 main-text-size text-grey text-weight-500">
+                    <div className="mt-10 mb-20 main-text-size text-grey text-weight-500">
                       "In the space where Love exists." - teal_arts
                     </div>
                   </div>

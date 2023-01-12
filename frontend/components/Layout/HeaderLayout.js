@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import { Link, NavLink } from "react-router-dom";
 import { images } from '../../constant';
 import { ConnectWallet } from '../../pages/ConnectWallet';
@@ -6,7 +6,27 @@ import SearchHeader from '../SearchFilter/SearchHeader';
 import { Outlet } from 'react-router-dom';
 
 export const HeaderLayout = () => {
+    const navLinkRef = useRef(null);
     const [open, setOpen] = useState(false);
+    const [toggleOpen, setToggleOpen] = useState(false);
+
+    const onToggleDropdown = () => {
+        setToggleOpen(!toggleOpen)
+      }
+
+      useEffect(() => {
+        function handleClick(event) {
+          if (!navLinkRef.current.contains(event.target)) {
+            setToggleOpen(false);
+          }
+        }
+    
+        document.addEventListener('click', handleClick);
+    
+        return () => {
+          document.removeEventListener('click', handleClick);
+        };
+      }, []);
 
   return (
     <>
@@ -21,13 +41,30 @@ export const HeaderLayout = () => {
 
             <div className='flex gap-2'>
                 <span className='flex gap-2'>
-                <NavLink className="navbar grid content-center">
-                <span
-                    class="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700"
-                >
-                NEAR
-                </span>
+                <NavLink ref={navLinkRef} onClick={() => onToggleDropdown()} className="navbar grid content-center">
+                    <span 
+                        className="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700"
+                    >
+                    NEAR
+                    </span>
+
+                    { toggleOpen ?  
+                    <div className="z-50 w-56 absolute translate-y-14 bg-white rounded-xl">
+                        <div className='relative m-6'>
+                            <span
+                                className="whitespace-nowrap rounded-full mx-4 bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700"
+                                >
+                                NEAR
+                            </span>
+                            <span
+                                className="whitespace-nowrap rounded-full bg-green-100 px-2.5 py-0.5 text-sm text-green-700"
+                                >
+                                Aurora
+                            </span>
+                        </div>
+                    </div> : <></> }
                 </NavLink>
+
                 <NavLink className="navbar grid content-center" to="/Marketplace">Marketplace</NavLink>
                 <NavLink className="navbar grid content-center" to="/Auctions">Auctions</NavLink>
                 <NavLink className="navbar grid content-center" to="/Activity">Activity</NavLink>
@@ -42,7 +79,7 @@ export const HeaderLayout = () => {
                     </span>
                 </button>
 
-                <button><ConnectWallet /></button>
+                <button className='rounded-full'><ConnectWallet /></button>
             </div>
         </div>
     </header>

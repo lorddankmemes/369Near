@@ -11,12 +11,14 @@ import { CoverProfile } from '../components/ProfileContent/CoverProfile'
 import { images } from '../constant'
 import { useWallet } from '../hooks/useWallet'
 import {useNavigate} from 'react-router-dom'
+import { useProfile } from '../hooks/useProfile'
 
 
 export const MainProfile = () => {
     const navigate = useNavigate();
 
     const { accountId } = useWallet()
+    const { avatar } = useProfile()
 
     const padFunction = (number) => {
         let string = String(number)
@@ -37,7 +39,7 @@ export const MainProfile = () => {
     {/* left container */}
         <div className='flex flex-col col-span-4 lg:col-span-1 bg-white rounded-2xl text-black py-10 px-6 ml-10 lg:ml-0 -translate-y-44'>
             <div>
-                <div className='profile-size'></div>
+                <div><img className='profile-size m-10' src={avatar}/></div>
                 <div className='text-2xl font-semibold text-center'>{/* @{profile.user_public_address.slice(-4).padStart(profile.user_public_address.length, ".")} */}
                     {accountId}
                 </div>

@@ -27,7 +27,7 @@ function Activity() {
           {activity.result.map((data, index) => (
       
             <div className='grid grid-cols-3 md:grid-cols-3 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative'>
-              <div class="flex flex-col col-span-1 md:col-span-1">
+              <div className="flex flex-col col-span-1 md:col-span-1">
                   <LazyLoadImage className="object-cover object-center h-28 w-30 rounded-lg col-span-1" 
                   src={data.transaction_of_collectible.ipfs_media_path} 
                   loading="lazy"

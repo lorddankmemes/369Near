@@ -305,7 +305,11 @@ import { useWallet } from '../hooks/useWallet'
 
 export const UpdateProfile = () => {
    
+    const { ipfs } = useIpfsFactory()
+    const { accountId, viewMethod, callMethod } = useWallet()
+
     const [profile, setProfile] = useState({
+        avatar: '',
         email: '',
         firstname: '',
         lastname: '',
@@ -319,11 +323,86 @@ export const UpdateProfile = () => {
         dribble: '',
         youtube: '',
     })
+
     const [preview, setPreview] = useState()
+    const [profileImg, setProfileImg] = useState()
 
-    const { ipfs } = useIpfsFactory()
-    const { accountId, callMethod } = useWallet()
+    const onFileChange = (e) => {
+        console.log(e.target.files[0])
+        setProfileImg(e.target.files[0])
+    }
 
+    useEffect(() => {
+        if (!profileImg) {
+          setPreview(undefined)
+          return
+        }
+    
+        const objectUrl = URL.createObjectURL(profileImg)
+        setPreview(objectUrl)
+    
+        return () => URL.revokeObjectURL(objectUrl)
+      }, [profileImg])
+    
+
+    const onHandleChanged = (evt) => {
+        const {type, value, name} = evt.target.value
+
+        let val
+        switch(type) {
+        case 'checkbox':
+            val = !profile[name]
+            break
+        default:
+            val = value
+        }
+
+        setProfile({
+            ...profile,
+            [evt.target.name]: value
+        })
+    }
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+        try {
+          if(profileImg) {
+            const cid = await ipfs.add(profileImg)
+            setProfile({
+              ...profile,
+              [avatar]: `ipfs://${cid}`
+            })
+          }
+    
+          await callMethod({
+            contractId: process.env.CONTRACT_NAME,
+            method: 'nft_mint',
+            args
+          })
+    
+          console.log(profile)
+    
+        } catch(e) {
+          console.log(e)
+        }
+      }
+
+      const getProfile = async () => {
+        const res = await viewMethod(process.env.CONTRACT_NAME, 'nft_tokens_for_owner', { account_id: accountId})
+        if(res) {
+          setProfile(res)
+        }
+      }
+    
+      useEffect(()=> {
+        if(accountId && !profile.handler) {
+          getProfile()
+        }
+      },[accountId, profile, getProfile])
+
+
+   /*  const [preview, setPreview] = useState()
+  
     const onHandleChanged = (evt) => {
         const {value} = evt.target.value
         setProfile({
@@ -355,9 +434,9 @@ export const UpdateProfile = () => {
         setPreview(objectUrl)
     
         return () => URL.revokeObjectURL(objectUrl)
-    }, [image])
+    }, [image]) */
 
-    const onSubmit = async (e) => {
+/*     const onSubmit = async (e) => {
         e.preventDefault()
 
         try {
@@ -380,7 +459,7 @@ export const UpdateProfile = () => {
           } catch(e) {
             console.log(e)
           }
-    }
+    } */
 
   return (
     <div>
@@ -405,7 +484,7 @@ export const UpdateProfile = () => {
                                         onChange={onHandleChanged}
                                         className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
                                         placeholder="Enter your email"
-                                        style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                     />
                                 </div>
                         </label>
@@ -420,7 +499,7 @@ export const UpdateProfile = () => {
                                         onChange={onHandleChanged}
                                         className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
                                         placeholder="Enter your First name"
-                                        style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                     />
                                 </div>
                         </label>
@@ -435,7 +514,7 @@ export const UpdateProfile = () => {
                                         onChange={onHandleChanged}
                                         className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
                                         placeholder="Enter your Last name"
-                                        style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                     />
                                 </div>
                         </label>
@@ -450,7 +529,7 @@ export const UpdateProfile = () => {
                                         onChange={onHandleChanged}
                                         className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
                                         placeholder="Name your artwork"
-                                        style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                        style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                     />
                                 </div>
                         </label>
@@ -459,10 +538,10 @@ export const UpdateProfile = () => {
 
 
                 <div className='grid grid-cols-2 md:grid-cols-4 pt-16 px-6'>
-                    <div class="flex text-md col-span-2 md:col-span-2 font-semibold text-black ">
+                    <div className="flex text-md col-span-2 md:col-span-2 font-semibold text-black ">
                         Add a short bio
                     </div>
-                    <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                    <div className="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
                         <label>
                             <div>
                                 <textarea
@@ -472,7 +551,7 @@ export const UpdateProfile = () => {
                                     onChange={onHandleChanged}
                                     className="w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
                                     placeholder="Enter a short bio"
-                                    style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                    style={{ padding:"20px", boxShadow: "inset 4px 8px 20px 2px rgb(0 0 0 / 0.05)"}}
                                 />
                             </div>
                         </label>
@@ -488,14 +567,21 @@ export const UpdateProfile = () => {
                         10MB max size.</span>
                     </div>
 
-                    <div className="flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md h-[52vh] relative">
+                    <div className="flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-xl h-[52vh] relative">
                         <div className='text-gray-400 px-10 pt-4 text-center'>Drag and drop an image here, or click to browse.</div>
                         <div className='mx-10'>
-                            <img src={preview} alt="" className='object-cover h-[33vh] w-full bg-transparent rounded-md'/>
+                            <img src={preview} alt="" className='object-cover h-[33vh] bg-transparent rounded-md'/>
                         </div>
                         <div className='m-auto'>
-                            <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
-                            <button onClick={onOpenFileDialog} type="file" className='mt-2 px-16'>Choose File</button>
+                            {/* <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
+                            <button onClick={onOpenFileDialog} type="file" className='mt-2 px-16'>Choose File</button> */}
+                            <input id="avatar" type="file" onChange={onFileChange} hidden />
+                            <label
+                            htmlFor="avatar"
+                            className="rounded-full px-4 cursor-pointer text-black hover:border-orange-600 hover:border-2 hover:px-16 hover:py-2 hover:rounded-lg"
+                            >
+                            Choose File
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -516,7 +602,7 @@ export const UpdateProfile = () => {
                                             onChange={onHandleChanged}
                                             className="h-12 w-full rounded-xl text-sm text-black"
                                             placeholder="Enter name"
-                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                         />
                                     </span>
                                 </div>
@@ -535,7 +621,7 @@ export const UpdateProfile = () => {
                                             onChange={onHandleChanged}
                                             className="h-12 w-full rounded-xl text-sm text-black"
                                             placeholder="Enter name"
-                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                         />
                                     </span>
                                 </div>
@@ -554,7 +640,7 @@ export const UpdateProfile = () => {
                                             onChange={onHandleChanged}
                                             className="h-12 w-full rounded-xl text-sm text-black"
                                             placeholder="Enter name"
-                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                         />
                                     </span>
                                 </div>
@@ -573,7 +659,7 @@ export const UpdateProfile = () => {
                                             onChange={onHandleChanged}
                                             className="h-12 w-full rounded-xl text-sm text-black"
                                             placeholder="Enter name"
-                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                         />
                                     </span>
                                 </div>
@@ -592,7 +678,7 @@ export const UpdateProfile = () => {
                                             onChange={onHandleChanged}
                                             className="h-12 w-full rounded-xl text-sm text-black"
                                             placeholder="Enter name"
-                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                         />
                                     </span>
                                 </div>
@@ -611,7 +697,7 @@ export const UpdateProfile = () => {
                                             onChange={onHandleChanged}
                                             className="h-12 w-full rounded-xl text-sm text-black"
                                             placeholder="Enter name"
-                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                         />
                                     </span>
                                 </div>
@@ -630,7 +716,7 @@ export const UpdateProfile = () => {
                                             onChange={onHandleChanged}
                                             className="h-12 w-full rounded-xl text-sm text-black"
                                             placeholder="Enter name"
-                                            style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
+                                            style={{ padding:"20px", boxShadow: "inset 4px 8px 10px 2px rgb(0 0 0 / 0.05)"}}
                                         />
                                     </span>
                                 </div>

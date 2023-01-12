@@ -25,7 +25,7 @@ export const Collection = () => {
     <>
       <div>
          <div className='mx-8'>
-         <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
           {
             collection.length > 0 ? 
@@ -36,17 +36,43 @@ export const Collection = () => {
                       <img className="object-cover object-center h-60 w-96 rounded-lg" src={val.metadata.media} />
                     </div>
 
-                    <div className='text-lg font-semibold py-4'>{val.metadata.title}</div>
+                    <div className='text-[10px] font-semibold py-4'>{val.metadata.title}</div>
                     
-                    {/* <div className='flex gap-4'>
-                        <div>
-                          <img src={val.metadata.featured_collectible_info.collectibles_user.profile_photo_path} className="creator-size"/>
+                    {/* list price and token type */}
+                    <div className='flex gap-12'>
+                        <div className=''>
+                            <p className="text-sm text-gray-500">List Price</p>
+                            <span className="text-sm font-semibold text-orange-600">0.041 ETH </span>
                         </div>
-                        <div>
-                          <span className='text-gray-400 font-light'>Creator</span>
-                          <div>{val.metadata.username}</div>
+                        <div className=''>
+                            <p className="text-sm text-gray-500">Token type</p>
+                            <span className="text-sm font-semibold text-black">Edition 1 / 1</span>
                         </div>
-                    </div> */}
+                    </div>
+
+                    <hr className='mt-10 mb-4'/>
+
+                    {/* creator and owner section */}
+                    <div className='flex gap-4'>
+                      <div className='flex gap-2'>
+                            <div>
+                              <img src={val.metadata.media} className="market2-size"/>
+                            </div>
+                            <div>
+                              <span className='text-gray-500 font-normal text-sm'>Creator</span>
+                              <div>{val.metadata.username}</div>
+                            </div>
+                      </div>
+                      <div className='flex gap-2'>
+                          <div>
+                            <img src={val.metadata.media} className="market2-size"/>
+                          </div>
+                          <div>
+                            <span className='text-gray-500 font-normal text-sm'>Creator</span>
+                            <div>{val.metadata.username}</div>
+                          </div>
+                      </div>
+                    </div>
                 </div>
                )})
                :

@@ -21,7 +21,7 @@ export const OnSale = () => {
     <>
     <div>
          <div className='mx-8'>
-         <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
           {
             onSale.length > 0 ? 

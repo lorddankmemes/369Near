@@ -73,16 +73,16 @@ export const Dashboard = () => {
                     <span>DATE</span>
                 </div> */}
            
-                <table class="table-auto w-full">
+                <table className="table-auto w-full">
                 <thead className='text-xs font-medium'>
                     <tr>
-                        <th scope="col" class="flex justify-start">EVENT</th>
-                        <th scope="col" class="">ITEM</th>
-                        <th scope="col" class="">PRICE</th>
-                        <th scope="col" class="">QTY</th>
-                        <th scope="col" class="">FROM</th>
-                        <th scope="col" class="">TO</th>
-                        <th scope="col" class="flex justify-end">DATE</th>
+                        <th scope="col" className="flex justify-start">EVENT</th>
+                        <th scope="col" className="">ITEM</th>
+                        <th scope="col" className="">PRICE</th>
+                        <th scope="col" className="">QTY</th>
+                        <th scope="col" className="">FROM</th>
+                        <th scope="col" className="">TO</th>
+                        <th scope="col" className="flex justify-end">DATE</th>
                     </tr>
                 </thead>
                 {market.data.result.map((data) => (

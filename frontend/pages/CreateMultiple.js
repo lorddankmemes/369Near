@@ -12,12 +12,16 @@ export const CreateMultiple = () => {
     const [description, setDescription] = useState('')
     const [category, setCategory] = useState('')
     const [onSale, setOnSale] = useState(false)
-    const [onAuction, setOnAuction] = useState(false)
-
+    const [salePrice, setSalePrice] = useState(0)
 
     const handleMultipleClick = () => {
         navigate('/create/:id/multiple')
       }
+
+      const onHandleSaleChanged = () => {
+        setOnSale(!onSale)
+    }
+
 
   return (
     <>
@@ -178,11 +182,11 @@ export const CreateMultiple = () => {
             </div>
 
 
-            <div class="flex col-span-4 lg:col-span-2 px-10 w-full">
+            <div className="flex col-span-4 lg:col-span-2 px-10 w-full">
                 <form onSubmit={e => { handleSubmit(e) }}>
 
-                    <div class="relative">
-                        <div class="flex flex-col gap-y-6 text-sm">
+                    <div className="relative">
+                        <div className="flex flex-col gap-y-6 text-sm">
                             <label>
                                 Name
                                 <div>
@@ -291,7 +295,8 @@ export const CreateMultiple = () => {
                                         <input 
                                             type="checkbox"
                                             value={onSale}
-                                            onChange={e => setOnSale(e.target.value)}
+                                            onClick={onHandleSaleChanged}
+                                            /* onChange={e => setOnSale(e.target.value)} */
                                             className="sr-only" 
                                         />
 
@@ -301,25 +306,6 @@ export const CreateMultiple = () => {
                                 </label>
                             </div>
 
-                            <div className="flex justify-between w-full mb-2">
-                                <div class="text-gray-400 font-semibold text-md">
-                                Put on Auction
-                                </div>
-
-                                <label class="flex items-center cursor-pointer">
-                                    <div class="relative">
-                                        <input 
-                                            type="checkbox"
-                                            value={onAuction}
-                                            onChange={e => setOnAuction(e.target.value)}
-                                            className="sr-only" 
-                                        />
-
-                                        <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                                    </div>             
-                                </label>
-                            </div>
 
                             <div className='flex flex-col md:col-span-2 my-2'>
                                 <button
@@ -334,8 +320,38 @@ export const CreateMultiple = () => {
                         </div>
                 </form>
             </div>
-
         </div>
+         {/* onSale modal */}
+         { onSale ?
+                <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black my-10">
+                    <div className="col-span-4 lg:col-span-2">
+                        <div className='text-4xl font-semibold pb-2'>Put on sale</div>
+                            <label>
+                            Enter the price in ETH for one item.
+                                <div className='flex gap-4 mt-2'>
+                                    <input
+                                        type="number"
+                                        name="salePrice"
+                                        className="bg-white outline-orange-600 h-10 w-1/2 rounded-md text-black"
+                                        value={salePrice}
+                                        onChange={e => setSalePrice(e.target.value)}
+                                        style={{ padding:"20px"}}
+                                    />
+                                    <div className='text-sm font-light'>
+                                        Platform Fee: 0% <br/>
+                                        You will receive Ξ 0.0001 (~$0.125)
+                                    </div>   
+                                </div>
+                            </label>
+                    </div>
+                    <div className='flex justify-center'>
+                        {/* <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
+                        <button onClick={onOpenFileDialog} type="file" className='mt-6 px-16'>Put on Sale</button> */}
+                    </div>
+                </div>
+                : 
+                null
+            }   
     </div>
     </>
   )

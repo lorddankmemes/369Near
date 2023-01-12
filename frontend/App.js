@@ -19,6 +19,7 @@ import { SingleNFTMarketplace } from './pages/SingleNFTMarketplace';
 import { UpdateProfile } from './pages/UpdateProfile';
 import { HeaderLayout } from './components/Layout/HeaderLayout';
 import useIpfsFactory from './hooks/useIpfsFactory';
+import { MainCollection } from './pages/MainCollection';
 
 export default function App() {
 
@@ -55,7 +56,12 @@ export default function App() {
               <Route path=":id" element={<SingleAuction />} />
             </Route>
 
-            <Route exact path="profile" element={<MainProfile />}/>
+            <Route exact path="profile" >
+              <Route index element={<MainProfile />} />
+              <Route path=":id" element={<MainProfile />} />
+            </Route>
+
+            <Route exact path="collection" element={<MainCollection />}/>
             
             <Route exact index path="create" element={<CreateCollectible />} />
             <Route exact path="create/nft" element={<CreateSingle />} />

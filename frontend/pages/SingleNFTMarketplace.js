@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import { images } from '../constant';
+import { useLocation } from 'react-router-dom';
 
-const nft = {"name":"One World Stamp - Pandemic Series","description":"This series of stamps was created to memorize the common experience faced by the whole world\n","image":"https://3six9.infura-ipfs.io/ipfs/QmVcZMWeRgn6nZffC38zxJxT4hNtYPgGJqT9gGkMR8XbpC","external_url":"https://app.3six9.space/token2/0xFbE0F78D6a6339C9E7c586dD96dA9f5dFA09D773:187","attributes":[]}
+export const SingleNFTMarketplace = (props) => {
 
-export const SingleNFTMarketplace = () => {
-
+    const location = useLocation();
+    const { data } = location.state;
     const [currentComponent, setCurrentComponent] = useState('A');
     const [showModal, setShowModal] = useState(false);
 
@@ -13,7 +14,7 @@ export const SingleNFTMarketplace = () => {
 
   return (
     <>
-    <div className='body-container'>
+    <div className='pl-24'>
         <div class="grid grid-cols-1 md:grid-cols-6 mx-4 content-center text-white pt-20">
 
             {showModal ? (
@@ -79,12 +80,14 @@ export const SingleNFTMarketplace = () => {
 
                 <div class="flex flex-col md:col-span-3 justify-center mx-10">
                     <div className='flex gap-x-4'>
-                        <span><img src={nft.image} className="creator-size"/></span>
-                        <span className='font-extrabold pt-2 text-gray-400'>{nft.name}</span>
+                        <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`} className="creator-size"/></span>
+                        <span className='font-extrabold pt-2 text-gray-400'>{data.sale_collectibles.collectible_collection.tokenAddress}</span>
                     </div>
                     <div>
-                        <div className='text-5xl font-bold pt-4 pb-10'>{nft.name}</div> 
-                        <img src={nft.image}  />        
+                        <div className='text-5xl font-bold pt-4 pb-10'>{data.sale_collectibles.collectible_name}</div> 
+                        <div>
+                            <img className='rounded-xl w-full h-full md:w-full md:h-full lg:w-4/5 lg:h-2/5' src={data.sale_collectibles.ipfs_media_path}  />  
+                        </div>      
                     </div>
                 </div>
 
@@ -102,22 +105,22 @@ export const SingleNFTMarketplace = () => {
                             {currentComponent === 'A' ? 
                                 <div className='grid gap-6 px-6'>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={nft.image} className="creator-size"/></span>
+                                        <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`} className="creator-size"/></span>
                                         <span>Owner
-                                            <div className='font-extrabold'>{nft.name}</div>
+                                            <div className='font-extrabold'>{data.sale_collectibles.collectibles_user.fullName}</div>
                                         </span>
                                     </div>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={nft.image} className="creator-size"/></span>
+                                        <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`} className="creator-size"/></span>
                                         <span>Creator
-                                                <div className='font-extrabold'>{nft.name}</div>
+                                                <div className='font-extrabold'>{data.sale_collectibles.collectibles_user.fullName}</div>
                                         </span>
                                     </div>
                                     <div className='bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg'>20.00% of sales will be paid to the original artist</div>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={nft.image} className="creator-size"/></span>
+                                        <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectible_collection.tokenLogo}`} className="creator-size"/></span>
                                         <span>Collection (ERC721)
-                                                <div className='font-extrabold'>{nft.name}</div>
+                                                <div className='font-extrabold'>{data.sale_collectibles.collectible_collection.tokenName}</div>
                                         </span>
                                     </div> 
                                 </div>
@@ -126,9 +129,9 @@ export const SingleNFTMarketplace = () => {
                             {currentComponent === 'B' ? 
                                 <div className='grid gap-6 px-6'>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={nft.image} className="creator-size"/></span>
+                                        <span><img src={data.sale_collectibles.collectibles_user.profile_photo_path} className="creator-size"/></span>
                                         <span>Is selling for 0.001 ETH
-                                            <div className='font-extrabold'>{nft.name}</div>
+                                            <div className='font-extrabold'>{data.sale_collectibles.collectibles_user.fullName}</div>
                                         </span>
                                     </div>
                                 </div>
@@ -137,15 +140,15 @@ export const SingleNFTMarketplace = () => {
                             {currentComponent === 'C' ? 
                                 <div className='grid gap-6 px-6'>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={nft.image} className="creator-size"/></span>
+                                        <span><img src={data.sale_collectibles.collectibles_user.profile_photo_path} className="creator-size"/></span>
                                         <span>Is selling for 0.001 ETH
-                                            <div className='font-extrabold'>{nft.name}</div>
+                                            <div className='font-extrabold'>{data.sale_collectibles.collectibles_user.fullName}</div>
                                         </span>
                                     </div>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={nft.image} className="creator-size"/></span>
+                                        <span><img src={data.sale_collectibles.collectibles_user.profile_photo_path} className="creator-size"/></span>
                                         <span>Is selling for 0.001 ETH
-                                            <div className='font-extrabold'>{nft.name}</div>
+                                            <div className='font-extrabold'>{data.sale_collectibles.collectibles_user.fullName}</div>
                                         </span>
                                     </div>
                                 </div>
@@ -180,12 +183,12 @@ export const SingleNFTMarketplace = () => {
 
                     <div>
                         <span className='font-medium'>Token Address</span>
-                        <div className='font-medium text-md text-gray-500 pt-2'>{nft.name}</div>
+                        <div className='font-medium text-md text-gray-500 pt-2'>{data.sale_collectibles.collectible_collection.tokenAddress}</div>
                     </div>
 
                     <div>
                         <span className='font-medium'>Token Id</span>
-                        <div className='font-medium text-md text-gray-500 pt-2'>{nft.name}</div>
+                        <div className='font-medium text-md text-gray-500 pt-2'>{data.sale_collectibles.collectible_collection.tokenAddress}</div>
                     </div>
                 </div>
         </div>
