@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { images } from '../constant';
 import { useLocation } from 'react-router-dom';
 
@@ -57,6 +57,66 @@ function SingleAuction() {
   useEffect(() => {
     }, [currentComponent]);
 
+    const Ref = useRef(null);
+
+    const [timer, setTimer] = useState('00:00:00');
+
+    const getTimeRemaining = (e) => {
+      const total = Date.parse(e) - Date.parse(new Date());
+      const seconds = Math.floor((total / 1000) % 60);
+      const minutes = Math.floor((total / 1000 / 60) % 60);
+      const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+      return {
+          total, hours, minutes, seconds
+      };
+  }
+  
+  const startTimer = (e) => {
+    let { total, hours, minutes, seconds } 
+                = getTimeRemaining(e);
+    if (total >= 0) {
+  
+        // update the timer
+        // check if less than 10 then we need to 
+        // add '0' at the beginning of the variable
+        setTimer(
+            (hours > 9 ? hours : '0' + hours) + ':' +
+            (minutes > 9 ? minutes : '0' + minutes) + ':'
+            + (seconds > 9 ? seconds : '0' + seconds)
+        )
+    }
+  }
+  
+  const clearTimer = (e) => {
+    
+    // If you adjust it you should also need to
+    // adjust the Endtime formula we are about
+    // to code next    
+    setTimer('00:00:10');
+  
+    // If you try to remove this line the 
+    // updating of timer Variable will be
+    // after 1000ms or 1sec
+    if (Ref.current) clearInterval(Ref.current);
+    const id = setInterval(() => {
+        startTimer(e);
+    }, 1000)
+    Ref.current = id;
+  }
+  
+  const getDeadTime = () => {
+    let deadline = new Date();
+  
+    // This is where you need to adjust if 
+    // you entend to add more time
+    deadline.setSeconds(deadline.getSeconds() + 10);
+    return deadline;
+  }
+  
+  useEffect(() => {
+    clearTimer(getDeadTime());
+  }, []);
+
   return (
     <>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mx-4 text-white pt-20 m-10 md:m-16 lg:m-0">
@@ -88,7 +148,7 @@ function SingleAuction() {
             </div>
 
             <div className='flex gap-x-4'>
-                <span><img src={auction.seller_profile_photo_path} className="creator-size"/></span>
+                <span><img src={`https://ipfs.io/ipfs/${auction.seller_profile_photo_path}`} className="creator-size"/></span>
                 <span>
                     <div className='font-bold'>{data.auctions_of_collectible.collectibles_user.username}</div>
                 </span>
@@ -96,11 +156,13 @@ function SingleAuction() {
 
             <div className='text-5xl font-bold pb-12'>{data.auctions_of_collectible.collectible_name}</div>
 
-            <div className='bg-white py-10 text-black rounded-lg px-6'>
-                Starting price
-                <div>{auction.starting_price}{auction.currency_symbol}</div>
-                <div>(+Platform fee {auction.currency_symbol})</div>
-                <div>Auction ending in</div>
+            <div className='flex flex-col gap-y-1 bg-white py-10 rounded-lg px-6 text-[14px] text-black'>
+                <div className='font-medium pb-4'>Starting price</div>
+                <div className='text-3xl font-medium'>{/* {auction.starting_price} */}0.004 {auction.currency_symbol}</div>
+                <div className='font-semibold'>(+Platform fee 0.0001{auction.currency_symbol})</div>
+                <div className='font-semibold text-gray-600'>$5.3249</div>
+                <div className='font-semibold'>Auction ending in</div>
+                <div className='text-3xl'>{timer}</div>
             </div>
 
             <div 

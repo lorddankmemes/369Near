@@ -14,38 +14,50 @@ export const CoverProfile = () => {
    }, [accountId] )
 
 
-   //upload cover image logic
-   const [preview, setPreview] = useState()
-   const [coverImg, setCoverImg] = useState()
+  //upload cover image logic
+  const [coverImg, setCoverImg] = useState()
+  const [preview, setPreview] = useState()
 
-   const onFileChange = (e) => {
-       console.log(e.target.files[0])
-       setCoverImg(e.target.files[0])
-   }
-
-   useEffect(() => {
-    if (!coverImg) {
-      setPreview(undefined)
-      return
+    const onFileChanged = (e) => {
+        setCoverImg(e.target.files[0])
     }
 
-    const objectUrl = URL.createObjectURL(coverImg)
-    setPreview(objectUrl)
+    const imageRef = useRef(null)
 
-    return () => URL.revokeObjectURL(objectUrl)
-  }, [coverImg])
+    const onOpenFileDialog = (e) => {
+        imageRef.current.click()
+    }
 
- /*  if(coverImg) {
-    const cid = await ipfs.add(coverImg)
-    setCoverImg({
-      [coverImg]: `ipfs://${cid}`
-    })
-  }
+    useEffect(() => {
+        if (!coverImg) {
+          setPreview(undefined)
+          return
+        } else {
+          setPreview(coverImg)
+        }
+    
+        const objectUrl = URL.createObjectURL(coverImg)
+        setPreview(objectUrl)
+    
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [coverImg])
+
+    //add cover image into ipfs
+  /*   if(coverImg) {
+        const cid = await ipfs.add(coverImg)
+        setCoverImg({
+          [coverImg]: `ipfs://${cid}`
+        })
+      }
  */
-  //remove cover image logic
 
-
-  //ipfs
+    //remove cover image logic
+    const handleRemoveImage = () => {
+      if (coverImg) {
+        coverImg.slice();
+        setCoverImg(!coverImg)
+      } 
+    }
 
   
 
@@ -59,19 +71,21 @@ export const CoverProfile = () => {
 
         { isOwner ?
           <div className='flex gap-4 mx-6 my-12 text-xs text-white'>
-              <button onChange={onFileChange} className='rounded-full py-2 px-4'>
-                  <input 
-                    id="coverImg" 
-                    type="file" 
-                    value={coverImg} 
-                    hidden />
-                      <label
-                            htmlFor="coverImg"
-                            >
-                            Replace image
-                      </label>
-              </button>
-              <button className='bg-transparent rounded-full'>Remove</button>
+              <button onClick={onOpenFileDialog} type="file" className='rounded-full py-2 px-4'>
+                    <input 
+                      id="coverImg" 
+                      ref={imageRef} 
+                      accept="image/*" 
+                      type="file" 
+                      onChange={onFileChanged} 
+                      hidden />
+                        <label
+                              htmlFor="coverImg"
+                              >
+                              Replace image
+                        </label>
+                </button>
+              <button onClick={handleRemoveImage} className='bg-transparent rounded-full'>Remove</button>
           </div>
         :
           <></>
@@ -88,15 +102,21 @@ export const CoverProfile = () => {
 
           { isOwner ?
             <div className='flex gap-4 mx-6 my-12 text-xs text-white'>
-                <button className='rounded-full py-2 px-4'>
-                    <input id="coverImg" type="file" onChange={onFileChange} hidden />
+                <button onClick={onOpenFileDialog} type="file" className='rounded-full py-2 px-4'>
+                    <input 
+                      id="coverImg" 
+                      ref={imageRef} 
+                      accept="image/*" 
+                      type="file" 
+                      onChange={onFileChanged} 
+                      hidden />
                         <label
                               htmlFor="coverImg"
                               >
                               Replace image
                         </label>
                 </button>
-                <button className='bg-transparent rounded-full'>Remove</button>
+                <button onClick={handleRemoveImage} className='bg-transparent rounded-full'>Remove</button>
             </div>
           :
             <></>

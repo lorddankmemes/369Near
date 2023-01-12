@@ -19,6 +19,7 @@
   "dependencies": {
     "github-like-avatar-generator": "^1.1.10",
     "react-calendar": "^4.0.0",
-    "react-datepicker": "^4.8.0"
+    "react-datepicker": "^4.8.0",
+    "react-html-parser": "^2.0.2"
   }
 }

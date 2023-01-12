@@ -94,9 +94,9 @@ export const CreateSingle = () => {
 
         try {
             const cid = await ipfs.add(image)
-            console.log(cid)
             if(cid.path) {
 
+                console.log(cid)
                 // add cid
                 setMetadata({
                     ...metadata,
@@ -115,6 +115,8 @@ export const CreateSingle = () => {
                     metadata: meta,
                     receiver_id: accountId
                 }
+
+                console.log(args)
 
                 await callMethod({
                     contractId: process.env.CONTRACT_NAME,

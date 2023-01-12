@@ -3,15 +3,19 @@ import auction from '../data/auction.json'
 import {useNavigate} from "react-router-dom"
 import SliderButton from '../components/SliderButton/SliderButton'
 import Filter from '../components/SearchFilter/Filter'
+import moment from 'moment';
 
 
 function Auctions() {
 
   const Ref = useRef(null);
   
-  const [timer, setTimer] = useState('00:00:00');
-
-  const getTimeRemaining = (e) => {
+  const [timer, setTimer] = useState('');
+  const [days, setDays] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [hours, setHours] = useState(0);
+  /* const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
     const seconds = Math.floor((total / 1000) % 60);
     const minutes = Math.floor((total / 1000 / 60) % 60);
@@ -43,7 +47,7 @@ const clearTimer = (e) => {
   // If you adjust it you should also need to
   // adjust the Endtime formula we are about
   // to code next    
-  setTimer('00:00:10');
+  setTimer('00:00:20');
 
   // If you try to remove this line the 
   // updating of timer Variable will be
@@ -60,17 +64,38 @@ const getDeadTime = () => {
 
   // This is where you need to adjust if 
   // you entend to add more time
-  deadline.setSeconds(deadline.getSeconds() + 10);
+  deadline.setSeconds(deadline.getSeconds() + 20);
   return deadline;
 }
 
 useEffect(() => {
   clearTimer(getDeadTime());
 }, []);
+ */
 
-const onClickReset = () => {
-  clearTimer(getDeadTime());
-}
+const [timeLeft, setTimeLeft] = useState(auction.result.auction_end);
+
+ useEffect(() => {
+    let intervalId = setInterval(() => {
+        let now = moment();
+        let endTime = moment(timeLeft);
+        let duration = moment.duration(endTime.diff(now));
+        let days = duration.days();
+        let hours = duration.hours();
+        let minutes = duration.minutes();
+        let seconds = duration.seconds();
+        if (duration.asMilliseconds() < 0) {
+            clearInterval(intervalId);
+            setTimeLeft("Expired!");
+        } else {
+            setDays(days);
+            setHours(hours);
+            setMinutes(minutes);
+            setSeconds(seconds);
+        }
+    }, 1000);
+    return () => clearInterval(intervalId);
+}, [timeLeft]);
 
 const [selectedNFT, setSelectedNFT] = useState(null)
 
@@ -123,7 +148,8 @@ const handleNFTClick = (data) => {
                 <span className='font-semibold'>{data.starting_price}</span>
 
                 <p className="text-md text-gray-400 pt-4">Ending In</p>
-                {timer}
+                {/* {new Date(data.auction_end).toLocaleString()} */}
+                <div>{days}d {hours}h {minutes}m {seconds}s</div>
               </div>
 
           ))}

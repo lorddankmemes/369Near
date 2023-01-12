@@ -80,7 +80,7 @@ export const SingleNFTMarketplace = (props) => {
 
                 <div class="flex flex-col md:col-span-3 justify-center mx-10">
                     <div className='flex gap-x-4'>
-                        <span><img src={data.sale_collectibles.collectibles_user.profile_photo_path} className="creator-size"/></span>
+                        <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`} className="creator-size"/></span>
                         <span className='font-extrabold pt-2 text-gray-400'>{data.sale_collectibles.collectible_collection.tokenAddress}</span>
                     </div>
                     <div>
@@ -105,20 +105,20 @@ export const SingleNFTMarketplace = (props) => {
                             {currentComponent === 'A' ? 
                                 <div className='grid gap-6 px-6'>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={data.sale_collectibles.collectibles_user.profile_photo_path} className="creator-size"/></span>
+                                        <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`} className="creator-size"/></span>
                                         <span>Owner
                                             <div className='font-extrabold'>{data.sale_collectibles.collectibles_user.fullName}</div>
                                         </span>
                                     </div>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={data.sale_collectibles.collectibles_user.profile_photo_path} className="creator-size"/></span>
+                                        <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`} className="creator-size"/></span>
                                         <span>Creator
                                                 <div className='font-extrabold'>{data.sale_collectibles.collectibles_user.fullName}</div>
                                         </span>
                                     </div>
                                     <div className='bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg'>20.00% of sales will be paid to the original artist</div>
                                     <div className='flex gap-x-4'>
-                                        <span><img src={data.sale_collectibles.collectible_collection.tokenLogo} className="creator-size"/></span>
+                                        <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectible_collection.tokenLogo}`} className="creator-size"/></span>
                                         <span>Collection (ERC721)
                                                 <div className='font-extrabold'>{data.sale_collectibles.collectible_collection.tokenName}</div>
                                         </span>
