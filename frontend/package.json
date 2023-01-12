@@ -53,7 +53,8 @@
     "react-icons": "^4.7.1",
     "react-lazy-load-image-component": "^1.5.6",
     "react-router-dom": "^6.4.5",
-    "regenerator-runtime": "^0.13.9"
+    "regenerator-runtime": "^0.13.9",
+    "github-like-avatar-generator": "^1.1.10"
   },
   "resolutions": {
     "@babel/preset-env": "7.13.8"
