@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { images } from '../constant';
 import { useLocation } from 'react-router-dom';
+import AuctionCountdown from '../components/Container/Countdown'
+import AuctionCountdownDesc from '../components/Container/CountdownDesc'
 
 //collectible auction info
 const auction = {
@@ -59,63 +61,8 @@ function SingleAuction() {
 
     const Ref = useRef(null);
 
-    const [timer, setTimer] = useState('00:00:00');
 
-    const getTimeRemaining = (e) => {
-      const total = Date.parse(e) - Date.parse(new Date());
-      const seconds = Math.floor((total / 1000) % 60);
-      const minutes = Math.floor((total / 1000 / 60) % 60);
-      const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-      return {
-          total, hours, minutes, seconds
-      };
-  }
-  
-  const startTimer = (e) => {
-    let { total, hours, minutes, seconds } 
-                = getTimeRemaining(e);
-    if (total >= 0) {
-  
-        // update the timer
-        // check if less than 10 then we need to 
-        // add '0' at the beginning of the variable
-        setTimer(
-            (hours > 9 ? hours : '0' + hours) + ':' +
-            (minutes > 9 ? minutes : '0' + minutes) + ':'
-            + (seconds > 9 ? seconds : '0' + seconds)
-        )
-    }
-  }
-  
-  const clearTimer = (e) => {
-    
-    // If you adjust it you should also need to
-    // adjust the Endtime formula we are about
-    // to code next    
-    setTimer('00:00:10');
-  
-    // If you try to remove this line the 
-    // updating of timer Variable will be
-    // after 1000ms or 1sec
-    if (Ref.current) clearInterval(Ref.current);
-    const id = setInterval(() => {
-        startTimer(e);
-    }, 1000)
-    Ref.current = id;
-  }
-  
-  const getDeadTime = () => {
-    let deadline = new Date();
-  
-    // This is where you need to adjust if 
-    // you entend to add more time
-    deadline.setSeconds(deadline.getSeconds() + 10);
-    return deadline;
-  }
-  
-  useEffect(() => {
-    clearTimer(getDeadTime());
-  }, []);
+ 
 
   return (
     <>
@@ -124,20 +71,24 @@ function SingleAuction() {
       {/* left section */}
       <div className="flex col-span-1 justify-center relative">
         { showModal ?
-          <div className='flex bg-white py-10 text-black rounded-lg px-6 w-full lg:w-4/5 absolute z-3 bottom-0 lg:bottom-1/4' onClick={() => setShowModal(false)}>
-             <div>
-              Starting price
-              <div>{auction.starting_price}{auction.currency_symbol}</div>
-              <div>(+Platform fee {auction.currency_symbol})</div>
-              <div>Auction ending in</div>
-            </div>
+          <div className='flex bg-white py-10 text-black rounded-lg px-6 w-full text-[14px] divide-x lg:w-[75%] absolute z-3 bottom-0 lg:bottom-1/4' onClick={() => setShowModal(false)}>
+              <div className='flex flex-col gap-y-1 pr-4'> 
+                <div className='font-medium pb-4'>Starting price</div>
+                <div className='text-3xl font-medium'>{/* {auction.starting_price} */}0.004 {auction.currency_symbol}</div>
+                <div className='font-semibold'>(+Platform fee 0.0001{auction.currency_symbol})</div>
+                <div className='font-semibold text-gray-500'>$5.3249</div>
+              </div>
+              <div className='flex flex-col px-6'>
+                <div className='font-semibold'>Auction ending in</div>
+                <AuctionCountdownDesc data={data}/>
+              </div>
           </div>
           : null}
           <img className="rounded-xl w-full h-full md:full md:h-full lg:w-3/5 lg:h-4/5" src={data.auctions_of_collectible.ipfs_media_path}  />
       </div>
 
       {/* right section */}
-      <div class="flex col-span-1 lg:w-4/5 justify-center">
+      <div className="flex col-span-1 lg:w-4/5 justify-center">
         { !showModal ?
           <div className='flex flex-col w-full'>
 
@@ -147,7 +98,7 @@ function SingleAuction() {
               <div className='bg-white rounded-full py-4 px-3'><img src={images.share} /></div>
             </div>
 
-            <div className='flex gap-x-4'>
+            <div className='flex gap-x-4 items-center pb-4'>
                 <span><img src={`https://ipfs.io/ipfs/${auction.seller_profile_photo_path}`} className="creator-size"/></span>
                 <span>
                     <div className='font-bold'>{data.auctions_of_collectible.collectibles_user.username}</div>
@@ -156,18 +107,22 @@ function SingleAuction() {
 
             <div className='text-5xl font-bold pb-12'>{data.auctions_of_collectible.collectible_name}</div>
 
-            <div className='flex flex-col gap-y-1 bg-white py-10 rounded-lg px-6 text-[14px] text-black'>
+            <div className='flex gap-x-10 bg-white py-10 rounded-lg px-6 text-[14px] text-black divide-x'>
+              <div className='flex-col gap-y-1'> 
                 <div className='font-medium pb-4'>Starting price</div>
                 <div className='text-3xl font-medium'>{/* {auction.starting_price} */}0.004 {auction.currency_symbol}</div>
                 <div className='font-semibold'>(+Platform fee 0.0001{auction.currency_symbol})</div>
-                <div className='font-semibold text-gray-600'>$5.3249</div>
+                <div className='font-semibold text-gray-500'>$5.3249</div>
+              </div>
+              <div className='pl-6'>
                 <div className='font-semibold'>Auction ending in</div>
-                <div className='text-3xl'>{timer}</div>
+                <AuctionCountdownDesc data={data}/>
+              </div>
             </div>
 
             <div 
               onClick={() => setShowModal(true)} 
-              className='outline outline-orange-600 bg-none py-6 my-10 text-orange-600 rounded-lg text-center font-semibold'>
+              className='outline outline-orange-600 bg-none py-6 my-10 text-orange-600 rounded-lg text-center font-semibold hover:bg-orange-600 hover:text-white'>
               Place a bid
             </div>
           </div>

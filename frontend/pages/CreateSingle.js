@@ -7,8 +7,35 @@ import { useWallet } from '../hooks/useWallet'
 
 export const CreateSingle = () => {
     const [showModal, setShowModal] = useState(false);
-    const [category, setCategory] = useState('')
     const [royalty, setRoyalty] = useState(0)
+
+    //properties state
+    const [properties, setProperties] = useState([]);
+    const [property1, setProperty1] = useState('');
+    const [property2, setProperty2] = useState('');
+
+    const handleChangeProperty1 = event => {
+        setProperty1(event.target.value);
+    };
+
+    const handleChangeProperty2 = event => {
+        setProperty2(event.target.value);
+    };
+
+    const addProperty = (e) => {
+        e.preventDefault()
+
+        const newProperty = { property1, property2 };
+        setProperties([...properties, newProperty]);
+        setProperty1('');
+        setProperty2('');
+    }
+
+    const deleteProperty = index => {
+        const newProperties = [...properties];
+        newProperties.splice(index, 1);
+        setProperties(newProperties);
+    };
 
     //lock state
     const [onLock, setOnLock] = useState(false)
@@ -19,19 +46,31 @@ export const CreateSingle = () => {
 
     //auction modal state
     const [onAuction, setOnAuction] = useState(false)
-    const [reservedPrice, setReservedPrice] = useState(0)
-    const [selectWeth, setSelectWeth] = useState('')
-    const [startDate, setStartDate] = useState('')
-    const [endDate, setEndDate] = useState('')
-    const [startPrice, setStartPrice] = useState(0.0)
-    const [bidPrice, setBidPrice] = useState(0)
+    const [auction, setAuction] = useState({
+        reservedPrice: 0,
+        selectWeth: '',
+        startDate: '',
+        endDate: '',
+        startPrice: 0.0,
+        bidPrice: 0
+    })
+
+    const onHandleChangedAuction = (evt) => {
+        const value = evt.target.value
+        setAuction({
+            ...auction,
+            [evt.target.name]: value
+        })
+    }
+
     
-    //input state
+    //metadata state
     const [metadata, setMetadata] = useState({
         title: '',
         description: '',
         media: '',
-        perpetual_royalties: {}
+        perpetual_royalties: {},
+        category: '',
     })
 
     const [preview, setPreview] = useState()
@@ -46,15 +85,83 @@ export const CreateSingle = () => {
             [evt.target.name]: value
         })
     }
+    
+    //select option 
+    const selectCategory = [
+        {
+          "value": "",
+          "label": "Select category"
+        },
+        {
+          "value": "collectibles",
+          "label": "Collectibles"
+        },
+        {
+          "value": "membership",
+          "label": "Membership"
+        },
+        {
+          "value": "ticketing",
+          "label": "Ticketing"
+        },
+        {
+          "value": "animation",
+          "label": "Animation"
+        },
+        {
+          "value": "arts",
+          "label": "Arts"
+        },
+        {
+          "value": "Irl art",
+          "label": "Irl art"
+        },
+        {
+          "value": "trading",
+          "label": "Trading Cards"
+        },
+        {
+          "value": "memes",
+          "label": "Memes"
+        },
+        {
+          "value": "music",
+          "label": "Music"
+        }
+      ]
 
-    const onHandleSaleChanged = () => {
-        setOnSale(!onSale)
-        setOnAuction(onAuction)
+    //checkbox logic for onSale and onAuction
+    const [checkbox1, setCheckbox1] = useState(false);
+    const [checkbox2, setCheckbox2] = useState(false);
+
+    const onHandleSaleChanged = (event) => {
+        setCheckbox1(event.target.checked);
+        setCheckbox2(false);
+
+        setOnSale(true)
+
+        if (checkbox1 === true) {
+            setOnSale(false)
+        }
+
+        if (onSale === true) {
+            setOnAuction(false)
+        }
     }
 
-    const onHandleAuctionChanged = () => {
-        setOnAuction(!onAuction)
-        setOnSale(onSale)
+    const onHandleAuctionChanged = (event) => {
+        setCheckbox2(event.target.checked);
+        setCheckbox1(false);
+
+        setOnAuction(true)
+
+        if (checkbox2 === true) {
+            setOnAuction(false)
+        }
+
+        if (onAuction === true) {
+            setOnSale(false)
+        }
     }
 
     const onHandleLockChanged = () => {
@@ -117,20 +224,69 @@ export const CreateSingle = () => {
                 }
 
                 console.log(args)
-
+                
                 await callMethod({
                     contractId: process.env.CONTRACT_NAME,
                     method: 'nft_mint',
                     args
                 })
 
-                /* if(onSale) {
-
-                } */
+                if(onAuction) {
+                    onSubmitOnAuction()
+                }
             }
           } catch(e) {
             console.log(e)
           }
+    }
+
+    const onSubmitOnSale = async (e) => {
+        e.preventDefault()
+
+        try {
+            const cid = await ipfs.add(image)
+            if(cid.path) {
+
+                console.log(cid)
+                // add cid
+                setMetadata({
+                    ...metadata,
+                    media: cid.path
+                })
+
+                setOnSale({
+                    onSale
+                })
+
+                // add royalty
+                const meta = {
+                    ...metadata
+                }
+
+                meta.perpetual_royalties[`${accountId}`] = royalty
+
+                const args = {
+                    token_id: `${Date.now()}`,
+                    metadata: meta,
+                    receiver_id: accountId
+                }
+
+                console.log(args)
+
+                await callMethod({
+                    contractId: process.env.CONTRACT_NAME,
+                    method: 'nft_mint',
+                    args
+                })
+            }
+          } catch(e) {
+            console.log(e)
+          }
+    }
+
+    const onSubmitOnAuction = async () => {
+        // auction
+        // nft utk auction
     }
     
 
@@ -296,7 +452,7 @@ return (
                             </label>       
                     </div>                
                 
-                { !onLock ?
+                { onLock ?
                 <>
                     <div className='pt-6 text-gray-400'>Provide the Links of the content which buyer can download, post purchase</div>
                         <div className='mt-10'>
@@ -381,44 +537,70 @@ return (
                                 Category
                                 <select
                                         name="category"
-                                        value={category}
-                                        onChange={e => setCategory(e.target.value)}
-                                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                                        placeholder="Name your artwork"
+                                        value={metadata.category}
+                                        onChange={onHandleChanged}
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
                                         style={{ padding:"20px"}}
                                         >
-                                            <option selected>Select category</option>
-                                            <option value="collectibles">Collectibles</option>
-                                            <option value="membership">Membership</option>
-                                            <option value="ticketing">Ticketing</option>
-                                            <option value="animation">Animation</option>
-                                            <option value="arts">Arts</option>
-                                            <option value="IRLart">IRL art</option>
-                                            <option value="Trading Cards">Trading Cards</option>
-                                            <option value="memes">Memes</option>
-                                            <option value="music">Music</option>
+                                        {selectCategory.map((option, i) => {
+                                            return (
+                                            <option value={option.value} key={i} >
+                                                {option.label}
+                                            </option>
+                                            );
+                                        })}
                                 </select>
                             </label>
 
                             <label>
                                 Properties
+                                <div>
+                                
+                                {properties.map((property, index) => (
+                                        <div className='flex gap-4 mt-2' key={index}>
+                                           <input
+                                                type="text"
+                                                name="property1"
+                                                value={property.property1}
+                                                className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                                                style={{ padding:"20px"}}
+                                                />
+                                            <input
+                                                type="text"
+                                                name="property2"
+                                                value={property.property2}
+                                                className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                                                style={{ padding:"20px"}}
+                                                />
+                                        
+                                           <button onClick={() => deleteProperty(index)}>
+                                               <img src={images.deleteInput} className="w-[80px] h-[20px]" />
+                                           </button>
+                                        </div>
+                                    ))}
+                                </div>
                                 <div className='flex gap-4 mt-2'>
-                                <input
-                                    type="text"
-                                    name="dimension"
-                                    className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
-                                    placeholder="E.g. Dimension"
-                                    style={{ padding:"20px"}}
-                                    />
-                                <input
-                                    type="text"
-                                    name="size"
-                                    className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
-                                    placeholder="E.g. 1200px x 2000px"
-                                    style={{ padding:"20px"}}
-                                    />
-                                    <button>Add</button>
-                                    </div>
+                                    <input
+                                        type="text"
+                                        name="property1"
+                                        value={metadata.property1}
+                                        onChange={handleChangeProperty1}
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                                        placeholder="E.g. Dimension"
+                                        style={{ padding:"20px"}}
+                                        />
+                                    <input
+                                        type="text"
+                                        name="property2"
+                                        value={metadata.property2}
+                                        onChange={handleChangeProperty2}
+                                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                                        placeholder="E.g. 1200px x 2000px"
+                                        style={{ padding:"20px"}}
+                                        />
+                                    
+                                    <button onClick={addProperty}>Add</button>
+                                </div>
                             </label>
 
                             <div className="flex justify-between w-full mt-4 mb-2">
@@ -431,7 +613,9 @@ return (
                                         <input 
                                             type="checkbox"
                                             value={onSale}
-                                            onClick={onHandleSaleChanged}
+                                            onChange={onHandleSaleChanged}
+                                            /* onClick={e => setOnSale(!onSale)} */
+                                            checked={checkbox1}
                                             /* onChange={e => setOnSale(e.target.value)} */
                                             className="sr-only" 
                                         />
@@ -452,7 +636,8 @@ return (
                                         <input 
                                             type="checkbox"
                                             value={onAuction}
-                                            onClick={onHandleAuctionChanged}
+                                            onChange={onHandleAuctionChanged}
+                                            checked={checkbox2}
                                             /* onChange={e => setOnAuction(e.target.value)} */
                                             className="sr-only" 
                                         />
@@ -463,15 +648,19 @@ return (
                                 </label>
                             </div>
 
-                            <div className='flex flex-col md:col-span-2 my-2'>
-                                <button
-                                    type="button"
-                                    onClick={onSubmit}
-                                    className='py-6 border-2 border-orange-600 bg-white text-black text-lg'
-                                >
-                                    Create
-                                </button>
-                            </div>
+                            { onSale === false && onAuction === false ?
+                                <div className='flex flex-col md:col-span-2 my-2'>
+                                    <button
+                                        type="button"
+                                        onClick={onSubmit}
+                                        className='py-6 border-2 border-orange-600 bg-white text-black text-lg'
+                                    >
+                                        Create
+                                    </button>
+                                </div>
+                            :
+                                <></>
+                            }
                         </div>
                     </div>
 
@@ -504,8 +693,7 @@ return (
                             </label>
                     </div>
                     <div className='flex justify-center'>
-                        <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
-                        <button onClick={onOpenFileDialog} type="file" className='mt-6 px-16'>Put on Sale</button>
+                        <button onClick={onSubmitOnSale} type="file" className='mt-6 px-16'>Put on Sale</button>
                     </div>
                 </div>
                 : 
@@ -517,7 +705,7 @@ return (
                 <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black rounded-lg">
                     <div className='text-4xl font-semibold pb-2'>Put on Auction</div>
                         <div className='grid grid-cols-2 md:grid-cols-4 gap-20 mt-10'>
-                            <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                            <div className="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
                             <label>
                                 Reserved Price (WETH)
                                         <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2'>
@@ -526,20 +714,23 @@ return (
                                                     /* type="number" */
                                                     name="reservedPrice"
                                                     className="h-16 w-full rounded-md pl-6 focus:outline-none"
-                                                    value={reservedPrice}
-                                                    onChange={e => setReservedPrice(e.target.value)}
+                                                    value={auction.reservedPrice}
+                                                    /* onChange={e => setReservedPrice(e.target.value)} */
+                                                    onChange = {onHandleChangedAuction}
                                                 />
                                             </div>
                                             <div className='flex flex-col md:col-span-2'>
                                             <span>
                                                 <select
                                                     name="selectWeth"
-                                                    value={selectWeth}
+                                                    value={auction.selectWeth}
+                                                    onChange = {onHandleChangedAuction}
                                                     className="h-16 w-full rounded-xl text-sm text-black mr-4"
                                                     placeholder="Enter name"
                                                     style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
                                                  >
-                                                    <option onChange={e => setSelectWeth(e.target.value)} value>WETH</option>
+                                                    <option /* onChange={e => setSelectWeth(e.target.value)} */ 
+                                                        value>WETH</option>
                                                     <option value="weth">Weth</option>
                                                 </select>
                                             </span>
@@ -554,8 +745,9 @@ return (
                                             <input
                                                 type="date" 
                                                 name="startDate"
-                                                value={startDate}
-                                                onChange={e => setStartDate(e.target.value)}
+                                                value={auction.startDate}
+                                                /* onChange={e => setStartDate(e.target.value)} */
+                                                onChange = {onHandleChangedAuction}
                                                 className="h-16 w-full rounded-md px-6 focus:outline-none"
                                             /> 
                                         </div>
@@ -570,23 +762,25 @@ return (
                                         <input
                                                 type="date" 
                                                 name="endDate"
-                                                value={endDate}
-                                                onChange={e => setEndDate(e.target.value)}
+                                                value={auction.endDate}
+                                                /* onChange={e => setEndDate(e.target.value)} */
+                                                onChange = {onHandleChangedAuction}
                                                 className="h-16 w-full rounded-md px-6 focus:outline-none"
                                             /> 
                                         </div>
                                     </div>
                                 </label>
                             </div>
-                            <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                            <div className="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
                                 <label>
                                 Starting price (WETH)
                                         <div>
                                             <input
                                                 type="number"
                                                 name="startPrice"
-                                                value={startPrice}
-                                                onChange={e => setStartPrice(e.target.value)}
+                                                value={auction.startPrice}
+                                                /* onChange={e => setStartPrice(e.target.value)} */
+                                                onChange = {onHandleChangedAuction}
                                                 className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
                                                 style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
                                             >                                               
@@ -600,8 +794,9 @@ return (
                                             <input
                                                 type="number"
                                                 name="bidPrice"
-                                                value={bidPrice}
-                                                onChange={e => setBidPrice(e.target.value)}
+                                                value={auction.bidPrice}
+                                                /* onChange={e => setBidPrice(e.target.value)} */
+                                                onChange = {onHandleChangedAuction}
                                                 className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
                                                 style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
                                             />
@@ -610,8 +805,7 @@ return (
                             </div>
                         </div>
                         <div className='flex justify-center'>
-                            <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
-                            <button onClick={onOpenFileDialog} type="file" className='mt-6 px-16'>Put on Auction</button>
+                            <button onClick={onSubmitOnAuction} type="file" className='mt-6 px-16'>Put on Auction</button>
                         </div>
                 </div>
             :

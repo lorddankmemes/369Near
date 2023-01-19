@@ -14,12 +14,14 @@ import './assets/global.css';
 
 import Footer from './components/Container/Footer';
 import { MainProfile } from './pages/MainProfile';
+import { NavProfile } from './pages/NavProfile';
 import { CreateCollectible } from './pages/CreateCollectible';
 import { SingleNFTMarketplace } from './pages/SingleNFTMarketplace';
 import { UpdateProfile } from './pages/UpdateProfile';
 import { HeaderLayout } from './components/Layout/HeaderLayout';
 import useIpfsFactory from './hooks/useIpfsFactory';
 import { MainCollection } from './pages/MainCollection';
+import { AuctionCollection } from './pages/AuctionCollection';
 
 export default function App() {
 
@@ -58,10 +60,14 @@ export default function App() {
 
             <Route exact path="profile" >
               <Route index element={<MainProfile />} />
-              <Route path=":id" element={<MainProfile />} />
+              <Route path=":id" element={<NavProfile />} />
             </Route>
 
-            <Route exact path="collection" element={<MainCollection />}/>
+            <Route exact path="collection" >
+              <Route index element={<MainCollection />}/>
+              <Route path=":id" element={<MainCollection />}/>
+              {/* <Route path=":id" element={<AuctionCollection />}/> */}
+            </Route> 
             
             <Route exact index path="create" element={<CreateCollectible />} />
             <Route exact path="create/nft" element={<CreateSingle />} />
