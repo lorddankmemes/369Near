@@ -4,6 +4,7 @@ import { images } from '../../constant';
 import { ConnectWallet } from '../../pages/ConnectWallet';
 import SearchHeader from '../SearchFilter/SearchHeader';
 import { Outlet } from 'react-router-dom';
+import { BiChevronUp } from 'react-icons/bi';
 
 export const HeaderLayout = () => {
     const navLinkRef = useRef(null);
@@ -28,9 +29,35 @@ export const HeaderLayout = () => {
         };
       }, []);
 
+      //to the top button
+      const [isVisible, setIsVisible] = useState(false)
+
+      const toggleVisibility = () => {
+        if (window.pageYOffset > 300) {
+          setIsVisible(true)
+        } else {
+          setIsVisible(false)
+        }
+      }
+    
+      const scrollToTop = () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+      }
+    
+      useEffect(() => {
+        window.addEventListener('scroll', toggleVisibility)
+    
+        return () => {
+          window.removeEventListener('scroll', toggleVisibility)
+        }
+      }, [])
+
   return (
     <>
-    <header className='grid md:grid-cols-1 px-20 py-4 font-light fixed inset-x-0 z-50 invisible md:visible'>
+    <header className='grid md:grid-cols-1 body-container font-light fixed inset-x-0 z-50 invisible md:visible'>
         <div className='flex justify-between'>
             <div className='flex gap-10'>
                 <Link to="/">
@@ -74,8 +101,8 @@ export const HeaderLayout = () => {
                     className='bg-white text-black' 
                     to="https://rainbowbridge.app/transfer">
                     <span className='flex'>
-                    <img className="mr-2 w-6" src={images.rainbow}></img>
-                    <span className='text-xs'>Rainbow bridge</span>
+                        <img className="mr-2 w-6" src={images.rainbow}></img>
+                        <span className='text-xs'>Rainbow bridge</span>
                     </span>
                 </button>
 
@@ -83,6 +110,16 @@ export const HeaderLayout = () => {
             </div>
         </div>
     </header>
+
+    <div className="fixed bottom-6 right-6">
+      <button
+        type="button"
+        onClick={scrollToTop}
+        className="bg-orange-600 bg-opacity-50 hover:bg-orange-600"
+      >
+        <BiChevronUp className="h-6 w-6 opacity-50" aria-hidden="true" />
+      </button>
+    </div>
 
 
     {/* hamburger header */}

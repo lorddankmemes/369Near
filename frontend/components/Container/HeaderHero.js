@@ -14,16 +14,6 @@ function HeaderHero() {
     if(accountId) { console.log(accountId); setLoaded(true)}
   }, [accountId, loaded])
 
-  /* const handleClickCreate = () => {
-    if (!accountId) {
-      return signIn(process.env.CONTRACT_NAME || "seed.bonebon.testnet").then(() => {
-      navigate("/Create")
-    });
-    } else {
-      return navigate("/Create")
-    }
-  }
-   */
 
   const handleClickCreate = async () => {
     let signedIn = false;
@@ -36,7 +26,21 @@ function HeaderHero() {
       navigate("/Create");
     }
   }
-  
+
+
+/* onst [isSignedIn, setIsSignedIn] = useState(false);
+const handleClickCreate = async () => {
+    if (!isSignedIn) {
+        try {
+          await signIn(process.env.CONTRACT_NAME || "seed.bonebon.testnet");
+          setIsSignedIn(true);
+        } catch (error) {
+          console.log("Error occured during signIn:", error);
+          return;
+        }
+    } 
+    if(isSignedIn) navigate("/Create");
+  } */
 
   return (
     <>

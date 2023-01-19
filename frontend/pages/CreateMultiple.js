@@ -41,7 +41,7 @@ export const CreateMultiple = () => {
                                         <h4 className="text-3xl text-center font-bold pb-10 text-gray-800">
                                         ERC1155 Collection
                                         </h4>
-                                            <div class="flex flex-col gap-y-6 text-sm text-gray-400 w-full">
+                                            <div className="flex flex-col gap-y-6 text-sm text-gray-400 w-full">
 
                                              <div
                                                 type="search"
@@ -154,8 +154,8 @@ export const CreateMultiple = () => {
                 </div>
             </div>
 
-            <div class="flex col-span-4 lg:col-span-2 mx-6">
-                <div class="relative w-full">
+            <div className="flex col-span-4 lg:col-span-2 mx-6">
+                <div className="relative w-full">
                 <div className='pb-8'>Preview</div>
                     <div className='bg-white h-full rounded-xl'>
                             abc
@@ -163,7 +163,7 @@ export const CreateMultiple = () => {
                 </div>
             </div>
         </div>
-        <div class="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
+        <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
             <div className='col-span-4 lg:col-span-2 flex flex-col bg-white rounded-xl px-10 py-6 font-medium text-gray-500'>
                 <span>Unlock once purchased</span>
                 <span className='pt-6'>Content below and media file will be unlocked after successful transaction</span>
@@ -286,12 +286,12 @@ export const CreateMultiple = () => {
                             </label>
 
                             <div className="flex justify-between w-full mt-4 mb-2">
-                                <div class="text-gray-400 font-semibold text-md">
+                                <div className="text-gray-400 font-semibold text-md">
                                 Put on Sale
                                 </div>
 
-                                <label class="flex items-center cursor-pointer">
-                                    <div class="relative">
+                                <label className="flex items-center cursor-pointer">
+                                    <div className="relative">
                                         <input 
                                             type="checkbox"
                                             value={onSale}
@@ -300,8 +300,8 @@ export const CreateMultiple = () => {
                                             className="sr-only" 
                                         />
 
-                                        <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                        <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                        <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
                                     </div>             
                                 </label>
                             </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { OnSaleCollection } from '../components/Collection/OnSale'
-import { Collectibles } from '../components/Collection/Collectibles'
+import { OnSale } from '../components/ProfileContent/OnSale'
+import { Collection } from '../components/ProfileContent/Collection'
 import { MyAuction } from '../components/ProfileContent/MyAuction'
 import { useLocation } from 'react-router-dom';
 
@@ -13,9 +13,9 @@ export const MainCollection = (props) => {
     <>
     <div className='body-container'>
         <div className='grid mt-10 text-center'>
-            <img className='profile-size' src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectible_collection.tokenLogo}`} />
-            <div className='text-2xl font-bold'>{data.sale_collectibles.collectible_collection.tokenName}</div>
-            <div className='pt-2 text-orange-600 text-underline font-semibold'>{data.sale_collectibles.collectible_collection.tokenAddress}</div>
+            <img className='profile-size' src={`https://ipfs.io/ipfs/${data.auctions_of_collectible.collectible_collection.tokenLogo}`}  />
+            <div className='text-2xl font-bold'>{data.auctions_of_collectible.collectible_collection.tokenName}</div>
+            <div className='pt-2 text-orange-600 text-underline font-semibold'>{data.auctions_of_collectible.collectible_collection.tokenAddress}</div>
         </div>
 
         <div className='grid mt-10'>
@@ -26,8 +26,8 @@ export const MainCollection = (props) => {
             </div>
 
             <div className='pt-10'>
-                {currentComponent === 1 && <OnSaleCollection/>}
-                {currentComponent === 2 && <Collectibles /> }
+                {currentComponent === 1 && <OnSale/>}
+                {currentComponent === 2 && <Collection /> }
                 {currentComponent === 3 && <MyAuction /> }
             </div>
         </div>

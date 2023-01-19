@@ -15,15 +15,15 @@ function Activity() {
 
     <div className='text-5xl font-bold my-10'>Activity</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2">
-      <div class="flex flex-col md:col-span-1 gap-y-6 mr-10">
+    <div className="grid grid-cols-1 md:grid-cols-2">
+      <div className="flex flex-col md:col-span-1 gap-y-6 mr-10">
         <div className='box-border h-22 w-32 py-1 text-center border-4 bg-white text-black font-bold border-orange-600 rounded-full'>
           All activity
         </div>
 
         
         <div>
-        <div class="grid gap-6 mb-10">
+        <div className="grid gap-6 mb-10">
           {activity.result.map((data, index) => (
       
             <div className='grid grid-cols-3 md:grid-cols-3 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative'>
@@ -33,7 +33,7 @@ function Activity() {
                   loading="lazy"
                   />
               </div>
-              <div class="flex flex-col col-span-2 md:col-span-2 ml-6">
+              <div className="flex flex-col col-span-2 md:col-span-2 ml-6">
                   <span className='col-span-2 mt-8'>
                     <span className='font-bold'>{data.activity_by_user_name}</span>
                     <span> {data.action_type}</span>
@@ -51,7 +51,7 @@ function Activity() {
 
       </div>
 
-      <div class="flex flex-col md:col-span-1">
+      <div className="flex flex-col md:col-span-1">
         <div className='md:flex gap-x-6'>
           <div className='box-border h-14 w-40 py-4 text-center border-2 bg-white text-black border-orange-600 rounded-md'>
             Top Sellers

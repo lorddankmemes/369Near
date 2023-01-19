@@ -38,6 +38,11 @@ footer {
   padding: 2em 6em;
 }
 
+.community-icon-div {
+  width: 25px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
 
 @font-face {
   font-family: 'Inter';

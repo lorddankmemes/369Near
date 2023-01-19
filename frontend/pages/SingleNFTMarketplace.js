@@ -78,7 +78,7 @@ export const SingleNFTMarketplace = (props) => {
             </>              
             ) : null}
 
-                <div class="flex flex-col md:col-span-3 justify-center mx-10">
+                <div className="flex flex-col md:col-span-3 justify-center mx-10">
                     <div className='flex gap-x-4'>
                         <span><img src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`} className="creator-size"/></span>
                         <span className='font-extrabold pt-2 text-gray-400'>{data.sale_collectibles.collectible_collection.tokenAddress}</span>

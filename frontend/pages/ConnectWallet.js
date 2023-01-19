@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { images } from '../constant';
 import { useProfile } from '../hooks/useProfile';
 import { useWallet } from '../hooks/useWallet';
-import { Wallet } from '../near-wallet';
 
 export function SignInPrompt({onClick}) {
   return (
