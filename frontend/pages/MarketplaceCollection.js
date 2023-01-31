@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { OnSaleCollection } from '../components/Collection/OnSale'
+import { OnSaleCollection } from '../components/Collection/OnSaleMarketplace'
 import { Collectibles } from '../components/Collection/Collectibles'
 import { MyAuction } from '../components/ProfileContent/MyAuction'
 import { useLocation } from 'react-router-dom';
 
-export const MainCollection = (props) => {
+export const MarketplaceCollection = (props) => {
   const location = useLocation();
   const { data } = location.state;
   const [currentComponent, setCurrentComponent] = useState(1);

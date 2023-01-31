@@ -53,6 +53,7 @@ footer {
   border-top-right-radius: 120%;
   border-bottom-right-radius: 130%;
   border-bottom-left-radius: 130%;
+  border: 2px solid #f05124;
 }
 
 @font-face {
@@ -412,6 +413,7 @@ button:hover, button:focus {
    border-bottom-right-radius: 130%;
    border-bottom-left-radius: 130%;
    background-color: #ffffff;
+   padding: 2px;
    
  }
 
