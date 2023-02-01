@@ -12,6 +12,7 @@ import beforeliked from '../assets/img/lovenonfilled.svg'
 import share from '../assets/img/share.svg'
 import plus from '../assets/img/plus.svg'
 import deleteInput from '../assets/img/delete.svg'
+import loadNft from '../assets/img/threedotsloading.svg'
 
 import setting from '../assets/img/settings.png'
 import logout from '../assets/img/logout.png'
@@ -54,5 +55,6 @@ export default {
     twitter,
     telegram,
     instagram,
-    medium
+    medium,
+    loadNft
 }

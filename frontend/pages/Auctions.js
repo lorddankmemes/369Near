@@ -5,6 +5,7 @@ import SliderButton from '../components/SliderButton/SliderButton'
 import { images } from "../constant"
 import AuctionCountdown from '../components/Container/Countdown'
 import slideOption from "../data/filter/slideOption.json";
+import LazyLoad from 'react-lazyload';
 
 
 function Auctions() {
@@ -188,7 +189,11 @@ const handleOwnerClick = (data) => {
                       onClick={() => handleNFTClick(data)} 
                       className='bg-white rounded-lg'
                     >
-                      <img className="object-cover object-center h-60 w-96 rounded-lg" src={data.auctions_of_collectible.ipfs_media_path} />
+                      <LazyLoad
+                          placeholder={<img src={images.loadNft} />}
+                        >
+                          <img className="object-cover object-center h-60 w-96 rounded-lg" src={data.auctions_of_collectible.ipfs_media_path} />
+                        </LazyLoad>
                     </div>
 
                     <div className='py-4 text-lg font-semibold'>{data.auctions_of_collectible.collectible_name}</div>

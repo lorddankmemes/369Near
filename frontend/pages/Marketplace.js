@@ -9,6 +9,7 @@ import { images } from "../constant"
 import slideOption from "../data/filter/slideOption.json";
 import ReactImageAppear from 'react-image-appear';
 import InfiniteScroll from 'react-infinite-scroller'; 
+import LazyLoad from 'react-lazyload';
 
 function Marketplace() {
   const [selectedNFT, setSelectedNFT] = useState(null)
@@ -175,12 +176,11 @@ function Marketplace() {
                       onClick={() => handleNFTClick(data)}  
                       className='bg-white rounded-lg'
                       >
-                     {/*  <ReactImageAppear className="object-cover object-center h-40 md:h-60 w-full rounded-lg"
-                        src={data.sale_collectibles.ipfs_media_path} >
-                      </ReactImageAppear> */}
-                       <div>
-                        <img src={data.sale_collectibles.ipfs_media_path} className="object-cover object-center h-40 md:h-60 w-full rounded-lg" />
-                      </div>
+                        <LazyLoad
+                          placeholder={<img src={images.loadNft} />}
+                        >
+                          <img src={data.sale_collectibles.ipfs_media_path} className="object-cover object-center h-40 md:h-60 w-full rounded-lg" />
+                        </LazyLoad>
                     </div>
                   </div>
                   
