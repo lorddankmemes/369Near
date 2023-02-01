@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import platform from "../data/platform";
 import activity from '../data/activity.json'
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -6,6 +6,50 @@ import { images } from '../constant'
 import moment from 'moment';
 
 function Activity() {
+
+   //filter function
+   const topOption = [
+    {
+      value: "sellers",
+      label: "Top Sellers"
+    },
+    {
+      value: "collectors",
+      label: "Top Collectors"
+    }
+  ]
+
+  //filter function
+  const timeOption = [
+    {
+      value: "sellers",
+      label: "In 1 day"
+    },
+    {
+      value: "collectors",
+      label: "In 2 days"
+    },
+    {
+      value: "collectors",
+      label: "In 7 days"
+    },
+    {
+      value: "collectors",
+      label: "In 30 days"
+    }
+  ]
+
+  const [filterOption, setFilterOption] = useState("");
+  const [open, setOpen] = useState(false);
+  const onToggleDropdown = () => {
+    setOpen(!open)
+  }
+
+  const handleOptionSelection = (value) => {
+    setFilterOption(value);
+    setOpen(false);
+  };
+
   return (
     <>
     <div className='body-container lg:mx-14'>
@@ -53,12 +97,47 @@ function Activity() {
 
       <div className="flex flex-col md:col-span-1">
         <div className='md:flex gap-x-6'>
-          <div className='box-border h-14 w-40 py-4 text-center border-2 bg-white text-black border-orange-600 rounded-md'>
-            Top Sellers
-          </div>
-          <div className='box-border h-14 w-40 py-4 mt-4 md:mt-0 text-center border-2 bg-white text-black border-orange-600 rounded-md '>
-            In one day
-          </div>
+                
+            {/* filter function */}
+            <div onClick={() => onToggleDropdown()} >
+              <div className='text-black pl-4 pr-2 flex items-center border-2 bg-white border-orange-600 rounded-xl w-[200px] h-[60px]'>
+              {filterOption ? dropdownOption.find(option => option.value === filterOption).label : 'Top Seller'}
+              </div>
+
+              { open ?  
+                <div id="dropdownAvatar" className="z-50 w-56 absolute mt-4 bg-white text-black rounded-xl">
+                  <ul className="flex flex-col p-6 text-sm text-gray-700">
+                    <div>Sort by</div>
+                    {topOption.map((option, i) => {
+                      return (
+                        <li className='flex pt-2' key={i}>
+                          <a onClick={() => handleOptionSelection(option.value)} className="block pt-1">{option.label}</a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div> : <></> }
+            </div>
+            <div onClick={() => onToggleDropdown()} >
+              <div className='text-black pl-4 pr-2 flex items-center border-2 bg-white border-orange-600 rounded-xl w-[200px] h-[60px]'>
+              {filterOption ? dropdownOption.find(option => option.value === filterOption).label : 'In 1 day'}
+              </div>
+
+              { open ?  
+                <div id="dropdownAvatar" className="z-50 w-56 absolute mt-4 bg-white text-black rounded-xl">
+                  <ul className="flex flex-col p-6 text-sm text-gray-700">
+                    <div>Sort by</div>
+                    {timeOption.map((option, i) => {
+                      return (
+                        <li className='flex pt-2' key={i}>
+                          <a onClick={() => handleOptionSelection(option.value)} className="block pt-1">{option.label}</a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div> : <></> }
+            </div>
+              
         </div>
 
         <div className='flex text-xl font-semibold justify-between bg-slate-800 my-6 px-10 py-14 rounded-lg'>

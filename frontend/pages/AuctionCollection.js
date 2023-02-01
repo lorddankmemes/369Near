@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { OnSale } from '../components/ProfileContent/OnSale'
 import { Collection } from '../components/ProfileContent/Collection'
 import { MyAuction } from '../components/ProfileContent/MyAuction'
 import { useLocation } from 'react-router-dom';
+import { OnSaleAuction } from '../components/Collection/OnSaleAuction';
 
-export const MainCollection = (props) => {
+export const AuctionCollection = (props) => {
   const location = useLocation();
   const { data } = location.state;
   const [currentComponent, setCurrentComponent] = useState(1);
@@ -26,7 +26,7 @@ export const MainCollection = (props) => {
             </div>
 
             <div className='pt-10'>
-                {currentComponent === 1 && <OnSale/>}
+                {currentComponent === 1 && <OnSaleAuction/>}
                 {currentComponent === 2 && <Collection /> }
                 {currentComponent === 3 && <MyAuction /> }
             </div>

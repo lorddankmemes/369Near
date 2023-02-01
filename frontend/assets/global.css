@@ -17,6 +17,7 @@ body {
   padding: 1em 6em;
 }
 
+
 @media (min-width: 1900px) {
   .body-container {
     padding: 1em 12em;
@@ -42,6 +43,17 @@ footer {
   width: 25px;
   margin-top: auto;
   margin-bottom: auto;
+}
+
+.rounded-liked {
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+  width: 50px;
+  border-top-left-radius: 120%;
+  border-top-right-radius: 120%;
+  border-bottom-right-radius: 130%;
+  border-bottom-left-radius: 130%;
+  border: 2px solid #f05124;
 }
 
 @font-face {
@@ -346,6 +358,7 @@ button:hover, button:focus {
   color: black;
 }
 
+
 .button-profile {
   background-color: rgba(255, 255, 255, 0);
   color:rgb(255, 255, 255);
@@ -400,6 +413,7 @@ button:hover, button:focus {
    border-bottom-right-radius: 130%;
    border-bottom-left-radius: 130%;
    background-color: #ffffff;
+   padding: 2px;
    
  }
 

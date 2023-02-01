@@ -1,0 +1,42 @@
+[
+    {
+      "value": "all",
+      "label": "All"
+    },
+    {
+      "value": "collectibles",
+      "label": "Collectibles"
+    },
+    {
+      "value": "membership",
+      "label": "Membership"
+    },
+    {
+      "value": "ticketing",
+      "label": "Ticketing"
+    },
+    {
+      "value": "animation",
+      "label": "Animations"
+    },
+    {
+      "value": "arts",
+      "label": "Arts"
+    },
+    {
+      "value": "Irl art",
+      "label": "Irl art"
+    },
+    {
+      "value": "trading",
+      "label": "Trading Cards"
+    },
+    {
+      "value": "memes",
+      "label": "Memes"
+    },
+    {
+      "value": "music",
+      "label": "Music"
+    }
+  ]

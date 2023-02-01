@@ -1,65 +1,9 @@
 import { useRef, useState } from "react";
 import { images } from "../../constant"
+import slideOption from "../../data/filter/slideOption.json";
 
 function SliderButton() {
 
- /*  const slide = [
-    'All',
-    'collectibles',
-    'Membership',
-    'Ticketing',
-    'Animation',
-    'Arts',
-    'IRL art',
-    'Trading Cards',
-    'Music',
-    'Memes'
-  ];
- */
-
-  const slideOption = [
-    {
-      "value": "all",
-      "label": "All"
-    },
-    {
-      "value": "collectibles",
-      "label": "Collectibles"
-    },
-    {
-      "value": "membership",
-      "label": "Membership"
-    },
-    {
-      "value": "ticketing",
-      "label": "Ticketing"
-    },
-    {
-      "value": "animation",
-      "label": "Animation"
-    },
-    {
-      "value": "arts",
-      "label": "Arts"
-    },
-    {
-      "value": "Irl art",
-      "label": "Irl art"
-    },
-    {
-      "value": "trading",
-      "label": "Trading Cards"
-    },
-    {
-      "value": "memes",
-      "label": "Memes"
-    },
-    {
-      "value": "music",
-      "label": "Music"
-    }
-  ]
-  
   const [slideSelected, setSlideSelected] = useState("");
 
   const filteredNft = () => {
