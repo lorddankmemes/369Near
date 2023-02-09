@@ -29,8 +29,8 @@ export default function useIpfsFactory() {
       try {
         console.log("IPFS Started");
 
-        const projectId = "2HDrQBzBA6e4Elmdwhpa6Mjg1Qs";
-        const projectSecret = "a8a2d7f469b2e8dbfc4dece05bdde035";
+        const projectId = "2L87coP3jFJtLT8Y5hexijTHRaq";
+        const projectSecret = "a51b639a9206e494b4a09cf8b567b628";
 
         const auth =
           "Basic " +
