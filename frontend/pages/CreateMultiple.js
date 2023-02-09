@@ -10,6 +10,9 @@ export const CreateMultiple = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [royalty, setRoyalty] = useState(0)
+    const [copy, setCopy] = useState(1)
+    const [showModalConfirm, setShowModalConfirm] = useState(false);
+    const [isModalApproved, setIsModalApproved] = useState(false)
 
     //properties state
     const [properties, setProperties] = useState([]);
@@ -54,12 +57,13 @@ export const CreateMultiple = () => {
         media: '',
         perpetual_royalties: {},
         category: '',
+        amount: {}
     })
 
     const [preview, setPreview] = useState()
 
-    const { ipfs } = useIpfsFactory()
-    const { accountId, callMethod } = useWallet()
+    const { ipfs, upload } = useIpfsFactory()
+    const { accountId, callMethod, viewMethod } = useWallet()
 
     const onHandleChanged = (evt) => {
         const value = evt.target.value
@@ -134,7 +138,6 @@ export const CreateMultiple = () => {
     const [image, setImage] = useState()
 
     const onFileChanged = (e) => {
-        console.log(e.target.files[0])
         setImage(e.target.files[0])
     }
 
@@ -155,49 +158,85 @@ export const CreateMultiple = () => {
     
         return () => URL.revokeObjectURL(objectUrl)
     }, [image])
+ 
+    //check approved creator
+   const [isApproved, setIsApproved] = useState(false)
+
+   const getApprovalStatus = async () => {
+        const res = await viewMethod(process.env.CONTRACT_SERIES_NAME, 'is_approved_creator', { account_id: accountId})
+        setIsApproved(res)
+    }
+
+    useEffect(()=> {
+        if(accountId) {
+          getApprovalStatus()
+        }
+      },[accountId, isApproved, getApprovalStatus])
 
 
-    //submit function logic
+    //add approve creator
+    const [addApproval, setAddApproval] = useState()
+
+    const getApprovalCreator = async () => {
+         const args = {
+            account_id: accountId
+        }
+
+        console.log(args)
+
+        await callMethod({
+            contractId: process.env.CONTRACT_SERIES_NAME,
+            method: 'add_approved_creator',
+            args
+        })
+    }
+ 
+
+    //submit function logic only for creation
     const onSubmit = async (e) => {
         e.preventDefault()
 
         try {
             const cid = await ipfs.add(image)
             if(cid.path) {
-
-                console.log(cid)
-                // add cid
                 setMetadata({
                     ...metadata,
                     media: cid.path
                 })
-
-                // add royalty
-                const meta = {
-                    ...metadata
-                }
-
-                meta.perpetual_royalties[`${accountId}`] = royalty
-
-                const args = {
-                    token_id: `${Date.now()}`,
-                    metadata: meta,
-                    receiver_id: accountId
-                }
-
-                console.log(args)
-                
-                await callMethod({
-                    contractId: process.env.CONTRACT_SERIES_NAME,
-                    method: 'nft_mint',
-                    args
-                })
-
             }
+
           } catch(e) {
             console.log(e)
           }
     }
+
+    // upload
+    useEffect(() => {
+        if(metadata.media) {
+
+            const meta = {
+                ...metadata
+            }
+
+            meta.perpetual_royalties[`${accountId}`] = royalty
+            meta.amount = copy
+   
+            const args = {
+                id: parseInt(Date.now(), 10),
+                metadata: meta,
+                receiver_id: accountId
+            };
+
+            console.log(args);
+
+            callMethod({
+                contractId: process.env.CONTRACT_SERIES_NAME,
+                method: 'create_series',
+                args
+            })
+            .then(() => setMetadata())
+        }
+    }, [metadata])
 
     const onSubmitOnSale = async (e) => {
         e.preventDefault()
@@ -223,6 +262,7 @@ export const CreateMultiple = () => {
                 }
 
                 meta.perpetual_royalties[`${accountId}`] = royalty
+                meta.amount = copy
 
                 const args = {
                     token_id: `${Date.now()}`,
@@ -233,7 +273,7 @@ export const CreateMultiple = () => {
                 console.log(args)
 
                 await callMethod({
-                    contractId: process.env.CONTRACT_NAME,
+                    contractId: process.env.CONTRACT_SERIES_NAME,
                     method: 'nft_mint',
                     args
                 })
@@ -242,7 +282,6 @@ export const CreateMultiple = () => {
             console.log(e)
           }
     }
-    
 
 
   return (
@@ -360,10 +399,65 @@ export const CreateMultiple = () => {
     </>
     ) : null}
 
+    {/* Modal to check approved creator, add creator, and create series */}
+    { showModalConfirm ? (
+        <>
+         <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div
+                className="fixed inset-0 w-full h-full bg-black opacity-40"
+                onClick={() => setShowModalConfirm(false)}
+            ></div>
+            <div className="flex relative justify-center items-center min-h-screen mt-40 px-4 py-8">
+                <div className="absolute w-full max-w-lg mx-auto bg-gray-100 z-99 rounded-md shadow-lg">
+                    <div className="my-4 py-10 flex flex-col justify-center text-black">
+                        <div className="text-3xl text-center font-bold pb-10 text-gray-800">
+                            Confirmation
+                        </div>
+                        {isApproved ? 
+                        <div className="text-md text-center font-bold pb-4 text-gray-800">Approve</div>
+                        : 
+                        <div>
+                            <div className="text-md text-center font-bold pb-4 text-gray-800">
+                                Only approved creator is allow to create series.<br/> Want to be an approved creator ?
+                            </div> 
+                            <div className='flex justify-center gap-x-6'>
+                                <button onClick={getApprovalCreator}>Yes</button>
+                                <button onClick={() => setShowModalConfirm(false)}>No</button>
+                            </div>
+                        </div>
+                        }
+
+                        <div className="text-md text-center font-bold mt-10 py-4 text-gray-800">
+                            Confirm your transaction on Near to create series ?
+                        </div>
+
+                        { isApproved ? 
+                            <div className='flex justify-center gap-x-6'>
+                                <button onClick={onSubmit}>Confirm</button>
+                                <button onClick={() => setShowModalConfirm(false)}>Cancel</button>
+                            </div>
+                            :
+                            <div className='flex justify-center gap-x-6'>
+                                <button disabled className='opacity-50 cursor-not-allowed'>Confirm</button>
+                                <button disabled className='opacity-50 cursor-not-allowed' 
+                                    onClick={() => setShowModalConfirm(false)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </>
+    ) : null}
+
         <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
             <div className="col-span-4 lg:col-span-2">
                 <Link to="/create" className='my-6'>Manage collectible type</Link>
-                <div className='text-5xl font-semibold pt-6 pb-10'>Create single<br/>collectible</div>
+                <div className='text-5xl font-semibold pt-6 pb-10'>Create multiple<br/>collectible</div>
 
                 <div>Upload File</div>
 
@@ -502,9 +596,8 @@ export const CreateMultiple = () => {
                                 Royalties
                                     <input
                                         type="text"
-                                        name="property1"
-                                        value={metadata.property1}
-                                        onChange={handleChangeProperty1}
+                                        name="royalty"
+                                        onChange={e => setRoyalty(e.target.value)}
                                         className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
                                         style={{ padding:"20px"}}
                                         />
@@ -513,9 +606,8 @@ export const CreateMultiple = () => {
                                  Number of copies
                                     <input
                                         type="text"
-                                        name="property2"
-                                        value={metadata.property2}
-                                        onChange={handleChangeProperty2}
+                                        name="copy"
+                                        onChange={e => setCopy(e.target.value)}
                                         className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
                                         style={{ padding:"20px"}}
                                         />
@@ -620,7 +712,7 @@ export const CreateMultiple = () => {
                                 <div className='flex flex-col md:col-span-2 my-2'>
                                     <button
                                         type="button"
-                                        onClick={onSubmit}
+                                        onClick={() => setShowModalConfirm(!showModalConfirm) && getApprovalStatus}
                                         className='py-6 border-2 border-orange-600 bg-white text-black text-lg'
                                     >
                                         Create
@@ -660,8 +752,12 @@ export const CreateMultiple = () => {
                             </label>
                     </div>
                     <div className='flex justify-center'>
-                        {/* <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
-                        <button onClick={onOpenFileDialog} type="file" className='mt-6 px-16'>Put on Sale</button> */}
+                        <button
+                            onClick={onSubmitOnSale}
+                            className='py-2 border-2 border-orange-600 bg-white text-black shadow-2xl text-md'
+                            >
+                            Put on Sale
+                        </button>
                     </div>
                 </div>
                 : 

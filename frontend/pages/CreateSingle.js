@@ -202,43 +202,44 @@ export const CreateSingle = () => {
         try {
             const cid = await ipfs.add(image)
             if(cid.path) {
-
-                console.log(cid)
                 // add cid
                 setMetadata({
                     ...metadata,
                     media: cid.path
                 })
 
-                // add royalty
-                const meta = {
-                    ...metadata
-                }
-
-                meta.perpetual_royalties[`${accountId}`] = royalty
-
-                const args = {
-                    token_id: `${Date.now()}`,
-                    metadata: meta,
-                    receiver_id: accountId
-                }
-
-                console.log(args)
-                
-                await callMethod({
-                    contractId: process.env.CONTRACT_NAME,
-                    method: 'nft_mint',
-                    args
-                })
-
-                if(onAuction) {
-                    onSubmitOnAuction()
-                }
             }
           } catch(e) {
             console.log(e)
           }
     }
+
+    //upload
+    useEffect(() => {
+        if(metadata.media) {
+            // add royalty
+            const meta = {
+                ...metadata
+            }
+
+            meta.perpetual_royalties[`${accountId}`] = royalty
+
+            const args = {
+                token_id: `${Date.now()}`,
+                metadata: meta,
+                receiver_id: accountId
+            }
+
+            console.log(args)
+            
+            callMethod({
+                contractId: process.env.CONTRACT_NAME,
+                method: 'nft_mint',
+                args
+            })
+            .then(() => setMetadata())
+        }
+    }, [metadata])
 
     const onSubmitOnSale = async (e) => {
         e.preventDefault()

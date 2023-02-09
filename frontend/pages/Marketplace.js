@@ -1,14 +1,10 @@
 import React from 'react'
 import React, {useState, useEffect, useRef} from 'react'
-import SliderButton from '../components/SliderButton/SliderButton'
-import Filter from '../components/SearchFilter/Filter'
 import test from '../data/test.json'
 import {useNavigate} from "react-router-dom"
 import dropdownOption from "../data/filter/marketOption.json";
 import { images } from "../constant"
 import slideOption from "../data/filter/slideOption.json";
-import ReactImageAppear from 'react-image-appear';
-import InfiniteScroll from 'react-infinite-scroller'; 
 import LazyLoad from 'react-lazyload';
 
 function Marketplace() {
@@ -100,6 +96,8 @@ function Marketplace() {
     setFilterOption(value);
     setOpen(false);
   };
+
+  //smart contract marketplace
 
   return (
     <div className='body-container'>
@@ -215,7 +213,7 @@ function Marketplace() {
                 <hr className='my-4'/>
 
                 <p className="text-sm text-gray-400">List Price</p>
-                <span className="text-md font-semibold">{data.onsale_current_price}</span>
+                <span className="text-md font-semibold">{`${(data.onsale_current_price / 10**18)} Ⓝ`}</span>
                 </div>
             ))}
           {/*  {loading && <p>Loading...</p>} */} 

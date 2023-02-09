@@ -13,15 +13,28 @@ export const Profile = () => {
     const getInnerProfile = async () => {
       const res = await viewMethod(process.env.CONTRACT_NAME, 'nft_tokens_for_owner', { account_id: accountId})
       setCreated(res)
-      setSold(res)
-      setRevenue(res)
     }
 
     useEffect(() => {
       if (accountId) {
         getInnerProfile()
       }
-    }, [accountId, created, sold, revenue, getInnerProfile])
+    }, [accountId, created, getInnerProfile])
+
+   /*  //returns the number of sales for a given account
+    const getAmountSold = async () => {
+      const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_supply_by_owner_id', { account_id: accountId})
+      setSold(res)
+    }
+
+    useEffect(() => {
+      if (accountId) {
+        getAmountSold()
+      }
+    }, [accountId, sold, getAmountSold]) */
+
+
+
 
   return (
       <div className='grid grid-cols-1 md:grid-cols-3 relative gap-8 mt-2 mx-4 w-full md:w-[90%]'>
