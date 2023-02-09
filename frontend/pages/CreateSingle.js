@@ -205,7 +205,7 @@ export const CreateSingle = () => {
                 // add cid
                 setMetadata({
                     ...metadata,
-                    media: cid.path
+                    media: `${process.env.INFURA_GATEWAY}/${cid.path}`
                 })
 
             }
