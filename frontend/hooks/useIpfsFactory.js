@@ -53,5 +53,23 @@ export default function useIpfsFactory() {
     setIpfsReady(Boolean(ipfs));
   }
 
-  return { ipfs, isIpfsReady, ipfsInitError };
+  const upload = async (buffer) => {
+    return new Promise((resolve, reject) => {
+      if(!ipfs) {
+        reject("Ipfs not started")
+      }
+
+      ipfs.add(buffer)
+        .then((data) => {
+          setTimeout(() => {
+            resolve(data)
+          }, 1000)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    })
+  }
+
+  return { ipfs, isIpfsReady, ipfsInitError, upload };
 }

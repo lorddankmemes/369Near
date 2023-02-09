@@ -8,22 +8,48 @@ export const Dashboard = () => {
 
   const { accountId, viewMethod} = useWallet()
 
-  const [created, setCreated] = useState(0)
+  const [createdSingle, setCreatedSingle] = useState(0)
+  const [createdSeries, setCreatedSeries] = useState(0)
   const [sold, setSold] = useState(0)
   const [revenue, setRevenue] = useState(0)
 
-  const getProfileDashboard = async () => {
+  //total artworks created in single 
+  const getArtworksCreatedSingle = async () => {
     const res = await viewMethod(process.env.CONTRACT_NAME, 'nft_tokens_for_owner', { account_id: accountId})
-    setCreated(res)
-    setSold(res)
-    setRevenue(res)
+    setCreatedSingle(res)
   }
 
   useEffect(() => {
     if (accountId) {
-      getProfileDashboard()
+      getArtworksCreatedSingle()
     }
-   }, [accountId, created, sold, revenue, getProfileDashboard])
+   }, [accountId, createdSingle, getArtworksCreatedSingle])
+
+//total artworks created in series
+ const getArtworksCreatedSeries = async () => {
+    const res = await viewMethod(process.env.CONTRACT_SERIES_NAME, 'nft_supply_for_owner', { account_id: accountId})
+    setCreatedSeries(res)
+  }
+
+  useEffect(() => {
+    if (accountId) {
+      getArtworksCreatedSeries()
+    }
+   }, [accountId, createdSeries, getArtworksCreatedSeries])
+
+
+   /*  //returns the number of sales for a given account
+    const getAmountSold = async () => {
+        const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_supply_by_owner_id', { account_id: accountId})
+        setSold(res)
+      }
+  
+      useEffect(() => {
+        if (accountId) {
+          getAmountSold()
+        }
+      }, [accountId, sold, getAmountSold]) */
+
 
    
 
@@ -36,7 +62,7 @@ export const Dashboard = () => {
                         <div className="flex flex-col md:col-span-1 bg-white p-4 rounded-lg">
                             <span className='text-gray-500'>Artworks created</span>
                             <div className='flex justify-between py-4 px-2'>
-                                <span className='text-3xl font-bold'>{created.length}</span>
+                                <span className='text-3xl font-bold'>{createdSingle.length}</span>
                                 <span><img src={images.artCreated}/></span>
                             </div>
                         </div>
@@ -44,7 +70,7 @@ export const Dashboard = () => {
                         <div className="flex flex-col md:col-span-1 bg-white p-4 rounded-lg">
                             <span className='text-gray-500'>Artworks sold</span>
                             <div className='flex justify-between py-4 px-2'>
-                                <span className='text-3xl font-bold'>0</span>
+                                <span className='text-3xl font-bold'>{createdSeries.length}</span>
                                 <span><img src={images.artSold}/></span>
                             </div>
                         </div>
@@ -85,8 +111,8 @@ export const Dashboard = () => {
                         <th scope="col" className="flex justify-end">DATE</th>
                     </tr>
                 </thead>
-                {market.data.result.map((data) => (
-                <tbody className='text-xs'>
+                {market.data.result.map((data, index) => (
+                <tbody className='text-xs' key={index}>
                     <tr className="border-b w-full">
                         <td scope="col" className="pr-10 py-4 whitespace-nowrap">{data.action_type}</td>
                         <td scope="col" className='flex gap-x-8 pr-6 py-4 justify-center'>

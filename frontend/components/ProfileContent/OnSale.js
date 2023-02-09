@@ -17,6 +17,23 @@ export const OnSale = () => {
     }
    }, [accountId, onSale, getProfileOnSale])
    
+
+   //onSale real smart contract, get the val from marketplace metadata
+   //method to retrieve information about all the NFTs that are currently for sale and owned by a specific account. 
+   //This information can be useful when building a marketplace frontend and showing the NFTs that a specific account is selling.
+   
+  /*const getProfileOnSale= async () => {
+    const res = await viewMethod(process.env.CONTRACT_MARKETPLACE, 'get_sales_by_owner_id', { account_id: accountId})
+    setOnSale(res)
+  }
+
+  useEffect(() => {
+    if (accountId) {
+      getProfileOnSale()
+    }
+   }, [accountId, onSale, getProfileOnSale]) */
+
+
   return (
     <>
     <div>
