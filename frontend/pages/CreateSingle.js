@@ -6,6 +6,9 @@ import useIpfsFactory from "../hooks/useIpfsFactory";
 import { useWallet } from "../hooks/useWallet";
 
 export const CreateSingle = () => {
+  const { ipfs } = useIpfsFactory();
+  const { accountId, callMethod } = useWallet();
+
   const [showModal, setShowModal] = useState(false);
   const [royalty, setRoyalty] = useState(0);
 
@@ -74,19 +77,20 @@ export const CreateSingle = () => {
 
   const [preview, setPreview] = useState();
 
-  const { ipfs } = useIpfsFactory();
-  const { accountId, callMethod } = useWallet();
-
   const onHandleChanged = (evt) => {
-    // const value = evt.target.value;
+    const value = evt.target.value;
     setMetadata({
       ...metadata,
-      [evt.target.name]: evt.target.value,
+      [evt.target.name]: value,
     });
   };
 
   //select option
   const selectCategory = [
+    {
+      value: "",
+      label: "Select category",
+    },
     {
       value: "collectibles",
       label: "Collectibles",
@@ -163,104 +167,6 @@ export const CreateSingle = () => {
     setOnLock(!onLock);
   };
 
-  //image & preview logic for collection
-  const imageRefCol = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  const onFileChangedCol = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setPreviewUrl(reader.result);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  //image & preview logic for single collectible
-  const [image, setImage] = useState();
-
-  const onFileChanged = (e) => {
-    console.log(e.target.files[0]);
-    setImage(e.target.files[0]);
-  };
-
-  const imageRef = useRef(null);
-
-  const onOpenFileDialog = (e) => {
-    imageRef.current.click();
-  };
-
-  useEffect(() => {
-    if (!image) {
-      setPreview(undefined);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(image);
-    setPreview(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [image]);
-
-  //submit function logic
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-        try {
-            const cid = await ipfs.add(image)
-            if(cid.path) {
-                // add cid
-                setMetadata({
-                    ...metadata,
-                    media: `${process.env.INFURA_GATEWAY}/${cid.path}`
-                })
-
-            }
-          } catch(e) {
-            console.log(e)
-          }
-    }
-
-    //upload
-    useEffect(() => {
-        if(metadata.media) {
-            // add royalty
-            const meta = {
-                ...metadata
-            }
-
-                meta.perpetual_royalties[`${accountId}`] = royalty
-
-                const args = {
-                    token_id: `${Date.now()}`,
-                    metadata: meta,
-                    receiver_id: accountId
-                }
-
-                console.log(args)
-
-                await callMethod({
-                    contractId: process.env.CONTRACT_NAME,
-                    method: 'nft_mint',
-                    args
-                })
-
-                if(onAuction) {
-                    onSubmitOnAuction()
-                }
-            }
-          } catch(e) {
-            console.log(e)
-          }
-    }
-
-  const onSubmitOnAuction = async () => {
-    // auction
-    // nft utk auction
-  };
-
   //image & preview logic
   const [image, setImage] = useState();
 
@@ -288,6 +194,10 @@ export const CreateSingle = () => {
   }, [image]);
 
   //submit function logic
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingOnSale, setIsSubmittingOnSale] = useState(false);
+  const [isSubmittingOnAuction, setIsSubmittingOnAuction] = useState(false);
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -299,6 +209,7 @@ export const CreateSingle = () => {
           ...metadata,
           media: `${process.env.INFURA_GATEWAY}/${cid.path}`,
         });
+        setIsSubmitting(true);
       }
     } catch (e) {
       console.log(e);
@@ -307,7 +218,7 @@ export const CreateSingle = () => {
 
   //upload
   useEffect(() => {
-    if (metadata.media) {
+    if (isSubmitting && metadata.media) {
       // add royalty
       const meta = {
         ...metadata,
@@ -337,170 +248,207 @@ export const CreateSingle = () => {
     try {
       const cid = await ipfs.add(image);
       if (cid.path) {
-        console.log(cid);
         // add cid
         setMetadata({
           ...metadata,
-          media: cid.path,
+          media: `${process.env.INFURA_GATEWAY}/${cid.path}`,
         });
 
-        setOnSale({
-          onSale,
-        });
-
-        // add royalty
-        const meta = {
-          ...metadata,
-        };
-
-        meta.perpetual_royalties[`${accountId}`] = royalty;
-
-        const args = {
-          token_id: `${Date.now()}`,
-          metadata: meta,
-          receiver_id: accountId,
-        };
-
-        console.log(args);
-
-        await callMethod({
-          contractId: process.env.CONTRACT_NAME,
-          method: "nft_mint",
-          args,
-        });
+        setSalePrice(salePrice);
+        setIsSubmittingOnSale(true);
       }
     } catch (e) {
       console.log(e);
     }
   };
 
+  //upload
+  useEffect(() => {
+    if (isSubmittingOnSale && metadata.media) {
+      // add royalty
+      const meta = {
+        ...metadata,
+      };
+
+      meta.perpetual_royalties[`${accountId}`] = royalty;
+
+      const args = {
+        token_id: `${Date.now()}`,
+        metadata: meta,
+        salePrice,
+        receiver_id: accountId,
+      };
+
+      console.log(args);
+
+      callMethod({
+        contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+        method: "nft_on_approve",
+        args,
+      }).then(() => setMetadata());
+    }
+  }, [metadata]);
+
+  const onSubmitOnAuction = async (e) => {
+    e.preventDefault();
+
+    try {
+      const cid = await ipfs.add(image);
+      if (cid.path) {
+        // add cid
+        setMetadata({
+          ...metadata,
+          media: `${process.env.INFURA_GATEWAY}/${cid.path}`,
+        });
+
+        setAuction({
+          ...auction,
+        });
+        setIsSubmittingOnAuction(true);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  //upload
+  useEffect(() => {
+    if (isSubmittingOnAuction && metadata.media) {
+      // add royalty
+      const meta = {
+        ...metadata,
+      };
+
+      meta.perpetual_royalties[`${accountId}`] = royalty;
+
+      const args = {
+        token_id: `${Date.now()}`,
+        metadata: meta,
+        salePrice,
+        receiver_id: accountId,
+      };
+
+      console.log(args);
+
+      callMethod({
+        contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+        method: "offer",
+        args,
+      }).then(() => setMetadata());
+    }
+  }, [metadata]);
 
   return (
     <>
       <div className="body-container">
-        {/* Create Collection Modal  */}
-        {showModal ? (
-          <div className="fixed inset-0 z-10 overflow-y-auto">
+        {/* {showModal ? (
+        <div className="fixed inset-0 z-10 overflow-y-auto">
             <div
-              className="fixed inset-0 w-full h-full bg-black opacity-40"
-              onClick={() => setShowModal(false)}
+                className="fixed inset-0 w-full h-full bg-black opacity-40"
+                onClick={() => setShowModal(false)}
             ></div>
             <div className="flex relative justify-center items-center min-h-screen mt-40 px-4 py-8">
-              <div className="absolute w-full max-w-lg mx-auto bg-gray-100 z-99 rounded-md shadow-lg">
-                <div className="mt-16 px-10 flex flex-col justify-center">
-                  <h4 className="text-3xl text-center font-bold pb-10 text-gray-800">
-                    ERC721 Collection
-                  </h4>
-                  <div className="flex flex-col gap-y-6 text-sm text-gray-400 w-full">
-                    <div
-                      className="cursor-pointer flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md text-center"
-                      style={{ padding: "40px" }}
-                      onClick={() => imageRefCol.current.click()}
-                    >
-                      {previewUrl ? (
-                        <img
-                          src={previewUrl}
-                          alt="Preview"
-                          className="w-full h-64 object-cover"
-                        />
-                      ) : (
-                        <>
-                          <span className="text-gray-400 text-md">
-                            Allowed png, gif, jpg 160x160px <br /> Recommended
-                          </span>
-                          <input
-                            ref={imageRefCol}
-                            id="image"
-                            accept="image/*"
-                            type="file"
-                            onChange={onFileChangedCol}
-                            style={{ display: "none" }}
-                          />
-                        </>
-                      )}
+                <div className="absolute w-full max-w-lg mx-auto bg-gray-100 z-99 rounded-md shadow-lg">
+                    <div className="mt-16 px-10 flex flex-col justify-center">
+
+                            <h4 className="text-3xl text-center font-bold pb-10 text-gray-800">
+                            NEP141 Collection
+                            </h4>
+                                <div className="flex flex-col gap-y-6 text-sm text-gray-400 w-full">
+
+                                    <div
+                                    type="search"
+                                    name="search-form"
+                                    id="search-form"
+                                    className="flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md text-center"
+                                    style={{ padding:"50px"}}
+                                >
+                                    <div className='text-gray-400 text-md'>Allowed png, gif, jpg 160x160px <br/> Recommended</div>
+                                </div>
+
+
+                                <label>
+                                    Name
+                                    <div>
+                                    <input
+                                        name="search-form"
+                                        id="search-form"
+                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                                        placeholder="Enter token name"
+                                        style={{ padding:"20px"}}
+                                        />
+                                        </div>
+                                </label>
+
+                                <label>
+                                    Symbol
+                                    <div>
+                                    <input
+                                        type="search"
+                                        name="search-form"
+                                        id="search-form"
+                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                                        placeholder="Enter symbol"
+                                        style={{ padding:"20px"}}
+                                        />
+                                        </div>
+                                </label>
+
+                                <label>
+                                    Description
+                                    <div>
+                                    <input
+                                        type="text"
+                                        name="description"
+                                        id="search-form"
+                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                                        placeholder="Spread some words about your token"
+                                        style={{ padding:"20px"}}
+                                        />
+                                        </div>
+                                </label>
+
+                                <label>
+                                    Short url
+                                    <div>
+                                    <input
+                                        type="search"
+                                        name="search-form"
+                                        id="search-form"
+                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2"
+                                        placeholder="short-url"
+                                        style={{ padding:"20px"}}
+                                        />
+                                        </div>
+                                </label>
+                            </div>
+
+                            <div className="items-center gap-2 mt-3 sm:flex">
+                                <button
+                                    className="w-full mt-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
+                                    onClick={() =>
+                                        setShowModal(false)
+                                    }
+                                >
+                                    Create Collection
+                                </button>
+                            </div>
+                            <div className="items-center gap-2 mt-3 mb-10 sm:flex">
+                                <button
+                                    className="w-full my-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
+                                    onClick={() =>
+                                        setShowModal(false)
+                                    }
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
                     </div>
-
-                    <label>
-                      Name
-                      <div>
-                        <input
-                          name="single-name"
-                          id="single-name"
-                          className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                          placeholder="Enter token name"
-                          style={{ padding: "20px" }}
-                        />
-                      </div>
-                    </label>
-
-                    <label>
-                      Symbol
-                      <div>
-                        <input
-                          type="text"
-                          name="single-symbol"
-                          id="single-symbol"
-                          className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                          placeholder="Enter symbol"
-                          style={{ padding: "20px" }}
-                        />
-                      </div>
-                    </label>
-
-                    <label>
-                      Description
-                      <div>
-                        <textarea
-                          name="description"
-                          id="description"
-                          rows="5"
-                          className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-auto w-full rounded-md mt-2 text-black"
-                          placeholder="Spread some words about your token"
-                          style={{ padding: "20px" }}
-                        />
-                      </div>
-                    </label>
-
-                    <label>
-                      Short url
-                      <div>
-                        <input
-                          type="text"
-                          name="single-url"
-                          id="single-url"
-                          className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2"
-                          placeholder="short-url"
-                          style={{ padding: "20px" }}
-                        />
-                      </div>
-                    </label>
-                  </div>
-
-                  <div className="items-center gap-2 mt-3 sm:flex">
-                    <button
-                      className="w-full mt-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
-                      onClick={() => setShowModal(false)}
-                    >
-                      Create Collection
-                    </button>
-                  </div>
-                  <div className="items-center gap-2 mt-3 mb-10 sm:flex">
-                    <button
-                      className="w-full my-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
-                      onClick={() => setShowModal(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
-        ) : (
-          <></>
-        )}
+    ) : <></>} */}
 
-        {/* Create single collectible  */}
         <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
           <div className="col-span-4 lg:col-span-2">
             <Link to="/create" className="my-6">
@@ -541,13 +489,9 @@ export const CreateSingle = () => {
 
           <div className="flex col-span-4 lg:col-span-2 mx-6">
             <div className="relative w-full">
-              <div className="pb-4">Preview</div>
+              <div className="pb-8">Preview</div>
               <div className="bg-white rounded-xl h-full relative">
-                <img
-                  src={preview}
-                  alt=""
-                  className="object-fill h-full rounded-lg"
-                />
+                <img src={preview} alt="" className="object-cover" />
               </div>
             </div>
           </div>
@@ -583,12 +527,12 @@ export const CreateSingle = () => {
                   Provide the Links of the content which buyer can download,
                   post purchase
                 </div>
-                <div className="mt-8">
+                <div className="mt-10">
                   <input
                     type="text"
                     name="externallink"
-                    className="h-20 w-full text-sm font-normal px-4 outline-orange-600 rounded-md border-[1px] border-gray-200"
-                    // placeholder="Tip: Markdown syntax is supported"
+                    className="h-20 w-full text-sm font-normal px-4 outline-orange-600 rounded-md mt-2 border-[1px] border-gray-200"
+                    placeholder="Tip: Markdown syntax is supported"
                   />
                 </div>
               </>
@@ -599,11 +543,11 @@ export const CreateSingle = () => {
               </span>
             )}
 
-            <span className="pt-12 text-black font-semibold">Collection</span>
+            <span className="pt-16">Collection</span>
 
-            <div className="grid grid-cols-2 text-orange-600 font-semibold text-md gap-10 py-10 text-center relative">
+            <div className="grid grid-cols-2 text-orange-600 font-semibold text-md gap-10 py-10 text-center">
               <div
-                className="border-2 border-orange-600 py-12 rounded-3xl cursor-pointer"
+                className="border-2 border-orange-600 py-12 rounded-3xl"
                 onClick={() => setShowModal(true)}
               >
                 <HiPlusSm size={50} className="m-auto" />
@@ -611,11 +555,7 @@ export const CreateSingle = () => {
                 <br />
                 Collection
               </div>
-              <span className="text-gray-500 absolute right-20 top-2 text-sm">
-                Default
-              </span>
-
-              <div className="border-2 border-orange-600 py-12 rounded-3xl cursor-pointer">
+              <div className="border-2 border-orange-600 py-12 rounded-3xl">
                 <img
                   src={images.logo}
                   className="rounded-full h-14 w-14 m-auto mb-4"
@@ -638,7 +578,6 @@ export const CreateSingle = () => {
                     Name
                     <div>
                       <input
-                        type="text"
                         name="title"
                         value={metadata.title}
                         onChange={onHandleChanged}
@@ -659,7 +598,7 @@ export const CreateSingle = () => {
                         onChange={onHandleChanged}
                         className="bg-white outline-orange-600 w-full rounded-md mt-2 text-overflow text-black"
                         placeholder="Describe your NFT item and any unlockable content.
-                                        E.g. Physical print when purchase."
+                                        E.g. Physical print unlocked with purchase."
                         style={{ padding: "10px" }}
                       />
                     </div>
@@ -677,7 +616,6 @@ export const CreateSingle = () => {
                         style={{ padding: "20px" }}
                       />
                     </div>
-                    <span className="text-xs ">Suggested: 10%, 20%, 30%</span>
                   </label>
 
                   <label>
@@ -686,12 +624,9 @@ export const CreateSingle = () => {
                       name="category"
                       value={metadata.category}
                       onChange={onHandleChanged}
-                      className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                      className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
                       style={{ padding: "20px" }}
                     >
-                      <option value="" className="text-black">
-                        Select Category
-                      </option>
                       {selectCategory.map((option, i) => {
                         return (
                           <option value={option.value} key={i}>
@@ -805,7 +740,7 @@ export const CreateSingle = () => {
                       <button
                         type="button"
                         onClick={onSubmit}
-                        className="py-4 border-2 border-orange-600 bg-white text-black text-lg font-medium"
+                        className="py-6 border-2 border-orange-600 bg-white text-black text-lg"
                       >
                         Create
                       </button>
@@ -830,7 +765,7 @@ export const CreateSingle = () => {
                   <input
                     type="number"
                     name="salePrice"
-                    className="bg-white border-2 outline-orange-600 h-10 w-1/2 rounded-md text-black"
+                    className="bg-white outline-orange-600 h-10 w-1/2 rounded-md text-black"
                     value={salePrice}
                     onChange={(e) => setSalePrice(e.target.value)}
                     style={{ padding: "20px" }}
@@ -846,7 +781,7 @@ export const CreateSingle = () => {
               <button
                 onClick={onSubmitOnSale}
                 type="file"
-                className="mt-6 px-16 py-2"
+                className="mt-6 px-16"
               >
                 Put on Sale
               </button>
