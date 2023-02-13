@@ -208,45 +208,128 @@ export const CreateSingle = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+        try {
+            const cid = await ipfs.add(image)
+            if(cid.path) {
+                // add cid
+                setMetadata({
+                    ...metadata,
+                    media: `${process.env.INFURA_GATEWAY}/${cid.path}`
+                })
+
+            }
+          } catch(e) {
+            console.log(e)
+          }
+    }
+
+    //upload
+    useEffect(() => {
+        if(metadata.media) {
+            // add royalty
+            const meta = {
+                ...metadata
+            }
+
+                meta.perpetual_royalties[`${accountId}`] = royalty
+
+                const args = {
+                    token_id: `${Date.now()}`,
+                    metadata: meta,
+                    receiver_id: accountId
+                }
+
+                console.log(args)
+
+                await callMethod({
+                    contractId: process.env.CONTRACT_NAME,
+                    method: 'nft_mint',
+                    args
+                })
+
+                if(onAuction) {
+                    onSubmitOnAuction()
+                }
+            }
+          } catch(e) {
+            console.log(e)
+          }
+    }
+
+  const onSubmitOnAuction = async () => {
+    // auction
+    // nft utk auction
+  };
+
+  //image & preview logic
+  const [image, setImage] = useState();
+
+  const onFileChanged = (e) => {
+    console.log(e.target.files[0]);
+    setImage(e.target.files[0]);
+  };
+
+  const imageRef = useRef(null);
+
+  const onOpenFileDialog = (e) => {
+    imageRef.current.click();
+  };
+
+  useEffect(() => {
+    if (!image) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(image);
+    setPreview(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [image]);
+
+  //submit function logic
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
     try {
       const cid = await ipfs.add(image);
       if (cid.path) {
-        console.log(cid);
         // add cid
         setMetadata({
           ...metadata,
-          media: cid.path,
+          media: `${process.env.INFURA_GATEWAY}/${cid.path}`,
         });
-
-        // add royalty
-        const meta = {
-          ...metadata,
-        };
-
-        meta.perpetual_royalties[`${accountId}`] = royalty;
-
-        const args = {
-          token_id: `${Date.now()}`,
-          metadata: meta,
-          receiver_id: accountId,
-        };
-
-        console.log(args);
-
-        await callMethod({
-          contractId: process.env.CONTRACT_NAME,
-          method: "nft_mint",
-          args,
-        });
-
-        if (onAuction) {
-          onSubmitOnAuction();
-        }
       }
     } catch (e) {
       console.log(e);
     }
   };
+
+  //upload
+  useEffect(() => {
+    if (metadata.media) {
+      // add royalty
+      const meta = {
+        ...metadata,
+      };
+
+      meta.perpetual_royalties[`${accountId}`] = royalty;
+
+      const args = {
+        token_id: `${Date.now()}`,
+        metadata: meta,
+        receiver_id: accountId,
+      };
+
+      console.log(args);
+
+      callMethod({
+        contractId: process.env.CONTRACT_NAME,
+        method: "nft_mint",
+        args,
+      }).then(() => setMetadata());
+    }
+  }, [metadata]);
 
   const onSubmitOnSale = async (e) => {
     e.preventDefault();
@@ -291,10 +374,6 @@ export const CreateSingle = () => {
     }
   };
 
-  const onSubmitOnAuction = async () => {
-    // auction
-    // nft utk auction
-  };
 
   return (
     <>

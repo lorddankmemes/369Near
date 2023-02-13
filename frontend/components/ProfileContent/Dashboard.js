@@ -24,7 +24,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     if (accountId) {
-      getProfileDashboard();
+      getArtworksCreatedSeries();
     }
   }, [accountId, created, sold, revenue, getProfileDashboard]);
 
@@ -35,7 +35,7 @@ export const Dashboard = () => {
         <div>
           <div className="grid grid-cols-2 md:grid-cols-3 rounded-lg relative py-6 gap-6 text-black">
             <div className="flex flex-col md:col-span-1 bg-white p-4 rounded-lg">
-              <span className="text-gray-500">Creations created</span>
+              <span className="text-gray-500">Artworks created</span>
               <div className="flex justify-between py-4 px-2">
                 <span className="text-3xl font-bold">{created.length}</span>
                 <span>
@@ -45,7 +45,7 @@ export const Dashboard = () => {
             </div>
 
             <div className="flex flex-col md:col-span-1 bg-white p-4 rounded-lg">
-              <span className="text-gray-500">Creations sold</span>
+              <span className="text-gray-500">Artworks sold</span>
               <div className="flex justify-between py-4 px-2">
                 <span className="text-3xl font-bold">0</span>
                 <span>
@@ -105,8 +105,8 @@ export const Dashboard = () => {
                 </th>
               </tr>
             </thead>
-            {market.data.result.map((data) => (
-              <tbody className="text-xs">
+            {market.data.result.map((data, index) => (
+              <tbody className="text-xs" key={index}>
                 <tr className="border-b w-full">
                   <td scope="col" className="pr-10 py-4 whitespace-nowrap">
                     {data.action_type}

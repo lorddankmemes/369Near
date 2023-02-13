@@ -10,7 +10,6 @@ import slideOption from "../data/filter/slideOption.json";
 import ReactImageAppear from "react-image-appear";
 import InfiniteScroll from "react-infinite-scroller";
 import LazyLoad from "react-lazyload";
-import { BsChevronDown } from "react-icons/bs";
 
 function Marketplace() {
   const [selectedNFT, setSelectedNFT] = useState(null);
@@ -145,6 +144,8 @@ function Marketplace() {
     setOpen(false);
   };
 
+  //smart contract marketplace
+
   return (
     <div className="body-container">
       <div className="font-bold pt-10 text-3xl">Explore Marketplace</div>
@@ -264,7 +265,6 @@ function Marketplace() {
         </div>
       </div>
 
-      {/* Listed nfts */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-14 my-16">
         <>
           {filteredNft().map((data, i) => (
@@ -322,9 +322,9 @@ function Marketplace() {
               <hr className="my-4" />
 
               <p className="text-sm text-gray-400">List Price</p>
-              <span className="text-md font-semibold">
-                {data.onsale_current_price}
-              </span>
+              <span className="text-md font-semibold">{`${
+                data.onsale_current_price / 10 ** 18
+              } Ⓝ`}</span>
             </div>
           ))}
           {/*  {loading && <p>Loading...</p>} */}
