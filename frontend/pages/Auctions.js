@@ -7,6 +7,7 @@ import AuctionCountdown from "../components/Container/Countdown";
 import slideOption from "../data/filter/slideOption.json";
 import LazyLoad from "react-lazyload";
 // import { BsChevronDown } from "react-icons/io";
+import { BsChevronDown } from "react-icons/bs";
 
 function Auctions() {
   const Ref = useRef(null);
@@ -179,11 +180,11 @@ function Auctions() {
                     (option) => option.value === filterOption
                   ).label
                 : "Filter & Sort"}
-              {/* <BsChevronDown
+              <BsChevronDown
                 className={`${
                   open ? "rotate-180 transform" : ""
                 }  text-black text-xl`}
-              /> */}
+              />
             </div>
 
             {open ? (

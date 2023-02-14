@@ -10,6 +10,7 @@ import slideOption from "../data/filter/slideOption.json";
 import ReactImageAppear from "react-image-appear";
 import InfiniteScroll from "react-infinite-scroller";
 import LazyLoad from "react-lazyload";
+import { BsChevronDown } from "react-icons/bs";
 
 function Marketplace() {
   const [selectedNFT, setSelectedNFT] = useState(null);
