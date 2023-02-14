@@ -26,9 +26,6 @@ export const Creation = () => {
     } 
    }, [accountId, creation, getProfileCreation])
 
-   const getSingleDetail= async () => {
-   }
-
    
    //series creation
    const [seriesCreation, setSeriesCreation] = useState([])
@@ -44,10 +41,40 @@ export const Creation = () => {
     } 
    }, [accountId, seriesCreation, getSeriesCreation])
 
+    //more details on single creation
+    const [selectedNFT, setSelectedNFT] = useState(null)
+
+    const [singleDetails, setSingleDetails] = useState([])
+
+/*     const getSingleDetails= async () => {
+     const res = await viewMethod(process.env.CONTRACT_SERIES_NAME, 'get_series_details')
+     setSingleDetails(res)
+   }
+    
+   useEffect(() => {
+       getSingleDetails()
+    }, [singleDetails, getSingleDetails]) */
+
+
    //more details on series
-   /* const [seriesDetails, setSeriesDetails] = useState([])
+  
+  const handleCreation = (val) => {
+    setSelectedNFT(val)
+    navigate('/creation', { state: { val } })
+  }
+
+  /*  const [seriesDetails, setSeriesDetails] = useState([])
 
    const getSeriesDetails= async () => {
+    const res = await viewMethod(process.env.CONTRACT_SERIES_NAME, 'get_series_details')
+    setSeriesDetails(res)
+  }
+   
+  useEffect(() => {
+      getSeriesDetails()
+   }, [seriesDetails, getSeriesDetails]) */
+
+ /*   const getSeriesDetails= async () => {
     const res = await viewMethod(process.env.CONTRACT_SERIES_NAME, 'get_series_details',  { series_id: seriesId })
     setSeriesDetails(res)
   }
@@ -66,11 +93,15 @@ export const Creation = () => {
 
             return (
               
-                <div key={key} className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
+                <div 
+                  key={key} 
+                  className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative"
+                >
                     <div>      
                       <img 
                         className="object-cover object-center h-60 w-96 rounded-lg" 
-                        src={val.metadata.media} 
+                        src={val.metadata.media}
+                        onClick={() => handleCreation(val)} 
                       />
                     </div>
 
@@ -79,7 +110,7 @@ export const Creation = () => {
                 </div>
             
             )
-          })
+          }) 
           :
           <div>
             <div className='text-md font-semibold text-white text-center py-6'>Looks like you have nothing in your creations yet!</div>
