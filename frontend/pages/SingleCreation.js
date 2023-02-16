@@ -6,51 +6,85 @@ import {useNavigate} from "react-router-dom"
 import { useWallet } from '../hooks/useWallet';
 
 
-export const SingleCreation = (props) => {
+export const SingleCreation = ({tokenId}) => {
 
     const location = useLocation();
     const val = location.state ? location.state.val : null;
+    const id = location.state ? location.state.id : null;
     const [currentComponent, setCurrentComponent] = useState('A');
     const [showModal, setShowModal] = useState(false);
     const [showModalShare, setShowModalShare] = useState(false);
+    const [modalUpdatePrice, setModalUpdatePrice] = useState(false);
     const [selectedNFT, setSelectedNFT] = useState(null)
 
     const { accountId, callMethod} = useWallet()
 
     const [hasMinted, setHasMinted] = useState(false)
-    const isMinting = async (e) => {
-    
-          await callMethod({
+
+    const isMinting = async () => {
+
+        await callMethod({
             contractId: process.env.CONTRACT_SERIES_NAME,
-            method: 'nft_mint',
+            method: 'add_approved_minter',
             args: {
-                token_id: `${Date.now()}`,
-                metadata: val,
-                receiver_id: accountId
+                account_id: accountId
             }
           })
     
-          console.log(args)
+        /*   let result = await callMethod({
+            contractId: process.env.CONTRACT_SERIES_NAME,
+            method: 'nft_mint',
+            args: {
+                id: val.series_id.toString(),
+                metadata: val,
+                receiver_id: accountId
+            }
+          }) */
+  
+        /*   const a = {
+              token_id: result.args.token_id
+          }  */
 
           setHasMinted(true)
       }
 
-      /* const isListing = async (e) => {
+      const isListing = async () => {
     
         await callMethod({
-          contractId: process.env.CONTRACT_SERIES_NAME,
-          method: 'nft_mint',
+          contractId: process.env.CONTRACT_NAME,
+          method: 'nft_approve',
           args: {
-              token_id: `${Date.now()}`,
-              metadata: val,
-              receiver_id: accountId
+              token_id: val.token_id,
+              account_id: accountId,
+              /* msg:  */
           }
+        }) 
+        
+        await callMethod({
+            contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+            method: 'storage_deposit',
+            args: {
+                account_id: accountId
+            }
         })
   
         console.log(args)
+    }
 
-        setHasMinted(true)
-    } */
+    const updatePrice = async () => {
+
+        await callMethod({
+            contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+            method: 'update_price',
+            args: {
+                token_id: val.token_id,
+                nft_contract_id: accountId,
+                price: parseNearAmount('15'),
+            }
+        })
+  
+        console.log(args)
+    }
 
   return (
     <>
@@ -58,7 +92,7 @@ export const SingleCreation = (props) => {
         <div className="grid grid-cols-1 md:grid-cols-6 mx-4 content-center text-white pt-20">
 
             {/* modal for checkout */}
-            {showModal ? (
+           {/*  {showModal ? (
             <>
                 <div className="fixed inset-0 z-10 overflow-y-auto">
                     <div
@@ -117,10 +151,10 @@ export const SingleCreation = (props) => {
                     </div>
                 </div>
             </>              
-            ) : null}
+            ) : null} */}
 
             {/* modal for sharing */}
-            {showModalShare ? (
+           {/*  {showModalShare ? (
             <>
                 <div className="fixed inset-0 z-10 overflow-y-auto">
                     <div
@@ -160,7 +194,6 @@ export const SingleCreation = (props) => {
                                   
                                     <div className="w-100 m-auto link-section">
                                         <div className="share-link text-weight-500 text-size-18">
-                                            {/* {{this.sharing.url}} */}
                                         </div>
                                         <div className="link-copy-btn" onClick={copyUrl}><div class="m-auto">copy</div>
 
@@ -168,6 +201,59 @@ export const SingleCreation = (props) => {
                                 </div>
                             </div>
                         </div>
+                        </div>
+                    </div>
+                </div>
+            </>              
+            ) : null} */}
+
+              {/* modal for update price */}
+              {modalUpdatePrice ? (
+            <>
+                <div className="fixed inset-0 z-10 overflow-y-auto">
+                    <div
+                        className="fixed inset-0 w-full h-full bg-black opacity-40"
+                        onClick={() => setModalUpdatePrice(false)}
+                    >
+                    </div>
+                    <div className="flex justify-center items-center min-h-screen px-4 py-8">
+                        <div className="relative w-full max-w-lg p-4 mx-auto bg-white rounded-md shadow-lg">
+                            <div className="mt-3 flex justify-center">
+                                <div className="mt-4 mb-10 px-10">
+                                    <div className="text-3xl text-center font-bold text-gray-800">
+                                        Update Price
+                                    </div>
+                                    <div className='mt-10 relative text-black'>
+                                    <input
+                                        type="search"
+                                        name="search-form"
+                                        id="search-form"
+                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                                        placeholder="Enter price"
+                                        style={{ padding:"20px"}}
+                                        />
+                                        <div
+                                            className="pl-2 pr-3 text-xl absolute inset-y-0 right-0 pt-2 flex items-center"
+                                        >
+                                        Ⓝ
+                                        </div>
+                                    </div>
+
+                                    <div className='text-xs text-gray-800 pt-2'>
+                                    Platform Fee: 0% <br/>
+                                    You will receive Ξ 0 (~$0.000)
+                                    </div>
+
+                                    <div className='pt-14'>
+                                        <div className='text-black text-sm mx-10 text-center'>You will be redirected to your wallet to confirm your transaction.</div>
+                                        <div className='grid grid-cols-2 justify-center gap-x-4 text-gray-400 text-sm pt-4'>
+                                            <button className="col-span-1 py-2" onClick={isListing}>Confirm</button>
+                                            <button className="col-span-1" onClick={() => setModalUpdatePrice(false)}>Cancel</button>
+                                        </div>
+                                    </div>
+                        
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -254,9 +340,8 @@ export const SingleCreation = (props) => {
 
                         {accountId ?
                             <>
-                            { hasMinted ? 
+                           {/*  { hasMinted ? 
                                 <div 
-                                    /* onClick={isListing}   */
                                     className='bg-white py-2 text-black rounded-lg text-center font-semibold'
                                     >
                                     Update Price
@@ -268,7 +353,15 @@ export const SingleCreation = (props) => {
                                     >
                                     Mint NFT
                                 </div>
-                            }
+                            } */}
+                            <div className='grid grid-cols-2 flex gap-x-4'>
+                                { val.series_id ?
+                                <button onClick={isMinting} className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'>Mint NFT Series</button>
+                                :
+                                <button disabled onClick={isMinting} className='opacity-50 cursor-not-allowed col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'>Minted</button>
+                                }
+                               <button onClick={() => setModalUpdatePrice(true)} className='bg-white col-span-1 py-2 px-10 text-black rounded-lg text-center font-semibold'>List NFT</button>
+                            </div> 
                             </>
                         :
                             <>
