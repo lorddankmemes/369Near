@@ -23,7 +23,7 @@ export const Dashboard = () => {
     if (accountId) {
       getArtworksCreatedSingle()
     }
-   }, [accountId, createdSingle, getArtworksCreatedSingle])
+   }, [accountId, createdSingle])
 
 //total artworks created in series
  const getArtworksCreatedSeries = async () => {
@@ -35,7 +35,7 @@ export const Dashboard = () => {
     if (accountId) {
       getArtworksCreatedSeries()
     }
-   }, [accountId, createdSeries, getArtworksCreatedSeries])
+   }, [accountId, createdSeries])
 
 
    /*  //returns the number of sales for a given account

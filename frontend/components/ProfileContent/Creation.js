@@ -60,8 +60,15 @@ export const Creation = () => {
   
   const handleCreation = (val) => {
     setSelectedNFT(val)
-    navigate('/creation', { state: { val } })
+    navigate(`/creation/${val.token_id}`, { state: { val } })
   }
+  
+/*   const handleCreation = (val) => {
+    setSelectedNFT(val)
+    navigate(`/creation/${token_id}`, {
+      state: { val, token_id },
+    });
+  } */
 
   /*  const [seriesDetails, setSeriesDetails] = useState([])
 
