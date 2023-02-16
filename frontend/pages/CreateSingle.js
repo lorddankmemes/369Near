@@ -6,6 +6,10 @@ import useIpfsFactory from '../hooks/useIpfsFactory'
 import { useWallet } from '../hooks/useWallet'
 
 export const CreateSingle = () => {
+
+    const { ipfs } = useIpfsFactory()
+    const { accountId, callMethod } = useWallet()
+
     const [showModal, setShowModal] = useState(false);
     const [royalty, setRoyalty] = useState(0)
 
@@ -74,9 +78,6 @@ export const CreateSingle = () => {
     })
 
     const [preview, setPreview] = useState()
-
-    const { ipfs } = useIpfsFactory()
-    const { accountId, callMethod } = useWallet()
 
     const onHandleChanged = (evt) => {
         const value = evt.target.value
@@ -196,6 +197,10 @@ export const CreateSingle = () => {
 
 
     //submit function logic
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSubmittingOnSale, setIsSubmittingOnSale] = useState(false)
+    const [isSubmittingOnAuction, setIsSubmittingOnAuction] = useState(false)
+
     const onSubmit = async (e) => {
         e.preventDefault()
 
@@ -207,6 +212,7 @@ export const CreateSingle = () => {
                     ...metadata,
                     media: `${process.env.INFURA_GATEWAY}/${cid.path}`
                 })
+                setIsSubmitting(true)
 
             }
           } catch(e) {
@@ -216,7 +222,7 @@ export const CreateSingle = () => {
 
     //upload
     useEffect(() => {
-        if(metadata.media) {
+        if(isSubmitting && metadata.media) {
             // add royalty
             const meta = {
                 ...metadata
@@ -241,54 +247,107 @@ export const CreateSingle = () => {
         }
     }, [metadata])
 
+
     const onSubmitOnSale = async (e) => {
         e.preventDefault()
 
         try {
             const cid = await ipfs.add(image)
             if(cid.path) {
-
-                console.log(cid)
                 // add cid
                 setMetadata({
                     ...metadata,
-                    media: cid.path
+                    media: `${process.env.INFURA_GATEWAY}/${cid.path}`
                 })
 
-                setOnSale({
-                    onSale
-                })
+                setSalePrice(salePrice)
+                setIsSubmittingOnSale(true)
 
-                // add royalty
-                const meta = {
-                    ...metadata
-                }
-
-                meta.perpetual_royalties[`${accountId}`] = royalty
-
-                const args = {
-                    token_id: `${Date.now()}`,
-                    metadata: meta,
-                    receiver_id: accountId
-                }
-
-                console.log(args)
-
-                await callMethod({
-                    contractId: process.env.CONTRACT_NAME,
-                    method: 'nft_mint',
-                    args
-                })
             }
           } catch(e) {
             console.log(e)
           }
     }
 
-    const onSubmitOnAuction = async () => {
-        // auction
-        // nft utk auction
+    //upload
+    useEffect(() => {
+        if(isSubmittingOnSale && metadata.media) {
+            // add royalty
+            const meta = {
+                ...metadata
+            }
+
+            meta.perpetual_royalties[`${accountId}`] = royalty
+
+            const args = {
+                token_id: `${Date.now()}`,
+                metadata: meta,
+                salePrice,
+                receiver_id: accountId
+            }
+
+            console.log(args)
+            
+            callMethod({
+                contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+                method: 'nft_on_approve',
+                args
+            })
+            .then(() => setMetadata())
+        }
+    }, [metadata]) 
+    
+
+    const onSubmitOnAuction = async (e) => {
+        e.preventDefault()
+
+        try {
+            const cid = await ipfs.add(image)
+            if(cid.path) {
+                // add cid
+                setMetadata({
+                    ...metadata,
+                    media: `${process.env.INFURA_GATEWAY}/${cid.path}`
+                })
+
+                setAuction({
+                    ...auction
+                })
+                setIsSubmittingOnAuction(true)
+
+            }
+          } catch(e) {
+            console.log(e)
+          }
     }
+
+     //upload
+      useEffect(() => {
+        if(isSubmittingOnAuction && metadata.media) {
+            // add royalty
+            const meta = {
+                ...metadata
+            }
+
+            meta.perpetual_royalties[`${accountId}`] = royalty
+
+            const args = {
+                token_id: `${Date.now()}`,
+                metadata: meta,
+                salePrice,
+                receiver_id: accountId
+            }
+
+            console.log(args)
+            
+            callMethod({
+                contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+                method: 'offer',
+                args
+            })
+            .then(() => setMetadata())
+        }
+    }, [metadata])
     
 
 return (

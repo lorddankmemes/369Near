@@ -22,6 +22,7 @@ import { HeaderLayout } from './components/Layout/HeaderLayout';
 import useIpfsFactory from './hooks/useIpfsFactory';
 import { MarketplaceCollection } from './pages/MarketplaceCollection';
 import { AuctionCollection } from './pages/AuctionCollection';
+import { SingleCreation } from './pages/SingleCreation';
 
 export default function App() {
 
@@ -58,6 +59,8 @@ export default function App() {
               <Route index element={<Auctions />} />
               <Route path=":id" element={<SingleAuction />} />
             </Route>
+            
+
 
             <Route exact path="profile" >
               <Route index element={<MainProfile />} />
@@ -69,6 +72,8 @@ export default function App() {
             </Route> 
 
             <Route path="auction/:id" element={<AuctionCollection />}/>
+
+            <Route path="creation" element={<SingleCreation />}/>
             
             <Route exact index path="create" element={<CreateCollectible />} />
             <Route exact path="create/nft" element={<CreateSingle />} />

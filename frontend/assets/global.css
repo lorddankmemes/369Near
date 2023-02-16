@@ -414,7 +414,7 @@ button:hover, button:focus {
    border-bottom-left-radius: 130%;
    background-color: #ffffff;
    padding: 2px;
-   
+
  }
 
  .market-size {
@@ -470,7 +470,7 @@ button:hover, button:focus {
 input:checked ~ .dot {
   transform: translateX(100%);
   background-color: #48bb78;
-} 
+}
 
 
 @media (prefers-color-scheme: dark) {
@@ -535,4 +535,19 @@ main.please-wait .loader:after{
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+
+.slider {
+  transition: transform 0.5s ease-in-out;
+}
+
+.slider-slide {
+  flex: 0 0 100%;
+}
+
+.slider-navigator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
