@@ -627,7 +627,7 @@ export const CreateMultiple = () => {
                         value={metadata.title}
                         onChange={onHandleChanged}
                         className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                        placeholder="Name your artwork"
+                        placeholder="Name your creation"
                         style={{ padding: "20px" }}
                       />
                     </div>
@@ -695,7 +695,7 @@ export const CreateMultiple = () => {
                       name="category"
                       value={metadata.category}
                       onChange={onHandleChanged}
-                      className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
+                      className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
                       style={{ padding: "20px" }}
                     >
                       {selectCategory.map((option, i) => {

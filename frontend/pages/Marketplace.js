@@ -79,7 +79,7 @@ function Marketplace() {
 
   //filter function
   const [filterOption, setFilterOption] = useState("");
-  const [slideSelected, setSlideSelected] = useState("");
+  const [slideSelected, setSlideSelected] = useState(slideOption[0].value);
 
   const filteredData = {
     //for filter function
@@ -200,13 +200,32 @@ function Marketplace() {
           >
             <img src={images.arrow} className="" />
           </div>
-          <div className="flex mx-4 gap-4 overflow-x-hidden w-full justify-around">
+          {/* <div className="flex mx-4 gap-4 overflow-x-hidden w-full justify-around">
             {slideOption
               .slice(currentIndex, currentIndex + 5)
               .map((option, index) => (
                 <button
                   key={index}
                   className="w-[18%] flex-nowrap flex-none rounded-full bg-white text-orange-600 py-3 text-center border-2 border-orange-600 hover:bg-orange-600 hover:text-white cursor-pointer"
+                  onClick={() => {
+                    setSlideSelected(option.value);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+          </div> */}
+          <div className="flex mx-4 gap-4 overflow-x-hidden w-full justify-around">
+            {slideOption
+              .slice(currentIndex, currentIndex + 5)
+              .map((option, index) => (
+                <button
+                  key={index}
+                  className={`w-[18%] flex-nowrap flex-none rounded-full text-center py-3 border-2 ${
+                    slideSelected === option.value
+                      ? "bg-orange-600 text-white border-orange-600"
+                      : "bg-white text-orange-600 border-orange-600 hover:bg-orange-600 hover:text-white"
+                  } cursor-pointer`}
                   onClick={() => {
                     setSlideSelected(option.value);
                   }}
@@ -281,7 +300,7 @@ function Marketplace() {
                   <LazyLoad placeholder={<img src={images.loadNft} />}>
                     <img
                       src={data.sale_collectibles.ipfs_media_path}
-                      className="object-cover object-center h-40 md:h-60 w-full rounded-lg"
+                      className="object-cover object-center h-40 md:h-60 w-full rounded-lg cursor-pointer"
                     />
                   </LazyLoad>
                 </div>
@@ -305,17 +324,17 @@ function Marketplace() {
                   <img
                     onClick={() => handleCollectionClick(data)}
                     src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectible_collection.tokenLogo}`}
-                    className="market-size z-10"
+                    className="market-size z-10 cursor-pointer"
                   />
                   <img
                     onClick={() => handleCreatorClick(data)}
                     src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`}
-                    className="market1-size z-20"
+                    className="market1-size z-20 cursor-pointer"
                   />
                   <img
                     onClick={() => handleOwnerClick(data)}
                     src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`}
-                    className="market2-size z-30"
+                    className="market2-size z-30 cursor-pointer"
                   />
                 </div>
               </div>

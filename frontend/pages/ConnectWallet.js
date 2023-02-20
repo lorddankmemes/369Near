@@ -86,7 +86,7 @@ export function SignOutButton({ onHandleSignOut }) {
               <span>
                 <img src={images.setting} />
               </span>
-              <a href="#" className="block pt-1 px-4">
+              <a href="/#/mybids" className="block pt-1 px-4">
                 Bids
               </a>
             </li>
