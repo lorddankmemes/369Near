@@ -197,6 +197,7 @@ export const CreateSingle = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingOnSale, setIsSubmittingOnSale] = useState(false);
   const [isSubmittingOnAuction, setIsSubmittingOnAuction] = useState(false);
+  const [tokenId, setTokenId] = useState(null);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -234,11 +235,13 @@ export const CreateSingle = () => {
 
       console.log(args);
 
-      callMethod({
+      const nftId = callMethod({
         contractId: process.env.CONTRACT_NAME,
         method: "nft_mint",
         args,
       }).then(() => setMetadata());
+
+      setTokenId(nftId);
     }
   }, [metadata]);
 

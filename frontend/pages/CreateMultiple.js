@@ -72,10 +72,10 @@ export const CreateMultiple = () => {
 
   //select option
   const selectCategory = [
-    // {
-    //   value: "",
-    //   label: "Select category",
-    // },
+    {
+      value: "",
+      label: "Select category",
+    },
     {
       value: "collectibles",
       label: "Collectibles",
@@ -129,21 +129,6 @@ export const CreateMultiple = () => {
 
   const onHandleLockChanged = () => {
     setOnLock(!onLock);
-  };
-
-  //image & preview logic for collection
-  const imageRefCol = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  const onFileChangedCol = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setPreviewUrl(reader.result);
-    };
-
-    reader.readAsDataURL(file);
   };
 
   //image & preview logic
@@ -234,7 +219,8 @@ export const CreateMultiple = () => {
       meta.amount = copy;
 
       const args = {
-        id: parseInt(Date.now(), 10),
+        /* id: parseInt(Date.now(), 10), */
+        token_id: `${Date.now()}`,
         metadata: meta,
         receiver_id: accountId,
       };
@@ -311,31 +297,15 @@ export const CreateMultiple = () => {
                     </h4>
                     <div className="flex flex-col gap-y-6 text-sm text-gray-400 w-full">
                       <div
-                        className="cursor-pointer flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md text-center"
-                        style={{ padding: "40px" }}
-                        onClick={() => imageRefCol.current.click()}
+                        type="search"
+                        name="search-form"
+                        id="search-form"
+                        className="flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md text-center"
+                        style={{ padding: "50px" }}
                       >
-                        {previewUrl ? (
-                          <img
-                            src={previewUrl}
-                            alt="Preview"
-                            className="w-full h-64 object-cover"
-                          />
-                        ) : (
-                          <>
-                            <span className="text-gray-400 text-md">
-                              Allowed png, gif, jpg 160x160px <br /> Recommended
-                            </span>
-                            <input
-                              ref={imageRefCol}
-                              id="image"
-                              accept="image/*"
-                              type="file"
-                              onChange={onFileChangedCol}
-                              style={{ display: "none" }}
-                            />
-                          </>
-                        )}
+                        <div className="text-gray-400 text-md">
+                          Allowed png, gif, jpg 160x160px <br /> Recommended
+                        </div>
                       </div>
 
                       <label>
@@ -504,6 +474,9 @@ export const CreateMultiple = () => {
                 JPG, PNG, GIF, WEBP, MP3, WAV, MP4, GLTF, GLB or VOX. Max size
                 30mb.
               </span>
+              {/*   <div className='flex justify-center pt-4'>
+                        <img src={preview} alt="" className='h-52' />
+                    </div> */}
               <div>
                 <input
                   ref={imageRef}
@@ -516,7 +489,7 @@ export const CreateMultiple = () => {
                 <button
                   onClick={onOpenFileDialog}
                   type="file"
-                  className="mt-6 px-16"
+                  className="mt-6 px-16 bg-white py-2 text-black"
                 >
                   Choose File
                 </button>
@@ -526,13 +499,9 @@ export const CreateMultiple = () => {
 
           <div className="flex col-span-4 lg:col-span-2 mx-6">
             <div className="relative w-full">
-              <div className="pb-4">Preview</div>
+              <div className="pb-8">Preview</div>
               <div className="bg-white rounded-xl h-full relative">
-                <img
-                  src={preview}
-                  alt=""
-                  className="object-fill h-full rounded-lg"
-                />
+                <img src={preview} alt="" className="object-cover" />
               </div>
             </div>
           </div>
@@ -568,12 +537,12 @@ export const CreateMultiple = () => {
                   Provide the Links of the content which buyer can download,
                   post purchase
                 </div>
-                <div className="mt-8">
+                <div className="mt-10">
                   <input
                     type="text"
                     name="externallink"
-                    className="h-20 w-full text-sm font-normal px-4 outline-orange-600 rounded-md border-[1px] border-gray-200"
-                    // placeholder="Tip: Markdown syntax is supported"
+                    className="h-20 w-full text-sm font-normal px-4 outline-orange-600 rounded-md mt-2 border-[1px] border-gray-200"
+                    placeholder="Tip: Markdown syntax is supported"
                   />
                 </div>
               </>
@@ -584,11 +553,11 @@ export const CreateMultiple = () => {
               </span>
             )}
 
-            <span className="pt-12 text-black font-semibold">Collection</span>
+            <span className="pt-16">Collection</span>
 
-            <div className="grid grid-cols-2 text-orange-600 font-semibold text-md gap-10 py-10 text-center relative">
+            <div className="grid grid-cols-2 text-orange-600 font-semibold text-md gap-10 py-10 text-center">
               <div
-                className="border-2 border-orange-600 py-12 rounded-3xl cursor-pointer"
+                className="border-2 border-orange-600 py-12 rounded-3xl"
                 onClick={() => setShowModal(true)}
               >
                 <HiPlusSm size={50} className="m-auto" />
@@ -596,11 +565,7 @@ export const CreateMultiple = () => {
                 <br />
                 Collection
               </div>
-              <span className="text-gray-500 absolute right-20 top-2 text-sm">
-                Default
-              </span>
-
-              <div className="border-2 border-orange-600 py-12 rounded-3xl cursor-pointer">
+              <div className="border-2 border-orange-600 py-12 rounded-3xl">
                 <img
                   src={images.logo}
                   className="rounded-full h-14 w-14 m-auto mb-4"
@@ -642,8 +607,8 @@ export const CreateMultiple = () => {
                         value={metadata.description}
                         onChange={onHandleChanged}
                         className="bg-white outline-orange-600 w-full rounded-md mt-2 text-overflow text-black"
-                        placeholder="Describe your creation and any unlockable content.
-                                        E.g. Physical print when purchased"
+                        placeholder="Describe your NFT item and any unlockable content.
+                                        E.g. Physical print unlocked with purchase."
                         style={{ padding: "10px" }}
                       />
                     </div>
@@ -661,9 +626,9 @@ export const CreateMultiple = () => {
                                         style={{ padding:"20px"}}
                                         />
                                 </div>
-
+                            
                             </label>
-
+                            
  */}
 
                   <div className="flex gap-4 mt-2">

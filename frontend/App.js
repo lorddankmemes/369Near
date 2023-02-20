@@ -71,7 +71,10 @@ export default function App() {
 
           <Route path="auction/:id" element={<AuctionCollection />} />
 
-          <Route path="creation" element={<SingleCreation />} />
+          {/* <Route path="creation" element={<SingleCreation />} /> */}
+          <Route path="creation">
+            <Route path=":id" element={<SingleCreation />} />
+          </Route>
 
           <Route exact index path="create" element={<CreateCollectible />} />
           <Route exact path="create/nft" element={<CreateSingle />} />
