@@ -35,7 +35,7 @@ function SearchHeader() {
             type="search"
             name="search-form"
             id="search-form"
-            className="outline outline-gray-500 h-10 rounded-full"
+            className="h-10 rounded-full border border-gray-700 focus:outline focus:outline-gray-500"
             placeholder="Search items, collections, and accounts"
             style={{
               width: "320px",

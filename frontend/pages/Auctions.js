@@ -53,7 +53,7 @@ function Auctions() {
 
   //filter function
   const [filterOption, setFilterOption] = useState("");
-  const [slideSelected, setSlideSelected] = useState("");
+  const [slideSelected, setSlideSelected] = useState(slideOption[0].value);
 
   const filteredData = {
     //for filter function
@@ -152,7 +152,11 @@ function Auctions() {
                 .map((option, index) => (
                   <button
                     key={index}
-                    className="w-[18%] flex-nowrap flex-none rounded-full bg-white text-orange-600 py-3 text-center border-2 border-orange-600 hover:bg-orange-600 hover:text-white cursor-pointer"
+                    className={`w-[18%] flex-nowrap flex-none rounded-full text-center py-3 border-2 ${
+                      slideSelected === option.value
+                        ? "bg-orange-600 text-white border-orange-600"
+                        : "bg-white text-orange-600 border-orange-600 hover:bg-orange-600 hover:text-white"
+                    } cursor-pointer`}
                     onClick={() => {
                       setSlideSelected(option.value);
                     }}
@@ -252,17 +256,17 @@ function Auctions() {
                     <img
                       onClick={() => handleCollectionClick(data)}
                       src={`https://ipfs.io/ipfs/${data.auctions_of_collectible.collectible_collection.tokenLogo}`}
-                      className="market-size z-10"
+                      className="market-size z-10 cursor-pointer"
                     />
                     <img
                       onClick={() => handleCreatorClick(data)}
                       src={`https://ipfs.io/ipfs/${data.auctions_of_collectible.collectibles_user.profile_photo_path}`}
-                      className="market1-size z-20"
+                      className="market1-size z-20 cursor-pointer"
                     />
                     <img
                       onClick={() => handleOwnerClick(data)}
                       src={`https://ipfs.io/ipfs/${data.auctions_of_collectible.collectibles_user.profile_photo_path}`}
-                      className="market2-size z-30"
+                      className="market2-size z-30 cursor-pointer"
                     />
                   </div>
                 </div>
@@ -270,7 +274,9 @@ function Auctions() {
                 <hr className="my-4" />
 
                 <p className="text-md text-gray-400 ">Starting Price</p>
-                <span className="font-semibold">{data.starting_price}</span>
+                <span className="font-semibold">{`${
+                  data.starting_price / 10 ** 18
+                } Ⓝ`}</span>
 
                 <p className="text-md text-gray-400 pt-4">Ending In</p>
                 {/* {new Date(data.auction_end).toLocaleString()} */}

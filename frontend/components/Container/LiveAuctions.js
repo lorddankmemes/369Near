@@ -6,7 +6,7 @@ import artwork from "../../data/landing/artwork";
 import auction from "../../data/auction";
 
 function LiveAuctions({ title, likes, order, image }) {
-  const maxLength = 20;
+  const maxLength = 10;
 
   return (
     <div className="h-auto ml-14 mr-6">

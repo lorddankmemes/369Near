@@ -1,200 +1,197 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {Link, useNavigate} from "react-router-dom"
-import { images } from '../constant'
-import { HiPlusSm } from 'react-icons/hi'
-import useIpfsFactory from '../hooks/useIpfsFactory'
-import { useWallet } from '../hooks/useWallet'
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { images } from "../constant";
+import { HiPlusSm } from "react-icons/hi";
+import useIpfsFactory from "../hooks/useIpfsFactory";
+import { useWallet } from "../hooks/useWallet";
 
 export const CreateSingle = () => {
+  const { ipfs } = useIpfsFactory();
+  const { accountId, callMethod } = useWallet();
 
-    const { ipfs } = useIpfsFactory()
-    const { accountId, callMethod } = useWallet()
+  const [showModal, setShowModal] = useState(false);
+  const [royalty, setRoyalty] = useState(0);
 
-    const [showModal, setShowModal] = useState(false);
-    const [royalty, setRoyalty] = useState(0)
+  //properties state
+  const [properties, setProperties] = useState([]);
+  const [property1, setProperty1] = useState("");
+  const [property2, setProperty2] = useState("");
 
-    //properties state
-    const [properties, setProperties] = useState([]);
-    const [property1, setProperty1] = useState('');
-    const [property2, setProperty2] = useState('');
+  const handleChangeProperty1 = (event) => {
+    setProperty1(event.target.value);
+  };
 
-    const handleChangeProperty1 = event => {
-        setProperty1(event.target.value);
-    };
+  const handleChangeProperty2 = (event) => {
+    setProperty2(event.target.value);
+  };
 
-    const handleChangeProperty2 = event => {
-        setProperty2(event.target.value);
-    };
+  const addProperty = (e) => {
+    e.preventDefault();
 
-    const addProperty = (e) => {
-        e.preventDefault()
+    const newProperty = { property1, property2 };
+    setProperties([...properties, newProperty]);
+    setProperty1("");
+    setProperty2("");
+  };
 
-        const newProperty = { property1, property2 };
-        setProperties([...properties, newProperty]);
-        setProperty1('');
-        setProperty2('');
+  const deleteProperty = (index) => {
+    const newProperties = [...properties];
+    newProperties.splice(index, 1);
+    setProperties(newProperties);
+  };
+
+  //lock state
+  const [onLock, setOnLock] = useState(false);
+
+  //sale modal state
+  const [onSale, setOnSale] = useState(false);
+  const [salePrice, setSalePrice] = useState(0);
+
+  //auction modal state
+  const [onAuction, setOnAuction] = useState(false);
+  const [auction, setAuction] = useState({
+    reservedPrice: 0,
+    selectWeth: "",
+    startDate: "",
+    endDate: "",
+    startPrice: 0.0,
+    bidPrice: 0,
+  });
+
+  const onHandleChangedAuction = (evt) => {
+    const value = evt.target.value;
+    setAuction({
+      ...auction,
+      [evt.target.name]: value,
+    });
+  };
+
+  //metadata state
+  const [metadata, setMetadata] = useState({
+    title: "",
+    description: "",
+    media: "",
+    perpetual_royalties: {},
+    category: "",
+  });
+
+  const [preview, setPreview] = useState();
+
+  const onHandleChanged = (evt) => {
+    const value = evt.target.value;
+    setMetadata({
+      ...metadata,
+      [evt.target.name]: value,
+    });
+  };
+
+  //select option
+  const selectCategory = [
+    {
+      value: "",
+      label: "Select category",
+    },
+    {
+      value: "collectibles",
+      label: "Collectibles",
+    },
+    {
+      value: "membership",
+      label: "Membership",
+    },
+    {
+      value: "ticketing",
+      label: "Ticketing",
+    },
+    {
+      value: "animation",
+      label: "Animation",
+    },
+    {
+      value: "arts",
+      label: "Arts",
+    },
+    {
+      value: "Irl art",
+      label: "Irl art",
+    },
+    {
+      value: "trading",
+      label: "Trading Cards",
+    },
+    {
+      value: "memes",
+      label: "Memes",
+    },
+    {
+      value: "music",
+      label: "Music",
+    },
+  ];
+
+  //checkbox logic for onSale and onAuction
+  const [checkbox1, setCheckbox1] = useState(false);
+  const [checkbox2, setCheckbox2] = useState(false);
+
+  const onHandleSaleChanged = (event) => {
+    setCheckbox1(event.target.checked);
+    setCheckbox2(false);
+
+    setOnSale(true);
+
+    if (checkbox1 === true) {
+      setOnSale(false);
     }
 
-    const deleteProperty = index => {
-        const newProperties = [...properties];
-        newProperties.splice(index, 1);
-        setProperties(newProperties);
-    };
+    if (onSale === true) {
+      setOnAuction(false);
+    }
+  };
 
-    //lock state
-    const [onLock, setOnLock] = useState(false)
+  const onHandleAuctionChanged = (event) => {
+    setCheckbox2(event.target.checked);
+    setCheckbox1(false);
 
-    //sale modal state
-    const [onSale, setOnSale] = useState(false)
-    const [salePrice, setSalePrice] = useState(0)
+    setOnAuction(true);
 
-    //auction modal state
-    const [onAuction, setOnAuction] = useState(false)
-    const [auction, setAuction] = useState({
-        reservedPrice: 0,
-        selectWeth: '',
-        startDate: '',
-        endDate: '',
-        startPrice: 0.0,
-        bidPrice: 0
-    })
-
-    const onHandleChangedAuction = (evt) => {
-        const value = evt.target.value
-        setAuction({
-            ...auction,
-            [evt.target.name]: value
-        })
+    if (checkbox2 === true) {
+      setOnAuction(false);
     }
 
-    
-    //metadata state
-    const [metadata, setMetadata] = useState({
-        title: '',
-        description: '',
-        media: '',
-        perpetual_royalties: {},
-        category: '',
-    })
-
-    const [preview, setPreview] = useState()
-
-    const onHandleChanged = (evt) => {
-        const value = evt.target.value
-        setMetadata({
-            ...metadata,
-            [evt.target.name]: value
-        })
+    if (onAuction === true) {
+      setOnSale(false);
     }
-    
-    //select option 
-    const selectCategory = [
-        {
-          "value": "",
-          "label": "Select category"
-        },
-        {
-          "value": "collectibles",
-          "label": "Collectibles"
-        },
-        {
-          "value": "membership",
-          "label": "Membership"
-        },
-        {
-          "value": "ticketing",
-          "label": "Ticketing"
-        },
-        {
-          "value": "animation",
-          "label": "Animation"
-        },
-        {
-          "value": "arts",
-          "label": "Arts"
-        },
-        {
-          "value": "Irl art",
-          "label": "Irl art"
-        },
-        {
-          "value": "trading",
-          "label": "Trading Cards"
-        },
-        {
-          "value": "memes",
-          "label": "Memes"
-        },
-        {
-          "value": "music",
-          "label": "Music"
-        }
-      ]
+  };
 
-    //checkbox logic for onSale and onAuction
-    const [checkbox1, setCheckbox1] = useState(false);
-    const [checkbox2, setCheckbox2] = useState(false);
+  const onHandleLockChanged = () => {
+    setOnLock(!onLock);
+  };
 
-    const onHandleSaleChanged = (event) => {
-        setCheckbox1(event.target.checked);
-        setCheckbox2(false);
+  //image & preview logic
+  const [image, setImage] = useState();
 
-        setOnSale(true)
+  const onFileChanged = (e) => {
+    console.log(e.target.files[0]);
+    setImage(e.target.files[0]);
+  };
 
-        if (checkbox1 === true) {
-            setOnSale(false)
-        }
+  const imageRef = useRef(null);
 
-        if (onSale === true) {
-            setOnAuction(false)
-        }
+  const onOpenFileDialog = (e) => {
+    imageRef.current.click();
+  };
+
+  useEffect(() => {
+    if (!image) {
+      setPreview(undefined);
+      return;
     }
 
-    const onHandleAuctionChanged = (event) => {
-        setCheckbox2(event.target.checked);
-        setCheckbox1(false);
+    const objectUrl = URL.createObjectURL(image);
+    setPreview(objectUrl);
 
-        setOnAuction(true)
-
-        if (checkbox2 === true) {
-            setOnAuction(false)
-        }
-
-        if (onAuction === true) {
-            setOnSale(false)
-        }
-    }
-
-    const onHandleLockChanged = () => {
-        setOnLock(!onLock)
-    }
-
-    //image & preview logic
-    const [image, setImage] = useState()
-
-    const onFileChanged = (e) => {
-        console.log(e.target.files[0])
-        setImage(e.target.files[0])
-    }
-
-    const imageRef = useRef(null)
-
-    const onOpenFileDialog = (e) => {
-        imageRef.current.click()
-    }
-
-    useEffect(() => {
-        if (!image) {
-          setPreview(undefined)
-          return
-        }
-    
-        const objectUrl = URL.createObjectURL(image)
-        setPreview(objectUrl)
-    
-        return () => URL.revokeObjectURL(objectUrl)
-    }, [image])
-
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [image]);
 
     //submit function logic
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -408,9 +405,8 @@ export const CreateSingle = () => {
 
 return (
     <>
-    <div className='body-container'>
-
-    {/* {showModal ? (
+      <div className="body-container">
+        {/* {showModal ? (
         <div className="fixed inset-0 z-10 overflow-y-auto">
             <div
                 className="fixed inset-0 w-full h-full bg-black opacity-40"
@@ -491,7 +487,7 @@ return (
                                         </div>
                                 </label>
                             </div>
-                            
+
                             <div className="items-center gap-2 mt-3 sm:flex">
                                 <button
                                     className="w-full mt-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
@@ -519,416 +515,467 @@ return (
     ) : <></>} */}
 
         <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
-            <div className="col-span-4 lg:col-span-2">
-                <Link to="/create" className='my-6'>Manage collectible type</Link>
-                <div className='text-5xl font-semibold pt-6 pb-10'>Create single<br/>collectible</div>
-
-                <div>Upload File</div>
-
-                <div className='my-6 text-center text-gray-400 text-sm p-6 border-dashed border-2 border-white rounded-xl'>
-                    <span>JPG, PNG, GIF, WEBP, MP3, WAV, MP4, GLTF, GLB or VOX. Max size 30mb.</span>
-                    <div>
-                        <input ref={imageRef} id="image" accept="image/*" type="file" onChange={onFileChanged} style={{ display: 'none' }} />
-                        <button onClick={onOpenFileDialog} type="file" className='mt-6 px-16'>Choose File</button>
-                    </div>
-                </div>
+          <div className="col-span-4 lg:col-span-2">
+            <Link to="/create" className="my-6">
+              Manage collectible type
+            </Link>
+            <div className="text-5xl font-semibold pt-6 pb-10">
+              Create single
+              <br />
+              collectible
             </div>
 
-            <div className="flex col-span-4 lg:col-span-2 mx-6">
-                <div className="relative w-full">
-                <div className='pb-8'>Preview</div>
-                    <div className='bg-white rounded-xl h-full relative'>
-                        <img src={preview} alt="" className='object-cover h-full rounded-xl' />
-                    </div>
-                </div>
+            <div>Upload File</div>
+
+            <div className="my-6 text-center text-gray-400 text-sm p-6 border-dashed border-2 border-white rounded-xl">
+              <span>
+                JPG, PNG, GIF, WEBP, MP3, WAV, MP4, GLTF, GLB or VOX. Max size
+                30mb.
+              </span>
+              <div>
+                <input
+                  ref={imageRef}
+                  id="image"
+                  accept="image/*"
+                  type="file"
+                  onChange={onFileChanged}
+                  style={{ display: "none" }}
+                />
+                <button
+                  onClick={onOpenFileDialog}
+                  type="file"
+                  className="mt-6 px-16"
+                >
+                  Choose File
+                </button>
+              </div>
             </div>
+          </div>
         </div>
-        
+
+
         {/* collection white background section */}
         <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
-            <div className='col-span-4 lg:col-span-2 flex flex-col bg-white rounded-xl px-10 py-6 font-normal'>
-                    <div className="flex justify-between w-full mt-4 mb-2">
-                        <div className="text-black font-semibold text-md">
-                                Unlock once purchase
-                        </div>
-        
-                            <label className="flex items-center cursor-pointer">
-                                <div className="relative">
-                                    <input 
-                                            type="checkbox"
-                                            value={onLock}
-                                            onClick={onHandleLockChanged}
-                                            /* onChange={e => setOnSale(e.target.value)} */
-                                            className="sr-only" 
-                                        />
+          <div className="col-span-4 lg:col-span-2 flex flex-col bg-white rounded-xl px-10 py-6 font-normal">
+            <div className="flex justify-between w-full mt-4 mb-2">
+              <div className="text-black font-semibold text-md">
+                Unlock once purchase
+              </div>
 
-                                    <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                                    <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                                </div>             
-                            </label>       
-                    </div>                
-                
-                { onLock ?
-                <>
-                    <div className='pt-6 text-gray-400'>Provide the Links of the content which buyer can download, post purchase</div>
-                        <div className='mt-10'>
-                            <input
-                                type="text"
-                                name="externallink"
-                                className="h-20 w-full text-sm font-normal px-4 outline-orange-600 rounded-md mt-2 border-[1px] border-gray-200"
-                                placeholder="Tip: Markdown syntax is supported"
-                        />
-                    </div>
-                </>
-                :
-                <span className='pt-6 text-gray-400'>Content below and media file will be unlocked after successful transaction</span>
-                }
+              <label className="flex items-center cursor-pointer">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    value={onLock}
+                    onClick={onHandleLockChanged}
+                    /* onChange={e => setOnSale(e.target.value)} */
+                    className="sr-only"
+                  />
 
-                <span className='pt-16'>Collection</span>
-
-                <div className='grid grid-cols-2 text-orange-600 font-semibold text-md gap-10 py-10 text-center'>
-                    <div className='border-2 border-orange-600 py-12 rounded-3xl' onClick={() => setShowModal(true)}>
-                        <HiPlusSm size={50} className="m-auto"/>
-                        Create<br/>Collection
-                    </div>
-                    <div className='border-2 border-orange-600 py-12 rounded-3xl'>
-                    <img src={images.logo} className="rounded-full h-14 w-14 m-auto mb-4" />
-                        3six9 NFT
-                    </div>
+                  <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                  <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
                 </div>
+              </label>
             </div>
 
-        {/* input form section */}
-            <div className="flex col-span-4 lg:col-span-2 px-10 w-full">
-                <form onSubmit={e => { handleSubmit(e) }}>
+            {onLock ? (
+              <>
+                <div className="pt-6 text-gray-400">
+                  Provide the Links of the content which buyer can download,
+                  post purchase
+                </div>
+                <div className="mt-10">
+                  <input
+                    type="text"
+                    name="externallink"
+                    className="h-20 w-full text-sm font-normal px-4 outline-orange-600 rounded-md mt-2 border-[1px] border-gray-200"
+                    // placeholder="Tip: Markdown syntax is supported"
+                  />
+                </div>
+              </>
+            ) : (
+              <span className="pt-6 text-gray-400">
+                Content below and media file will be unlocked after successful
+                transaction
+              </span>
+            )}
 
-                    <div className="relative">
-                        <div className="flex flex-col gap-y-6 text-sm">
-                            <label>
-                                Name
-                                <div>
-                                    <input
-                                        name="title"
-                                        value={metadata.title}
-                                        onChange={onHandleChanged}
-                                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                                        placeholder="Name your artwork"
-                                        style={{ padding:"20px"}}
-                                    />
-                                </div>
-                            </label>
+            <span className="pt-16">Collection</span>
 
-                            <label>
-                                Description
-                                <div>
-                                    <textarea
-                                        type="text"
-                                        name="description"
-                                        value={metadata.description}
-                                        onChange={onHandleChanged}
-                                        className="bg-white outline-orange-600 w-full rounded-md mt-2 text-overflow text-black"
-                                        placeholder="Describe your NFT item and any unlockable content.
+            <div className="relative grid grid-cols-2 text-orange-600 font-semibold text-md gap-10 py-10 text-center">
+              <span className="text-gray-500 absolute right-20 top-2 text-sm">
+                Default
+              </span>
+              <div
+                className="border-2 border-orange-600 py-12 rounded-3xl"
+                onClick={() => setShowModal(true)}
+              >
+                <HiPlusSm size={50} className="m-auto" />
+                Create
+                <br />
+                Collection
+              </div>
+              <div className="border-2 border-orange-600 py-12 rounded-3xl">
+                <img
+                  src={images.logo}
+                  className="rounded-full h-14 w-14 m-auto mb-4"
+                />
+                3six9 NFT
+              </div>
+            </div>
+          </div>
+
+          {/* input form section */}
+          <div className="flex col-span-4 lg:col-span-2 px-10 w-full">
+            <form
+              onSubmit={(e) => {
+                handleSubmit(e);
+              }}
+            >
+              <div className="relative">
+                <div className="flex flex-col gap-y-6 text-sm">
+                  <label>
+                    Name
+                    <div>
+                      <input
+                        name="title"
+                        value={metadata.title}
+                        onChange={onHandleChanged}
+                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                        placeholder="Name your creation"
+                        style={{ padding: "20px" }}
+                      />
+                    </div>
+                  </label>
+
+                  <label>
+                    Description
+                    <div>
+                      <textarea
+                        type="text"
+                        name="description"
+                        value={metadata.description}
+                        onChange={onHandleChanged}
+                        className="bg-white outline-orange-600 w-full rounded-md mt-2 text-overflow text-black"
+                        placeholder="Describe your NFT item and any unlockable content.
                                         E.g. Physical print unlocked with purchase."
-                                        style={{ padding:"10px"}}
-                                    />
-                                </div>
-                            </label>
+                        style={{ padding: "10px" }}
+                      />
+                    </div>
+                  </label>
 
-                            <label>
-                                Royalties
-                                <div className='flex gap-4 mt-2'>
-                                    <input
-                                        type="number"
-                                        name="royalty"
-                                        id="royalty"
-                                        onChange={e => setRoyalty(e.target.value)}
-                                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
-                                        style={{ padding:"20px"}}
-                                        />
-                                </div>
-                            
-                            </label>
+                  <label>
+                    Royalties
+                    <div className="flex gap-4 mt-2">
+                      <input
+                        type="number"
+                        name="royalty"
+                        id="royalty"
+                        onChange={(e) => setRoyalty(e.target.value)}
+                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                        style={{ padding: "20px" }}
+                      />
+                    </div>
+                  </label>
 
-                            <label>
-                                Category
-                                <select
-                                        name="category"
-                                        value={metadata.category}
-                                        onChange={onHandleChanged}
-                                        className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2"
-                                        style={{ padding:"20px"}}
-                                        >
-                                        {selectCategory.map((option, i) => {
-                                            return (
-                                            <option value={option.value} key={i} >
-                                                {option.label}
-                                            </option>
-                                            );
-                                        })}
-                                </select>
-                            </label>
+                  <label>
+                    Category
+                    <select
+                      name="category"
+                      value={metadata.category}
+                      onChange={onHandleChanged}
+                      className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                      style={{ padding: "20px" }}
+                    >
+                      {selectCategory.map((option, i) => {
+                        return (
+                          <option value={option.value} key={i}>
+                            {option.label}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </label>
 
-                            <label>
-                                Properties
-                                <div>
-                                
-                                {properties.map((property, index) => (
-                                        <div className='flex gap-4 mt-2' key={index}>
-                                           <input
-                                                type="text"
-                                                name="property1"
-                                                value={property.property1}
-                                                className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
-                                                style={{ padding:"20px"}}
-                                                />
-                                            <input
-                                                type="text"
-                                                name="property2"
-                                                value={property.property2}
-                                                className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
-                                                style={{ padding:"20px"}}
-                                                />
-                                        
-                                           <button onClick={() => deleteProperty(index)}>
-                                               <img src={images.deleteInput} className="w-[80px] h-[20px]" />
-                                           </button>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className='flex gap-4 mt-2'>
-                                    <input
-                                        type="text"
-                                        name="property1"
-                                        value={metadata.property1}
-                                        onChange={handleChangeProperty1}
-                                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
-                                        placeholder="E.g. Dimension"
-                                        style={{ padding:"20px"}}
-                                        />
-                                    <input
-                                        type="text"
-                                        name="property2"
-                                        value={metadata.property2}
-                                        onChange={handleChangeProperty2}
-                                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
-                                        placeholder="E.g. 1200px x 2000px"
-                                        style={{ padding:"20px"}}
-                                        />
-                                    
-                                    <button onClick={addProperty}>Add</button>
-                                </div>
-                            </label>
+                  <label>
+                    Properties
+                    <div>
+                      {properties.map((property, index) => (
+                        <div className="flex gap-4 mt-2" key={index}>
+                          <input
+                            type="text"
+                            name="property1"
+                            value={property.property1}
+                            className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                            style={{ padding: "20px" }}
+                          />
+                          <input
+                            type="text"
+                            name="property2"
+                            value={property.property2}
+                            className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                            style={{ padding: "20px" }}
+                          />
 
-                            <div className="flex justify-between w-full mt-4 mb-2">
-                                <div className="text-gray-400 font-semibold text-md">
-                                Put on Sale
-                                </div>
-
-                                <label className="flex items-center cursor-pointer">
-                                    <div className="relative">
-                                        <input 
-                                            type="checkbox"
-                                            value={onSale}
-                                            onChange={onHandleSaleChanged}
-                                            /* onClick={e => setOnSale(!onSale)} */
-                                            checked={checkbox1}
-                                            /* onChange={e => setOnSale(e.target.value)} */
-                                            className="sr-only" 
-                                        />
-
-                                        <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                                        <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                                    </div>             
-                                </label>
-                            </div>
-
-                            <div className="flex justify-between w-full mb-2">
-                                <div className="text-gray-400 font-semibold text-md">
-                                Put on Auction
-                                </div>
-
-                                <label className="flex items-center cursor-pointer">
-                                    <div className="relative">
-                                        <input 
-                                            type="checkbox"
-                                            value={onAuction}
-                                            onChange={onHandleAuctionChanged}
-                                            checked={checkbox2}
-                                            /* onChange={e => setOnAuction(e.target.value)} */
-                                            className="sr-only" 
-                                        />
-
-                                        <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                                        <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                                    </div>             
-                                </label>
-                            </div>
-
-                            { onSale === false && onAuction === false ?
-                                <div className='flex flex-col md:col-span-2 my-2'>
-                                    <button
-                                        type="button"
-                                        onClick={onSubmit}
-                                        className='py-6 border-2 border-orange-600 bg-white text-black text-lg'
-                                    >
-                                        Create
-                                    </button>
-                                </div>
-                            :
-                                <></>
-                            }
+                          <button onClick={() => deleteProperty(index)}>
+                            <img
+                              src={images.deleteInput}
+                              className="w-[80px] h-[20px]"
+                            />
+                          </button>
                         </div>
+                      ))}
+                    </div>
+                    <div className="flex gap-4 mt-2">
+                      <input
+                        type="text"
+                        name="property1"
+                        value={metadata.property1}
+                        onChange={handleChangeProperty1}
+                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                        placeholder="E.g. Dimension"
+                        style={{ padding: "20px" }}
+                      />
+                      <input
+                        type="text"
+                        name="property2"
+                        value={metadata.property2}
+                        onChange={handleChangeProperty2}
+                        className="bg-white outline-orange-600 h-10 w-full rounded-md text-black"
+                        placeholder="E.g. 1200px x 2000px"
+                        style={{ padding: "20px" }}
+                      />
+
+                      <button onClick={addProperty}>Add</button>
+                    </div>
+                  </label>
+
+                  <div className="flex justify-between w-full mt-4 mb-2">
+                    <div className="text-gray-400 font-semibold text-md">
+                      Put on Sale
                     </div>
 
-                </form>
+                    <label className="flex items-center cursor-pointer">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          value={onSale}
+                          onChange={onHandleSaleChanged}
+                          /* onClick={e => setOnSale(!onSale)} */
+                          checked={checkbox1}
+                          /* onChange={e => setOnSale(e.target.value)} */
+                          className="sr-only"
+                        />
+
+                        <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                        <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className="flex justify-between w-full mb-2">
+                    <div className="text-gray-400 font-semibold text-md">
+                      Put on Auction
+                    </div>
+
+                    <label className="flex items-center cursor-pointer">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          value={onAuction}
+                          onChange={onHandleAuctionChanged}
+                          checked={checkbox2}
+                          /* onChange={e => setOnAuction(e.target.value)} */
+                          className="sr-only"
+                        />
+
+                        <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                        <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                      </div>
+                    </label>
+                  </div>
+
+                  {onSale === false && onAuction === false ? (
+                    <div className="flex flex-col md:col-span-2 my-2">
+                      <button
+                        type="button"
+                        onClick={onSubmit}
+                        className="py-6 border-2 border-orange-600 bg-white text-black text-lg"
+                      >
+                        Create
+                      </button>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* onSale modal */}
+        {onSale === true && onAuction === false ? (
+          <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black my-10">
+            <div className="col-span-4 lg:col-span-2">
+              <div className="text-4xl font-semibold pb-2">Put on sale</div>
+              <label>
+                Enter the price in ETH for one item.
+                <div className="flex gap-4 mt-2">
+                  <input
+                    type="number"
+                    name="salePrice"
+                    className="bg-white outline-orange-600 h-10 w-1/2 rounded-md text-black"
+                    value={salePrice}
+                    onChange={(e) => setSalePrice(e.target.value)}
+                    style={{ padding: "20px" }}
+                  />
+                  <div className="text-sm font-light">
+                    Platform Fee: 0% <br />
+                    You will receive Ξ 0.0001 (~$0.125)
+                  </div>
+                </div>
+              </label>
             </div>
-        </div>
+            <div className="flex justify-center">
+              <button
+                onClick={onSubmitOnSale}
+                type="file"
+                className="mt-6 px-16"
+              >
+                Put on Sale
+              </button>
+            </div>
+          </div>
+        ) : null}
 
-
-            {/* onSale modal */}
-            { onSale === true && onAuction === false ?
-                <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black my-10">
-                    <div className="col-span-4 lg:col-span-2">
-                        <div className='text-4xl font-semibold pb-2'>Put on sale</div>
-                            <label>
-                            Enter the price in ETH for one item.
-                                <div className='flex gap-4 mt-2'>
-                                    <input
-                                        type="number"
-                                        name="salePrice"
-                                        className="bg-white outline-orange-600 h-10 w-1/2 rounded-md text-black"
-                                        value={salePrice}
-                                        onChange={e => setSalePrice(e.target.value)}
-                                        style={{ padding:"20px"}}
-                                    />
-                                    <div className='text-sm font-light'>
-                                        Platform Fee: 0% <br/>
-                                        You will receive Ξ 0.0001 (~$0.125)
-                                    </div>   
-                                </div>
-                            </label>
+        {/* onAuction modal */}
+        {onAuction ? (
+          <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black rounded-lg">
+            <div className="text-4xl font-semibold pb-2">Put on Auction</div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-20 mt-10">
+              <div className="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                <label>
+                  Reserved Price (WETH)
+                  <div className="grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2">
+                    <div className="flex items-center md:col-span-2 justify-between">
+                      <input
+                        /* type="number" */
+                        name="reservedPrice"
+                        className="h-16 w-full rounded-md pl-6 focus:outline-none"
+                        value={auction.reservedPrice}
+                        /* onChange={e => setReservedPrice(e.target.value)} */
+                        onChange={onHandleChangedAuction}
+                      />
                     </div>
-                    <div className='flex justify-center'>
-                        <button onClick={onSubmitOnSale} type="file" className='mt-6 px-16'>Put on Sale</button>
+                    <div className="flex flex-col md:col-span-2">
+                      <span>
+                        <select
+                          name="selectWeth"
+                          value={auction.selectWeth}
+                          onChange={onHandleChangedAuction}
+                          className="h-16 w-full rounded-xl text-sm text-black mr-4"
+                          placeholder="Enter name"
+                          style={{
+                            padding: "20px",
+                            boxShadow:
+                              "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)",
+                          }}
+                        >
+                          <option /* onChange={e => setSelectWeth(e.target.value)} */
+                            value
+                          >
+                            WETH
+                          </option>
+                          <option value="weth">Weth</option>
+                        </select>
+                      </span>
                     </div>
-                </div>
-                : 
-                null
-            }   
-        
-            {/* onAuction modal */}
-            { onAuction ?
-                <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black rounded-lg">
-                    <div className='text-4xl font-semibold pb-2'>Put on Auction</div>
-                        <div className='grid grid-cols-2 md:grid-cols-4 gap-20 mt-10'>
-                            <div className="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
-                            <label>
-                                Reserved Price (WETH)
-                                        <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2'>
-                                            <div className="flex items-center md:col-span-2 justify-between">
-                                                <input
-                                                    /* type="number" */
-                                                    name="reservedPrice"
-                                                    className="h-16 w-full rounded-md pl-6 focus:outline-none"
-                                                    value={auction.reservedPrice}
-                                                    /* onChange={e => setReservedPrice(e.target.value)} */
-                                                    onChange = {onHandleChangedAuction}
-                                                />
-                                            </div>
-                                            <div className='flex flex-col md:col-span-2'>
-                                            <span>
-                                                <select
-                                                    name="selectWeth"
-                                                    value={auction.selectWeth}
-                                                    onChange = {onHandleChangedAuction}
-                                                    className="h-16 w-full rounded-xl text-sm text-black mr-4"
-                                                    placeholder="Enter name"
-                                                    style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
-                                                 >
-                                                    <option /* onChange={e => setSelectWeth(e.target.value)} */ 
-                                                        value>WETH</option>
-                                                    <option value="weth">Weth</option>
-                                                </select>
-                                            </span>
-                                            </div>
-                                        </div>
-                                </label>
+                  </div>
+                </label>
 
-                                <label>
-                                    Start Date
-                                    <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2'>
-                                        <div className="flex items-center md:col-span-4">
-                                            <input
-                                                type="date" 
-                                                name="startDate"
-                                                value={auction.startDate}
-                                                /* onChange={e => setStartDate(e.target.value)} */
-                                                onChange = {onHandleChangedAuction}
-                                                className="h-16 w-full rounded-md px-6 focus:outline-none"
-                                            /> 
-                                        </div>
-                                    </div>
+                <label>
+                  Start Date
+                  <div className="grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2">
+                    <div className="flex items-center md:col-span-4">
+                      <input
+                        type="date"
+                        name="startDate"
+                        value={auction.startDate}
+                        /* onChange={e => setStartDate(e.target.value)} */
+                        onChange={onHandleChangedAuction}
+                        className="h-16 w-full rounded-md px-6 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </label>
 
-                                </label>
+                <label>
+                  End Date
+                  <div className="grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2">
+                    <div className="flex items-center md:col-span-4">
+                      <input
+                        type="date"
+                        name="endDate"
+                        value={auction.endDate}
+                        /* onChange={e => setEndDate(e.target.value)} */
+                        onChange={onHandleChangedAuction}
+                        className="h-16 w-full rounded-md px-6 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </label>
+              </div>
+              <div className="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+                <label>
+                  Starting price (WETH)
+                  <div>
+                    <input
+                      type="number"
+                      name="startPrice"
+                      value={auction.startPrice}
+                      /* onChange={e => setStartPrice(e.target.value)} */
+                      onChange={onHandleChangedAuction}
+                      className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                      style={{
+                        padding: "20px",
+                        boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)",
+                      }}
+                    ></input>
+                  </div>
+                </label>
 
-                                <label>
-                                    End Date
-                                    <div className='grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200 mt-2'>
-                                        <div className="flex items-center md:col-span-4">
-                                        <input
-                                                type="date" 
-                                                name="endDate"
-                                                value={auction.endDate}
-                                                /* onChange={e => setEndDate(e.target.value)} */
-                                                onChange = {onHandleChangedAuction}
-                                                className="h-16 w-full rounded-md px-6 focus:outline-none"
-                                            /> 
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                            <div className="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
-                                <label>
-                                Starting price (WETH)
-                                        <div>
-                                            <input
-                                                type="number"
-                                                name="startPrice"
-                                                value={auction.startPrice}
-                                                /* onChange={e => setStartPrice(e.target.value)} */
-                                                onChange = {onHandleChangedAuction}
-                                                className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
-                                                style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
-                                            >                                               
-                                            </input>
-                                        </div>
-                                </label>
-
-                                <label>
-                                Bid Price increment (WETH)
-                                        <div>
-                                            <input
-                                                type="number"
-                                                name="bidPrice"
-                                                value={auction.bidPrice}
-                                                /* onChange={e => setBidPrice(e.target.value)} */
-                                                onChange = {onHandleChangedAuction}
-                                                className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
-                                                style={{ padding:"20px", boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)"}}
-                                            />
-                                        </div>
-                                </label>
-                            </div>
-                        </div>
-                        <div className='flex justify-center'>
-                            <button onClick={onSubmitOnAuction} type="file" className='mt-6 px-16'>Put on Auction</button>
-                        </div>
-                </div>
-            :
-                null
-            }
-        </div>
+                <label>
+                  Bid Price increment (WETH)
+                  <div>
+                    <input
+                      type="number"
+                      name="bidPrice"
+                      value={auction.bidPrice}
+                      /* onChange={e => setBidPrice(e.target.value)} */
+                      onChange={onHandleChangedAuction}
+                      className="h-16 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
+                      style={{
+                        padding: "20px",
+                        boxShadow: "inset 8px 8px 4px 0px rgb(0 0 0 / 0.05)",
+                      }}
+                    />
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <button
+                onClick={onSubmitOnAuction}
+                type="file"
+                className="mt-6 px-16"
+              >
+                Put on Auction
+              </button>
+            </div>
+          </div>
+        ) : null}
+      </div>
     </>
-  )
-}
-
+  );
+};

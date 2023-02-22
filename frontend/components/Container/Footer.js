@@ -14,7 +14,7 @@ import { SiTiktok, SiMedium } from "react-icons/si";
 function Footer() {
   return (
     <footer>
-      <div className="flex justify-between mt-40 mb-16">
+      <div className="flex justify-between mt-40 mb-16 text-[0.9vw]">
         <div>
           <span>
             <img className="w-20 mb-6" src={images.logofooter} />
@@ -74,7 +74,7 @@ function Footer() {
             <a
               href="mailto:support@3six9.space"
               target="_blank"
-              className="text-orange-600 text-xl font-medium"
+              className="text-orange-600 font-medium"
             >
               support@3six9.space
             </a>
@@ -84,7 +84,7 @@ function Footer() {
         <div className="flex flex-col gap-y-2">
           <span className="font-medium">Follow us:</span>
           <div className="flex">
-            <div className="community-icon-div mr-3">
+            <div className="community-icon-div mr-2">
               <a
                 href="https://twitter.com/3six9OFFICIAL"
                 target="_blank"
@@ -93,7 +93,7 @@ function Footer() {
                 <BsTwitter />
               </a>
             </div>
-            <div className="community-icon-div mr-3">
+            <div className="community-icon-div mr-2">
               <a
                 href="https://www.instagram.com/3six9official/"
                 target="_blank"
@@ -102,17 +102,25 @@ function Footer() {
                 <BsInstagram />
               </a>
             </div>
-            <div className="community-icon-div mr-3">
-              <a href="#" target="_blank" className="pl-0 pr-0">
+            <div className="community-icon-div mr-2">
+              <a
+                href="https://www.facebook.com/3six9OFFICIAL"
+                target="_blank"
+                className="pl-0 pr-0"
+              >
                 <BsFacebook />
               </a>
             </div>
-            <div className="community-icon-div mr-3">
-              <a href="#" target="_blank" className="pl-0 pr-0">
+            <div className="community-icon-div mr-2">
+              <a
+                href="https://www.linkedin.com/company/3six9-nft-marketplace/"
+                target="_blank"
+                className="pl-0 pr-0"
+              >
                 <BsLinkedin />
               </a>
             </div>
-            <div className="community-icon-div mr-3">
+            <div className="community-icon-div mr-2">
               <a
                 href="https://t.me/threesixninenft"
                 target="_blank"
@@ -121,12 +129,16 @@ function Footer() {
                 <BsTelegram />
               </a>
             </div>
-            <div className="community-icon-div mr-3">
-              <a href="#" target="_blank" className="pl-0 pr-0">
+            <div className="community-icon-div mr-2">
+              <a
+                href="https://www.tiktok.com/@3six9official"
+                target="_blank"
+                className="pl-0 pr-0"
+              >
                 <SiTiktok />
               </a>
             </div>
-            <div className="community-icon-div mr-3">
+            <div className="community-icon-div mr-2">
               <a
                 href="https://medium.com/@3six9OFFICIAL/"
                 target="_blank"
@@ -138,7 +150,7 @@ function Footer() {
           </div>
           <span className="font-medium">Join the Community:</span>
           <div className="flex">
-            <div className="community-icon-div mr-3">
+            <div className="community-icon-div mr-2">
               <a
                 href="https://t.me/threesixninenft"
                 target="_blank"
@@ -147,7 +159,7 @@ function Footer() {
                 <BsTelegram />
               </a>
             </div>
-            <div className="community-icon-div mr-3">
+            <div className="community-icon-div mr-2">
               <a
                 href="https://discord.gg/86uzNjMgPK"
                 target="_blank"
