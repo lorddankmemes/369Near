@@ -4,8 +4,6 @@ import { useWallet } from "../../hooks/useWallet";
 export const Profile = () => {
   const { accountId, viewMethod } = useWallet();
 
-    const { wallet, accountId, viewMethod} = useWallet()
-
     const [created, setCreated] = useState(0)
     const [sold, setSold] = useState(0)
     const [revenue, setRevenue] = useState(0)
@@ -52,6 +50,7 @@ export const Profile = () => {
     }, [accountId, sold, getAmountSold]) */
 
   return (
+    <>
     <div className="grid grid-cols-1 md:grid-cols-3 relative gap-8 mt-2 mx-4 w-full md:w-[90%]">
       <div className="flex flex-col md:col-span-2 rounded-md text-black py-10 px-8 bg-white mx-6 md:mx-0">
         <div className="pb-4">About</div>

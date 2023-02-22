@@ -533,7 +533,7 @@ return (
                 30mb.
               </span>
               <div>
-                <input
+              <input
                   ref={imageRef}
                   id="image"
                   accept="image/*"
@@ -544,13 +544,22 @@ return (
                 <button
                   onClick={onOpenFileDialog}
                   type="file"
-                  className="mt-6 px-16"
+                  className="mt-6 px-16 bg-white py-2 text-black"
                 >
                   Choose File
                 </button>
               </div>
             </div>
           </div>
+
+          <div className="flex col-span-4 lg:col-span-2 mx-6">
+                <div className="relative w-full">
+                    <div className='pb-8'>Preview</div>
+                    <div className='bg-white rounded-xl h-full relative'>
+                        <img src={preview} alt="" className='object-cover h-full rounded-xl' />
+                    </div>
+                </div>
+            </div>
         </div>
 
 

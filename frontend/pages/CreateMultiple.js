@@ -501,7 +501,7 @@ export const CreateMultiple = () => {
             <div className="relative w-full">
               <div className="pb-8">Preview</div>
               <div className="bg-white rounded-xl h-full relative">
-                <img src={preview} alt="" className="object-cover" />
+                <img src={preview} alt="" className="object-cover h-full rounded-xl" />
               </div>
             </div>
           </div>
@@ -808,3 +808,5 @@ export const CreateMultiple = () => {
     </>
   );
 };
+
+
