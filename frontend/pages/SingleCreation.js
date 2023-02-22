@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react'
 import { images } from '../constant';
 import { useLocation } from 'react-router-dom';
 import {useNavigate} from "react-router-dom"
+import { parseNearAmount } from 'near-api-js/lib/utils/format';
 
 import { useWallet } from '../hooks/useWallet';
 
@@ -16,10 +17,12 @@ export const SingleCreation = ({tokenId}) => {
     const [showModalShare, setShowModalShare] = useState(false);
     const [modalUpdatePrice, setModalUpdatePrice] = useState(false);
     const [selectedNFT, setSelectedNFT] = useState(null)
+    const [newPrice, setNewPrice] = useState()
 
     const { accountId, callMethod} = useWallet()
 
     const [hasMinted, setHasMinted] = useState(false)
+    const [hasListed, setHasListed] = useState(false)
 
     const isMinting = async () => {
 
@@ -48,43 +51,64 @@ export const SingleCreation = ({tokenId}) => {
           setHasMinted(true)
       }
 
-      const isListing = async () => {
-    
-        await callMethod({
-          contractId: process.env.CONTRACT_NAME,
-          method: 'nft_approve',
-          args: {
-              token_id: val.token_id,
-              account_id: accountId,
-              /* msg:  */
-          }
-        }) 
-        
-        await callMethod({
-            contractId: process.env.CONTRACT_MARKETPLACE_NAME,
-            method: 'storage_deposit',
-            args: {
-                account_id: accountId
-            }
-        })
-  
-        console.log(args)
-    }
+    const isListing = async () => {
+            const nftApprovePromise = callMethod({
+                contractId: process.env.CONTRACT_NAME,
+                method: 'nft_approve',
+                args: {
+                  token_id: val.token_id,
+                  account_id: accountId,
+                  msg: JSON.stringify({
+					price: parseNearAmount(newPrice),
+				}),
+                },
+              })
+              
+              const storageDepositPromise = callMethod({
+                contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+                method: 'storage_deposit',
+                args: {
+                  account_id: accountId,
+                },
+              })
+            
+              const [nftApproveResult, storageDepositResult] = await Promise.all([nftApprovePromise, storageDepositPromise]).then(() => useNavigate('/collection'))
+              
+              console.log(nftApproveResult);
+              console.log(storageDepositResult);
+
+              setHasListed(true)    
+     }
 
     const updatePrice = async () => {
-
         await callMethod({
             contractId: process.env.CONTRACT_MARKETPLACE_NAME,
             method: 'update_price',
             args: {
                 token_id: val.token_id,
                 nft_contract_id: accountId,
-                price: parseNearAmount('15'),
+                msg: JSON.stringify({
+					price: parseNearAmount(newPrice),
+				}),
             }
         })
   
         console.log(args)
     }
+
+    const isPurchasing = async () => {
+        await callMethod({
+            contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+            method: 'offer',
+            args: {
+                token_id: val.token_id,
+                nft_contract_id: accountId,
+            }
+        })
+  
+        console.log(args)
+    }
+    
 
   return (
     <>
@@ -225,11 +249,11 @@ export const SingleCreation = ({tokenId}) => {
                                     </div>
                                     <div className='mt-10 relative text-black'>
                                     <input
-                                        type="search"
-                                        name="search-form"
-                                        id="search-form"
+                                        /* type="number" */
+                                        name="salePrice"
                                         className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                                        placeholder="Enter price"
+                                        value={newPrice}
+                                        onChange={(e) => setNewPrice(e.target.value)}
                                         style={{ padding:"20px"}}
                                         />
                                         <div
@@ -332,61 +356,47 @@ export const SingleCreation = ({tokenId}) => {
 
                         </div>
 
-                        {/* <div onClick={() => setShowModal(true)} className='bg-white py-2 text-black rounded-lg text-center font-semibold'></div> */}
-                       {/*  <div className='grid grid-cols-2 flex gap-x-4'>
-                            <span onClick={isMinting} className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'>Mint NFT</span>
-                            <span className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'>Cancel</span>
-                        </div> */}
-
-                        {accountId ?
+                        { !hasListed ?
                             <>
-                           {/*  { hasMinted ? 
-                                <div 
-                                    className='bg-white py-2 text-black rounded-lg text-center font-semibold'
-                                    >
-                                    Update Price
-                                </div>
-                                :
-                                <div 
-                                    onClick={isMinting}  
-                                    className='bg-white py-2 text-black rounded-lg text-center font-semibold'
-                                    >
-                                    Mint NFT
-                                </div>
-                            } */}
                             <div className='grid grid-cols-2 flex gap-x-4'>
                                 { val.series_id ?
-                                <button onClick={isMinting} className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'>Mint NFT Series</button>
+                                  <button 
+                                    onClick={isMinting} 
+                                    className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
+                                    >
+                                     Mint NFT Series
+                                  </button>
                                 :
-                                <button disabled onClick={isMinting} className='opacity-50 cursor-not-allowed col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'>Minted</button>
+                                  <button 
+                                    disabled 
+                                    className='opacity-50 cursor-not-allowed col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
+                                    >
+                                     Minted
+                                  </button>
                                 }
-                               <button onClick={() => setModalUpdatePrice(true)} className='bg-white col-span-1 py-2 px-10 text-black rounded-lg text-center font-semibold'>List NFT</button>
+                               <button 
+                                    onClick={() => setModalUpdatePrice(true)} 
+                                    className='bg-white col-span-1 py-2 px-10 text-black rounded-lg text-center font-semibold'
+                                    >
+                                    List NFT
+                                </button>
                             </div> 
                             </>
                         :
                             <>
-                            { hasMinted ? 
                                 <div 
-                                    onClick={isMinting}  
+                                    onClick={isPurchasing}  
                                     className='bg-white py-2 text-black rounded-lg text-center font-semibold'
                                     >
-                                    Make offer
+                                    Buy 1 for 0.1N
                                 </div>
-                                :
-                                <div 
-                                    onClick={isMinting}  
-                                    className='bg-white py-2 text-black rounded-lg text-center font-semibold'
-                                    >
-                                    Buy for 0.1
-                                </div>
-                            }
                             </>
                         }
 
                     </div>
                 </div>
 
-                <div class="flex lg:col-span-1 justify-center pt-10 md:pt-0">
+                <div className="flex lg:col-span-1 justify-center pt-10 md:pt-0">
                 <div className='flex md:flex-col gap-y-4 gap-x-10 mx-10'>
                         <div className='bg-white rounded-liked py-4 pl-3.5'><img src={images.beforeliked} /></div>
                         <div onClick={() => setShowModalShare(true)} className='bg-white rounded-liked py-4 pl-3'>

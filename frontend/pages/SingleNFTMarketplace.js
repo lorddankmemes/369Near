@@ -280,7 +280,7 @@ export const SingleNFTMarketplace = (props) => {
                     </div>
                 </div>
 
-                <div class="flex lg:col-span-1 justify-center pt-10 md:pt-0">
+                <div className="flex lg:col-span-1 justify-center pt-10 md:pt-0">
                 <div className='flex md:flex-col gap-y-4 gap-x-10 mx-10'>
                         <div className='bg-white rounded-liked py-4 pl-3.5'><img src={images.beforeliked} /></div>
                         <div onClick={() => setShowModalShare(true)} className='bg-white rounded-liked py-4 pl-3'>
@@ -293,7 +293,7 @@ export const SingleNFTMarketplace = (props) => {
 
 
     {/* Description part */}
-        <div class="grid grid-cols-1 md:grid-cols-1 mx-4 text-white pt-20">
+        <div className="grid grid-cols-1 md:grid-cols-1 mx-4 text-white pt-20">
             <div className='flex justify-center p-2 rounded-full m-auto bg-white text-black w-40 text-orange-600'>Description</div>
 
                 <div className='flex flex-col gap-y-8 justify-center bg-white rounded-lg text-black my-6 p-20 mx-1 lg:mx-48'>

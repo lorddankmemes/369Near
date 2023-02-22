@@ -40,7 +40,7 @@ export const Profile = () => {
                 </div>
             </div>
               
-            <div class='grid grid-cols-2 relative gap-8 pt-8'>
+            <div className='grid grid-cols-2 relative gap-8 pt-8'>
                   <div className='border-2 border-orange-600 p-6 rounded-[35px]'>
                     <span>Artworks<br/>Sold</span>
                     <div className='pt-4 text-3xl font-semibold'>0</div>

@@ -55,14 +55,14 @@ function Footer() {
           <a
             href="https://3six9.space/content-policy/"
             target="_blank"
-            class="footer-item"
+            className="footer-item"
           >
             Content Policy
           </a>
           <a
             href="https://www.3six9.space/terms-of-use"
             target="_blank"
-            class="footer-item"
+            className="footer-item"
           >
             Terms of Use
           </a>

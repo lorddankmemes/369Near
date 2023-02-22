@@ -284,21 +284,72 @@ export const CreateSingle = () => {
 
             meta.perpetual_royalties[`${accountId}`] = royalty
 
-            const args = {
-                token_id: `${Date.now()}`,
-                metadata: meta,
-                salePrice,
-                receiver_id: accountId
-            }
 
-            console.log(args)
-            
-            callMethod({
-                contractId: process.env.CONTRACT_MARKETPLACE_NAME,
-                method: 'nft_on_approve',
-                args
+            /* const nftMinting = callMethod({
+                contractId: process.env.CONTRACT_NAME,
+                method: 'nft_mint',
+                args: {
+                    token_id: `${Date.now()}`,
+                    metadata: meta,
+                    receiver_id: accountId
+                }
             })
-            .then(() => setMetadata())
+
+            setTokenId(nftMinting);
+            
+            const nftApproval = callMethod({
+                contractId: process.env.CONTRACT_NAME,
+                method: 'nft_approve',
+                args : {
+                    token_id: tokenId,
+                    account_id: accountId,
+                    msg: JSON.stringify({
+                        price: parseNearAmount(salePrice),
+                    }),
+                }
+            }) */
+
+            const mintAndApprove = async () => {
+                try {
+                    const mintResult = await callMethod({
+                        contractId: process.env.CONTRACT_NAME,
+                        method: 'nft_mint',
+                        args: {
+                            token_id: `${Date.now()}`,
+                            metadata: meta,
+                            receiver_id: accountId
+                        }
+                    });
+            
+                    const tokenId = mintResult.token_id;
+            
+                    const approveResult = await callMethod({
+                        contractId: process.env.CONTRACT_NAME,
+                        method: 'nft_approve',
+                        args : {
+                            token_id: tokenId,
+                            account_id: accountId,
+                            msg: JSON.stringify({
+                                price: parseNearAmount(salePrice),
+                            }),
+                        }
+                    });
+            
+                    return {tokenId, ...approveResult};
+                } catch (e) {
+                    console.error(e);
+                    throw e;
+                }
+            }
+            
+            mintAndApprove()
+                .then((result) => {
+                    console.log('NFT minted and approved for sale:', result);
+                })
+                .catch((error) => {
+                    console.error('Error minting and approving NFT:', error);
+                });
+
         }
     }, [metadata]) 
     
@@ -487,7 +538,7 @@ return (
                 <div className="relative w-full">
                 <div className='pb-8'>Preview</div>
                     <div className='bg-white rounded-xl h-full relative'>
-                        <img src={preview} alt="" className='object-cover' />
+                        <img src={preview} alt="" className='object-cover h-full rounded-xl' />
                     </div>
                 </div>
             </div>

@@ -113,6 +113,16 @@ export const Creation = () => {
                     </div>
 
                     <div className='text-lg font-semibold py-4'>{val.metadata.title}</div>
+
+                    <div className='flex gap-x-2'>
+                            <div>
+                              <img src={val.metadata.media} className="market2-size"/>
+                            </div>
+                            <div>
+                              <span className='text-black text-sm'>Creator</span>
+                              <div className='text-black font-semibold text-sm'>{accountId}</div>
+                            </div>
+                      </div>
                     
                 </div>
             

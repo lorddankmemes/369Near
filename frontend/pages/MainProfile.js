@@ -38,7 +38,7 @@ export const MainProfile = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-4 relative gap-4 pl-0 ml-10 mt-16">
           {/* left container */}
-          <div className="flex flex-col col-span-4 lg:col-span-1 bg-white rounded-2xl text-black py-10 px-4 ml-10 lg:ml-0 -translate-y-44">
+          <div className="flex flex-col col-span-4 lg:col-span-1 bg-white rounded-2xl text-black py-10 px-4 ml-10 lg:ml-0 -translate-y-44 max-h-[1000px]">
             <div>
               <div>
                 <img className="profile-size m-10" src={avatar} />
