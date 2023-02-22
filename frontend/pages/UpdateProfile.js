@@ -472,7 +472,7 @@ export const UpdateProfile = () => {
 
   return (
     <div>
-      <div class="grid grid-cols-1 md:grid-cols-1 body-container mx-6 lg:mx-56">
+      <div className="grid grid-cols-1 md:grid-cols-1 body-container mx-6 lg:mx-56">
         <div className="my-12 text-5xl font-semibold">Edit your profile</div>
 
         <div className="grid bg-white rounded-lg my-6 p-10 ">
@@ -481,7 +481,7 @@ export const UpdateProfile = () => {
               <div class="flex text-md col-span-2 md:col-span-2 font-semibold text-black ">
                 Enter your details
               </div>
-              <div class="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
+              <div className="flex flex-col col-span-2 gap-y-8 text-sm md:col-span-2 text-gray-400">
                 <label>
                   Email
                   <div>
@@ -664,7 +664,7 @@ export const UpdateProfile = () => {
                   </div>
                 </div>
                 <div className="grid md:grid-cols-4 rounded-xl border-[1px] border-gray-200">
-                  <div class="flex items-center md:col-span-2 justify-between">
+                  <div className="flex items-center md:col-span-2 justify-between">
                     <span className="text-black text-sm px-4">Twitter</span>
                     <span className="text-gray-400 text-xs px-4">
                       twitter.com/

@@ -358,6 +358,11 @@ button:hover, button:focus {
   color: black;
 }
 
+.button-slide:active {
+  background-color: #f05124;
+  color: black;
+}
+
 
 .button-profile {
   background-color: rgba(255, 255, 255, 0);

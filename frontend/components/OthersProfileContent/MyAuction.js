@@ -1,8 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export const MyAuction = () => {
-  return (
-    <div>MyAuction</div>
-  )
-}
-
+  return <div>My Auction</div>;
+};
