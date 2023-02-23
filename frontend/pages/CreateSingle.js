@@ -406,7 +406,7 @@ export const CreateSingle = () => {
 return (
     <>
       <div className="body-container">
-        {/* {showModal ? (
+         {showModal ? (
         <div className="fixed inset-0 z-10 overflow-y-auto">
             <div
                 className="fixed inset-0 w-full h-full bg-black opacity-40"
@@ -512,7 +512,7 @@ return (
                     </div>
                 </div>
             </div>
-    ) : <></>} */}
+    ) : <></>}
 
         <div className="grid grid-cols-2 lg:grid-cols-4 pt-28 pb-12 mx-6 lg:mx-28">
           <div className="col-span-4 lg:col-span-2">

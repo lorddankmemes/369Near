@@ -462,9 +462,9 @@ export const CreateMultiple = () => {
               Manage collectible type
             </Link>
             <div className="text-5xl font-semibold pt-12 pb-10">
-              Create single
+              Create multiple
               <br />
-              collectible
+              collectibles
             </div>
 
             <div className="font-semibold">Upload File</div>
