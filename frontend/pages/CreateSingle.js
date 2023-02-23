@@ -406,7 +406,7 @@ export const CreateSingle = () => {
 return (
     <>
       <div className="body-container">
-        {/* {showModal ? (
+         {showModal ? (
         <div className="fixed inset-0 z-10 overflow-y-auto">
             <div
                 className="fixed inset-0 w-full h-full bg-black opacity-40"
@@ -512,22 +512,22 @@ return (
                     </div>
                 </div>
             </div>
-    ) : <></>} */}
+    ) : <></>}
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
+        <div className="grid grid-cols-2 lg:grid-cols-4 pt-28 pb-12 mx-6 lg:mx-28">
           <div className="col-span-4 lg:col-span-2">
-            <Link to="/create" className="my-6">
+            <Link to="/create" className="bg-white text-black font-medium rounded-lg py-2 px-10 hover:border-2 hover:border-orange-600">
               Manage collectible type
             </Link>
-            <div className="text-5xl font-semibold pt-6 pb-10">
+            <div className="text-5xl font-semibold pt-12 pb-10">
               Create single
               <br />
               collectible
             </div>
 
-            <div>Upload File</div>
+            <div className="font-semibold">Upload File</div>
 
-            <div className="my-6 text-center text-gray-400 text-sm p-6 border-dashed border-2 border-white rounded-xl">
+            <div className="my-6 text-center text-gray-400 text-sm p-6 border-dashed border-[1px] border-gray-400 rounded-xl">
               <span>
                 JPG, PNG, GIF, WEBP, MP3, WAV, MP4, GLTF, GLB or VOX. Max size
                 30mb.
@@ -554,8 +554,8 @@ return (
 
           <div className="flex col-span-4 lg:col-span-2 mx-6">
                 <div className="relative w-full">
-                    <div className='pb-8'>Preview</div>
-                    <div className='bg-white rounded-xl h-full relative'>
+                    <div className='pb-8 text-[#808080] font-semibold'>Preview</div>
+                    <div className='bg-[#808080] rounded-xl h-[90%] relative mr-20'>
                         <img src={preview} alt="" className='object-cover h-full rounded-xl' />
                     </div>
                 </div>
@@ -564,8 +564,8 @@ return (
 
 
         {/* collection white background section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 py-20 mx-6 lg:mx-28">
-          <div className="col-span-4 lg:col-span-2 flex flex-col bg-white rounded-xl px-10 py-6 font-normal">
+        <div className="grid grid-cols-2 lg:grid-cols-4 pb-20 mx-6 lg:mx-28">
+          <div className="col-span-4 lg:col-span-2 flex flex-col bg-[#f4f5f7] rounded-xl px-10 py-6 font-normal">
             <div className="flex justify-between w-full mt-4 mb-2">
               <div className="text-black font-semibold text-md">
                 Unlock once purchase
@@ -609,33 +609,43 @@ return (
               </span>
             )}
 
-            <span className="pt-16">Collection</span>
+            <span className="pt-16 text-black font-semibold">Collection</span>
 
-            <div className="relative grid grid-cols-2 text-orange-600 font-semibold text-md gap-10 py-10 text-center">
-              <span className="text-gray-500 absolute right-20 top-2 text-sm">
+            <div className="relative grid grid-cols-2 text-orange-600 font-semibold text-md gap-x-6 py-10 mx-4 text-center">
+             {/*  <span className="text-gray-500 absolute right-20 top-2 text-sm">
                 Default
-              </span>
-              <div
-                className="border-2 border-orange-600 py-12 rounded-3xl"
-                onClick={() => setShowModal(true)}
-              >
-                <HiPlusSm size={50} className="m-auto" />
-                Create
-                <br />
-                Collection
+              </span> */}
+              <div>
+                <span className="text-[#f4f5f7] text-sm">
+                    Default
+                </span> 
+                <div
+                    className="border-2 border-orange-600 py-11 rounded-[30px]"
+                    onClick={() => setShowModal(true)}
+                >
+                    <HiPlusSm size={50} className="m-auto" />
+                    Create
+                    <br />
+                    Collection
+                </div>
               </div>
-              <div className="border-2 border-orange-600 py-12 rounded-3xl">
+              <div>
+              <span className="text-gray-500 text-sm">
+                  Default
+              </span> 
+              <div className="border-2 border-orange-600 py-11 rounded-[30px]">
                 <img
                   src={images.logo}
                   className="rounded-full h-14 w-14 m-auto mb-4"
                 />
                 3six9 NFT
               </div>
+              </div>
             </div>
           </div>
 
           {/* input form section */}
-          <div className="flex col-span-4 lg:col-span-2 px-10 w-full">
+          <div className="flex col-span-4 lg:col-span-2 px-10 pt-6 w-full">
             <form
               onSubmit={(e) => {
                 handleSubmit(e);
@@ -825,32 +835,31 @@ return (
 
         {/* onSale modal */}
         {onSale === true && onAuction === false ? (
-          <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-20 bg-white text-black my-10">
+          <div className="grid grid-cols-1 py-14 mx-6 lg:mx-28 px-16 bg-[#f4f5f7] text-black my-10 rounded-xl">
             <div className="col-span-4 lg:col-span-2">
               <div className="text-4xl font-semibold pb-2">Put on sale</div>
               <label>
                 Enter the price in ETH for one item.
-                <div className="flex gap-4 mt-2">
+                <div className="flex gap-4 mt-2 items-center">
                   <input
                     type="number"
                     name="salePrice"
-                    className="bg-white outline-orange-600 h-10 w-1/2 rounded-md text-black"
+                    className="bg-[#f4f5f7] border-[1px] border-orange-600 h-10 w-1/2 rounded-lg text-black focus:outline-none" 
                     value={salePrice}
                     onChange={(e) => setSalePrice(e.target.value)}
                     style={{ padding: "20px" }}
                   />
-                  <div className="text-sm font-light">
+                  <div className="text-xs font-light">
                     Platform Fee: 0% <br />
                     You will receive Ξ 0.0001 (~$0.125)
                   </div>
                 </div>
               </label>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center pt-10">
               <button
                 onClick={onSubmitOnSale}
-                type="file"
-                className="mt-6 px-16"
+                className="mt-6 px-28 py-6 button-glass font-semibold"
               >
                 Put on Sale
               </button>

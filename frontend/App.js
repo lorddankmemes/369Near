@@ -25,6 +25,7 @@ import { AuctionCollection } from "./pages/AuctionCollection";
 import { SingleCreation } from "./pages/SingleCreation";
 import MyBids from "./pages/MyBids";
 import FAQs from "./pages/FAQs";
+import { SingleCollectible } from "./pages/SingleCollectible";
 
 export default function App() {
   const { ipfs, ipfsInitError } = useIpfsFactory();
@@ -67,6 +68,10 @@ export default function App() {
 
           <Route exact path="collection">
             <Route path=":id" element={<MarketplaceCollection />} />
+          </Route>
+
+          <Route exact path="collectible">
+            <Route path=":id" element={<SingleCollectible />} />
           </Route>
 
           <Route path="auction/:id" element={<AuctionCollection />} />

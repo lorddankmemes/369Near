@@ -20,7 +20,7 @@ export const CreateCollectible = () => {
           <div className="md:col-span-2 mr-20">
             <a
               href="/"
-              className="bg-white border-2 border-orange-600 text-black font-semibold rounded-xl py-2 px-8 hover:text-white hover:bg-orange-600"
+              className="bg-white text-black font-semibold rounded-xl py-2 px-8 hover:border-2 hover:border-orange-600 "
             >
               Go back
             </a>
