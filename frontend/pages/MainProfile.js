@@ -110,7 +110,7 @@ export const MainProfile = () => {
                 className="button-profile rounded-full h-10 px-4"
                 onClick={() => setCurrentComponent(3)}
               >
-                COLLECTION
+                COLLECTIBLES
               </button>
               <button
                 className="button-profile rounded-full h-10 px-4"

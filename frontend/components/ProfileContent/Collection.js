@@ -2,6 +2,7 @@ import { profile } from 'console';
 import React, {useState, useEffect} from 'react'
 import artwork from "../../data/landing/artwork";
 import { useWallet } from '../../hooks/useWallet';
+import {useNavigate} from "react-router-dom"
 
 export const Collection = () => {
 
@@ -19,7 +20,16 @@ export const Collection = () => {
       getProfileCollection()
     }
    }, [accountId, collection, getProfileCollection])
+
+     //more details on single collectible
+     const navigate = useNavigate();
+     const [selectedNFT, setSelectedNFT] = useState(null)
    
+   const handleCreation = (val) => {
+    setSelectedNFT(val)
+    navigate(`/collectible/${val.token_id}`, { state: { val } })
+  }
+  
 
   return (
     <>
@@ -33,7 +43,11 @@ export const Collection = () => {
               return (
                 <div key={key} className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
                     <div>      
-                      <img className="object-cover object-center h-60 w-96 rounded-lg" src={val.metadata.media} />
+                      <img 
+                        className="object-cover object-center h-60 w-96 rounded-lg" 
+                        src={val.metadata.media} 
+                        onClick={() => handleCreation(val)} 
+                      />
                     </div>
 
                     <div className='text-[10px] font-semibold py-4'>{val.metadata.title}</div>
