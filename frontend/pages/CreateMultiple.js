@@ -458,7 +458,10 @@ export const CreateMultiple = () => {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 pt-28 pb-12 mx-6 lg:mx-28">
           <div className="col-span-4 lg:col-span-2">
-            <Link to="/create" className="bg-white text-black font-medium rounded-lg py-2 px-10 hover:border-2 hover:border-orange-600">
+            <Link
+              to="/create"
+              className="bg-white text-black font-medium rounded-lg py-2 px-10 hover:border-2 hover:border-orange-600"
+            >
               Manage collectible type
             </Link>
             <div className="text-5xl font-semibold pt-12 pb-10">
@@ -475,7 +478,7 @@ export const CreateMultiple = () => {
                 30mb.
               </span>
               <div>
-              <input
+                <input
                   ref={imageRef}
                   id="image"
                   accept="image/*"
@@ -495,18 +498,22 @@ export const CreateMultiple = () => {
           </div>
 
           <div className="flex col-span-4 lg:col-span-2 mx-6">
-                <div className="relative w-full">
-                    <div className='pb-8 text-[#808080] font-semibold'>Preview</div>
-                    <div className='bg-[#808080] rounded-xl h-[90%] relative mr-20'>
-                        <img src={preview} alt="" className='object-cover h-full rounded-xl' />
-                    </div>
-                </div>
+            <div className="relative w-full">
+              <div className="pb-8 text-[#808080] font-semibold">Preview</div>
+              <div className="bg-[#808080] rounded-xl h-[90%] relative mr-20">
+                <img
+                  src={preview}
+                  alt=""
+                  className="object-cover h-full rounded-xl"
+                />
+              </div>
             </div>
+          </div>
         </div>
 
         {/* collection white background section */}
         <div className="grid grid-cols-2 lg:grid-cols-4 pb-20 mx-6 lg:mx-28">
-        <div className="col-span-4 lg:col-span-2 flex flex-col bg-[#f4f5f7] rounded-xl px-10 py-6 font-normal">
+          <div className="col-span-4 lg:col-span-2 flex flex-col bg-[#f4f5f7] rounded-xl px-10 py-6 font-normal">
             <div className="flex justify-between w-full mt-4 mb-2">
               <div className="text-black font-semibold text-md">
                 Unlock once purchase
@@ -553,34 +560,30 @@ export const CreateMultiple = () => {
             <span className="pt-16 text-black font-semibold">Collection</span>
 
             <div className="relative grid grid-cols-2 text-orange-600 font-semibold text-md gap-x-6 py-10 mx-4 text-center">
-             {/*  <span className="text-gray-500 absolute right-20 top-2 text-sm">
+              {/*  <span className="text-gray-500 absolute right-20 top-2 text-sm">
                 Default
               </span> */}
               <div>
-                <span className="text-[#f4f5f7] text-sm">
-                    Default
-                </span> 
+                <span className="text-[#f4f5f7] text-sm">Default</span>
                 <div
-                    className="border-2 border-orange-600 py-11 rounded-[30px]"
-                    onClick={() => setShowModal(true)}
+                  className="border-2 border-orange-600 py-11 rounded-[30px]"
+                  onClick={() => setShowModal(true)}
                 >
-                    <HiPlusSm size={50} className="m-auto" />
-                    Create
-                    <br />
-                    Collection
+                  <HiPlusSm size={50} className="m-auto" />
+                  Create
+                  <br />
+                  Collection
                 </div>
               </div>
               <div>
-              <span className="text-gray-500 text-sm">
-                  Default
-              </span> 
-              <div className="border-2 border-orange-600 py-11 rounded-[30px]">
-                <img
-                  src={images.logo}
-                  className="rounded-full h-14 w-14 m-auto mb-4"
-                />
-                3six9 NFT
-              </div>
+                <span className="text-gray-500 text-sm">Default</span>
+                <div className="border-2 border-orange-600 py-11 rounded-[30px]">
+                  <img
+                    src={images.logo}
+                    className="rounded-full h-14 w-14 m-auto mb-4"
+                  />
+                  3six9 NFT
+                </div>
               </div>
             </div>
           </div>
@@ -636,9 +639,9 @@ export const CreateMultiple = () => {
                                         style={{ padding:"20px"}}
                                         />
                                 </div>
-                            
+
                             </label>
-                            
+
  */}
 
                   <div className="flex gap-4 mt-2">
@@ -670,8 +673,7 @@ export const CreateMultiple = () => {
                       name="category"
                       value={metadata.category}
                       onChange={onHandleChanged}
-                      className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                      style={{ padding: "20px" }}
+                      className=" outline-orange-600 h-10 w-full px-2 rounded-md mt-2 text-black"
                     >
                       {selectCategory.map((option, i) => {
                         return (
@@ -792,7 +794,7 @@ export const CreateMultiple = () => {
                   <input
                     type="number"
                     name="salePrice"
-                    className="bg-[#f4f5f7] border-[1px] border-orange-600 h-10 w-1/2 rounded-lg text-black focus:outline-none" 
+                    className="bg-[#f4f5f7] border-[1px] border-orange-600 h-10 w-1/2 rounded-lg text-black focus:outline-none"
                     value={salePrice}
                     onChange={(e) => setSalePrice(e.target.value)}
                     style={{ padding: "20px" }}
@@ -805,7 +807,7 @@ export const CreateMultiple = () => {
               </label>
             </div>
             <div className="flex justify-center pt-10">
-            <button
+              <button
                 onClick={onSubmitOnSale}
                 className="mt-6 px-28 py-6 button-glass font-semibold"
               >
@@ -818,5 +820,3 @@ export const CreateMultiple = () => {
     </>
   );
 };
-
-
