@@ -273,82 +273,61 @@ export const CreateSingle = () => {
 
     //upload
     useEffect(() => {
-        if(isSubmittingOnSale && metadata.media) {
-            // add royalty
-            const meta = {
-                ...metadata
-            }
-
-            meta.perpetual_royalties[`${accountId}`] = royalty
-
-
-            /* const nftMinting = callMethod({
+        if (isSubmittingOnSale && metadata.media && salePrice) {
+          // add royalty
+          const meta = {
+            ...metadata,
+          };
+      
+          meta.perpetual_royalties[`${accountId}`] = royalty;
+      
+          const mintAndApprove = async () => {
+            try {
+              const mintResult = await callMethod({
                 contractId: process.env.CONTRACT_NAME,
-                method: 'nft_mint',
+                method: "nft_mint",
                 args: {
-                    token_id: `${Date.now()}`,
-                    metadata: meta,
-                    receiver_id: accountId
-                }
-            })
-
-            setTokenId(nftMinting);
-            
-            const nftApproval = callMethod({
+                  token_id: `${Date.now()}`,
+                  metadata: meta,
+                  receiver_id: accountId,
+                },
+              });
+      
+              const tokenId = mintResult.token_id;
+      
+              const approveResult = await callMethod({
                 contractId: process.env.CONTRACT_NAME,
-                method: 'nft_approve',
-                args : {
-                    token_id: tokenId,
-                    account_id: accountId,
-                    msg: JSON.stringify({
-                        price: parseNearAmount(salePrice),
-                    }),
-                }
-            }) */
-
-            const mintAndApprove = async () => {
-                try {
-                    const mintResult = await callMethod({
-                        contractId: process.env.CONTRACT_NAME,
-                        method: 'nft_mint',
-                        args: {
-                            token_id: `${Date.now()}`,
-                            metadata: meta,
-                            receiver_id: accountId
-                        }
-                    });
-            
-                    const tokenId = mintResult.token_id;
-            
-                    const approveResult = await callMethod({
-                        contractId: process.env.CONTRACT_NAME,
-                        method: 'nft_approve',
-                        args : {
-                            token_id: tokenId,
-                            account_id: accountId,
-                            msg: JSON.stringify({
-                                price: parseNearAmount(salePrice),
-                            }),
-                        }
-                    });
-            
-                    return {tokenId, ...approveResult};
-                } catch (e) {
-                    console.error(e);
-                    throw e;
-                }
+                method: "nft_approve",
+                args: {
+                  token_id: tokenId,
+                  account_id: accountId,
+                  msg: JSON.stringify({
+                    sale_conditions: parseNearAmount(newPrice),
+                  }),
+                  msg: JSON.stringify({
+                    price: parseNearAmount(salePrice),
+                  }),
+                },
+              });
+      
+              return { tokenId, ...approveResult };
+            } catch (e) {
+              console.error(e);
+              throw e;
             }
-            
-            mintAndApprove()
-                .then((result) => {
-                    console.log('NFT minted and approved for sale:', result);
-                })
-                .catch((error) => {
-                    console.error('Error minting and approving NFT:', error);
-                });
-
+          };
+      
+          Promise.all([mintAndApprove()])
+            .then((result) => {
+              console.log("NFT minted and approved for sale:", result);
+            })
+            .catch((error) => {
+              console.error("Error minting and approving NFT:", error);
+            });
         }
-    }, [metadata]) 
+      }, [metadata, salePrice]);
+      
+      
     
 
     const onSubmitOnAuction = async (e) => {

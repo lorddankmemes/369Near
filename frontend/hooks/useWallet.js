@@ -111,6 +111,28 @@ const startUp = async (network = 'testnet') => {
     });
   }
 
+  const callBatchMethod = async (contractId, actions) => {
+    let functions = []
+
+    for(action in actions) {
+      functions.push({
+        type: 'FunctionCall',
+          params: {
+            methodName: action.method,
+            args: action.args,
+            gas: action.gas || process.env.THIRTY_TGAS,
+            deposit: action.deposit || process.env.DEPOSIT,
+          },
+      })
+    }
+
+    return await wallet.signAndSendTransaction({
+      signerId: accountId,
+      receiverId: contractId,
+      actions: functions,
+    });
+  }
+
   const value = {
     wallet,
     accountId,
@@ -119,7 +141,8 @@ const startUp = async (network = 'testnet') => {
     signIn,
     signOut,
     viewMethod,
-    callMethod
+    callMethod,
+    callBatchMethod
   }
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

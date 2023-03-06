@@ -78,7 +78,7 @@ export const Dashboard = () => {
               <span className="text-gray-500">Creations sold</span>
               <div className="flex justify-between py-4 px-2">
                 <span className="text-3xl font-bold">
-                  {createdSeries.length}
+                  {createdSeries}
                 </span>
                 <span>
                   <img src={images.artSold} />

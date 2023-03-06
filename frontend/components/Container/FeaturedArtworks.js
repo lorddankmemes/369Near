@@ -1,8 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import artwork from "../../data/landing/artwork";
+import { useNavigate } from "react-router-dom";
 
 function FeaturedArtworks() {
+
+  const navigate = useNavigate();
+  const [selectedNFT, setSelectedNFT] = useState(null);
+
+  const handleNFTClick = (data) => {
+    setSelectedNFT(data);
+    navigate(`/marketplace/${data.featured_collectible_info.collectible_uuid}`, {
+      state: { data },
+    });
+  };
+
   return (
     <>
       <div className="ml-14 mr-6">
@@ -17,6 +29,7 @@ function FeaturedArtworks() {
           {artwork.rows.map((data, index) => (
             <div
               key={index}
+              onClick={() => handleNFTClick(data)}
               className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative"
             >
               <div>

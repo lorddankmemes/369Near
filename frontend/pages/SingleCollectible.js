@@ -323,7 +323,7 @@ export const SingleCollectible = ({tokenId}) => {
                                             />
                                         </span>
                                         <span>Owner
-                                            <div className='font-extrabold w-80 block truncate '>{val.metadata.title}</div>
+                                            <div className='font-extrabold w-80 block truncate '>{val.owner_id}</div>
                                         </span>
                                     </div>
                                     <div className='flex gap-x-4'>
@@ -335,7 +335,7 @@ export const SingleCollectible = ({tokenId}) => {
                                             />
                                         </span>
                                         <span>Creator
-                                                <div className='font-extrabold w-80 block truncate '>{val.metadata.title}</div>
+                                                <div className='font-extrabold w-80 block truncate '>{val.owner_id}</div>
                                         </span>
                                     </div>
                                     <div className='bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg'>20.00% of sales will be paid to the original artist</div>
@@ -358,29 +358,16 @@ export const SingleCollectible = ({tokenId}) => {
 
                         { !hasListed ?
                             <>
-                            <div className='grid grid-cols-2 flex gap-x-4'>
-                                { val.series_id ?
-                                  <button 
-                                    onClick={isMinting} 
-                                    className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
-                                    >
-                                     Mint NFT Series
-                                  </button>
-                                :
-                                  <button 
-                                    disabled 
-                                    className='opacity-50 cursor-not-allowed col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
-                                    >
-                                     Minted
-                                  </button>
-                                }
-                               <button 
+                           { accountId &&
+                            <div className='grid grid-cols-1 flex gap-x-4'>
+                                <button 
                                     onClick={() => setModalUpdatePrice(true)} 
                                     className='bg-white col-span-1 py-2 px-10 text-black rounded-lg text-center font-semibold'
                                     >
                                     List NFT
                                 </button>
-                            </div> 
+                            </div>
+                            }
                             </>
                         :
                             <>

@@ -24,32 +24,37 @@ export const SingleCreation = ({tokenId}) => {
     const [hasMinted, setHasMinted] = useState(false)
     const [hasListed, setHasListed] = useState(false)
 
-    const isMinting = async () => {
-
-        await callMethod({
-            contractId: process.env.CONTRACT_SERIES_NAME,
-            method: 'add_approved_minter',
-            args: {
-                account_id: accountId
-            }
-          })
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [buttonText, setButtonText] = useState('Mint NFT Series');
     
-        /*   let result = await callMethod({
-            contractId: process.env.CONTRACT_SERIES_NAME,
-            method: 'nft_mint',
-            args: {
-                id: val.series_id.toString(),
-                metadata: val,
-                receiver_id: accountId
-            }
-          }) */
-  
-        /*   const a = {
-              token_id: result.args.token_id
-          }  */
-
-          setHasMinted(true)
+    const isMinting = async () => {
+      try {
+        let result = await callMethod({
+          contractId: process.env.CONTRACT_SERIES_NAME,
+          method: 'nft_mint',
+          args: {
+            id: val.series_id.toString(),
+            metadata: val,
+            receiver_id: accountId
+          }
+        }).then(() => setHasMinted(true));
+    
+        const a = {
+          token_id: result.args.token_id
+        }
+      } catch (e) {
+        console.error(e);
+        throw e;
       }
+    }
+    
+    useEffect(() => {
+      if (hasMinted === true) {
+        setButtonDisabled(true);
+        setButtonText('Minted');
+      }
+    }, [hasMinted]);
+          
 
     const isListing = async () => {
             const nftApprovePromise = callMethod({
@@ -57,9 +62,9 @@ export const SingleCreation = ({tokenId}) => {
                 method: 'nft_approve',
                 args: {
                   token_id: val.token_id,
-                  account_id: accountId,
+                  account_id: 'nft-marketplace.bonebon.testnet',
                   msg: JSON.stringify({
-					price: parseNearAmount(newPrice),
+					sale_conditions: parseNearAmount(newPrice),
 				}),
                 },
               })
@@ -359,21 +364,25 @@ export const SingleCreation = ({tokenId}) => {
                         { !hasListed ?
                             <>
                             <div className='grid grid-cols-2 flex gap-x-4'>
-                                { val.series_id ?
-                                  <button 
-                                    onClick={isMinting} 
+                            {val.series_id && !hasMinted && (
+                                <button
+                                    onClick={isMinting}
                                     className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
-                                    >
-                                     Mint NFT Series
-                                  </button>
-                                :
-                                  <button 
-                                    disabled 
+                                    disabled={buttonDisabled}
+                                >
+                                    {buttonText}
+                                </button>
+                                )}
+                                {val.series_id && hasMinted && (
+                                <button
+                                    id='mintedButton'
                                     className='opacity-50 cursor-not-allowed col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
-                                    >
-                                     Minted
-                                  </button>
-                                }
+                                    disabled={buttonDisabled}
+                                >
+                                    {buttonText}
+                                </button>
+                                )}
+
                                <button 
                                     onClick={() => setModalUpdatePrice(true)} 
                                     className='bg-white col-span-1 py-2 px-10 text-black rounded-lg text-center font-semibold'
