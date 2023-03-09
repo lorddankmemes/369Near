@@ -51,15 +51,34 @@ export const SingleCollectible = ({tokenId}) => {
           setHasMinted(true)
       }
 
-    const isListing = async () => {
-            const nftApprovePromise = callMethod({
+    /* const isListing = async () => {
+        
+        const contractId = val.series_id ? process.env.CONTRACT_SERIES_NAME : process.env.CONTRACT_NAME;
+        if (!contractId) {
+          console.error(`Invalid token_id ${val.token_id}`);
+          return;
+        }
+
+            const nftApproveSinglePromise = callMethod({
                 contractId: process.env.CONTRACT_NAME,
                 method: 'nft_approve',
                 args: {
                   token_id: val.token_id,
-                  account_id: accountId,
+                  account_id: 'nft-marketplace.bonebon.testnet',
                   msg: JSON.stringify({
-					price: parseNearAmount(newPrice),
+					sale_conditions: parseNearAmount(newPrice),
+				}),
+                },
+              })
+
+              const nftApproveSeriesPromise = callMethod({
+                contractId: process.env.CONTRACT_SERIES_NAME,
+                method: 'nft_approve',
+                args: {
+                  token_id: val.token_id,
+                  account_id: 'nft-marketplace.bonebon.testnet',
+                  msg: JSON.stringify({
+					sale_conditions: parseNearAmount(newPrice),
 				}),
                 },
               })
@@ -71,14 +90,49 @@ export const SingleCollectible = ({tokenId}) => {
                   account_id: accountId,
                 },
               })
-            
-              const [nftApproveResult, storageDepositResult] = await Promise.all([nftApprovePromise, storageDepositPromise]).then(() => useNavigate('/collection'))
               
-              console.log(nftApproveResult);
-              console.log(storageDepositResult);
+              const [nftApproveSingle, storageDepositSingle] = await Promise.all([nftApproveSinglePromise, storageDepositPromise]).then(() => useNavigate('/collection'))
+              const [nftApproveSeries, storageDepositSeries] = await Promise.all([nftApproveSeriesPromise, storageDepositPromise]).then(() => useNavigate('/collection'))
+              
+              console.log(nftApproveSingle);
+              console.log(storageDepositSingle);
+
+              console.log(nftApproveSeries);
+              console.log(storageDepositSeries);
 
               setHasListed(true)    
-     }
+     } */
+
+     const isListing = async () => {
+        const contractId = val.series_id ? process.env.CONTRACT_SERIES_NAME : process.env.CONTRACT_NAME;
+        if (!contractId) {
+          console.error(`Invalid token_id ${val.token_id}`);
+          return;
+        }
+        const nftApprovePromise = callMethod({
+          contractId: contractId,
+          method: 'nft_approve',
+          args: {
+            token_id: val.token_id,
+            account_id: 'nft-marketplace.bonebon.testnet',
+            msg: JSON.stringify({
+              sale_conditions: parseNearAmount(newPrice),
+            }),
+          },
+        });
+        const storageDepositPromise = callMethod({
+          contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+          method: 'storage_deposit',
+          args: {
+            account_id: accountId,
+          },
+        });
+        const [nftApprove, storageDeposit] = await Promise.all([nftApprovePromise, storageDepositPromise]);
+        console.log(nftApprove);
+        console.log(storageDeposit);
+        setHasListed(true);
+        /* useNavigate(contractId === process.env.CONTRACT_NAME ? '/collection' : '/series-collection'); */
+      };
 
     const updatePrice = async () => {
         await callMethod({
@@ -88,7 +142,7 @@ export const SingleCollectible = ({tokenId}) => {
                 token_id: val.token_id,
                 nft_contract_id: accountId,
                 msg: JSON.stringify({
-					price: parseNearAmount(newPrice),
+					sale_conditions: parseNearAmount(newPrice),
 				}),
             }
         })
@@ -323,7 +377,7 @@ export const SingleCollectible = ({tokenId}) => {
                                             />
                                         </span>
                                         <span>Owner
-                                            <div className='font-extrabold w-80 block truncate '>{val.metadata.title}</div>
+                                            <div className='font-extrabold w-80 block truncate '>{val.owner_id}</div>
                                         </span>
                                     </div>
                                     <div className='flex gap-x-4'>
@@ -335,7 +389,7 @@ export const SingleCollectible = ({tokenId}) => {
                                             />
                                         </span>
                                         <span>Creator
-                                                <div className='font-extrabold w-80 block truncate '>{val.metadata.title}</div>
+                                                <div className='font-extrabold w-80 block truncate '>{val.owner_id}</div>
                                         </span>
                                     </div>
                                     <div className='bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg'>20.00% of sales will be paid to the original artist</div>
@@ -358,29 +412,16 @@ export const SingleCollectible = ({tokenId}) => {
 
                         { !hasListed ?
                             <>
-                            <div className='grid grid-cols-2 flex gap-x-4'>
-                                { val.series_id ?
-                                  <button 
-                                    onClick={isMinting} 
-                                    className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
-                                    >
-                                     Mint NFT Series
-                                  </button>
-                                :
-                                  <button 
-                                    disabled 
-                                    className='opacity-50 cursor-not-allowed col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
-                                    >
-                                     Minted
-                                  </button>
-                                }
-                               <button 
+                           { accountId &&
+                            <div className='grid grid-cols-1 flex gap-x-4'>
+                                <button 
                                     onClick={() => setModalUpdatePrice(true)} 
                                     className='bg-white col-span-1 py-2 px-10 text-black rounded-lg text-center font-semibold'
                                     >
                                     List NFT
                                 </button>
-                            </div> 
+                            </div>
+                            }
                             </>
                         :
                             <>

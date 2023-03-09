@@ -10,7 +10,7 @@ export const Collection = () => {
 
   const [collection, setCollection] = useState([])
 
-  const getProfileCollection = async () => {
+ /*  const getProfileCollection = async () => {
     const res = await viewMethod(process.env.CONTRACT_NAME, 'nft_tokens_for_owner', { account_id: accountId})
     setCollection(res)
   }
@@ -20,6 +20,33 @@ export const Collection = () => {
       getProfileCollection()
     }
    }, [accountId, collection, getProfileCollection])
+ */
+   //single creation
+  const getProfileCollection= async () => {
+    const res = await viewMethod(process.env.CONTRACT_NAME, 'nft_tokens_for_owner', { account_id: accountId})
+    setCollection(res)
+  }
+
+  useEffect(() => {
+    if (accountId) {
+      getProfileCollection()
+    } 
+   }, [accountId, collection, getProfileCollection])
+
+   
+   //series creation
+   const [seriesCollection, setSeriesCollection] = useState([])
+
+   const getSeriesCollection= async () => {
+    const res = await viewMethod(process.env.CONTRACT_SERIES_NAME, 'nft_tokens_for_owner', { account_id: accountId})
+    setSeriesCollection(res)
+  }
+
+  useEffect(() => {
+    if (accountId) {
+      getSeriesCollection()
+    } 
+   }, [accountId, seriesCollection, getSeriesCollection])
 
      //more details on single collectible
      const navigate = useNavigate();
@@ -37,9 +64,8 @@ export const Collection = () => {
          <div className='mx-8'>
          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-          {
-            collection.length > 0 ? 
-            collection.map((val,key) => {
+         {
+        [...collection, ...seriesCollection].map((val,key) => {
               return (
                 <div key={key} className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
                     <div>      
@@ -64,7 +90,7 @@ export const Collection = () => {
                         </div>
                     </div>
 
-                    <hr className='mt-10 mb-4'/>
+                    <hr className='mt-8 mb-4'/>
 
                     {/* creator and owner section */}
                     <div className='flex gap-4'>
@@ -74,7 +100,7 @@ export const Collection = () => {
                             </div>
                             <div>
                               <span className='text-gray-500 font-normal text-sm'>Creator</span>
-                              <div>{val.metadata.username}</div>
+                              <div className='font-normal text-sm block w-[64px] truncate'>{val.owner_id}</div>
                             </div>
                       </div>
                       <div className='flex gap-2'>
@@ -83,16 +109,12 @@ export const Collection = () => {
                           </div>
                           <div>
                             <span className='text-gray-500 font-normal text-sm'>Creator</span>
-                            <div>{val.metadata.username}</div>
+                            <div className='font-normal text-sm block w-[64px] truncate'>{val.owner_id}</div>
                           </div>
                       </div>
                     </div>
                 </div>
                )})
-               :
-               <>
-                <></>
-              </>
               }
           </div>
          </div>

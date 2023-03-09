@@ -31,8 +31,9 @@ export const Creation = () => {
    const [seriesCreation, setSeriesCreation] = useState([])
 
    const getSeriesCreation= async () => {
-    const res = await viewMethod(process.env.CONTRACT_SERIES_NAME, 'get_series', { account_id: accountId})
-    setSeriesCreation(res)
+    const res = await viewMethod(process.env.CONTRACT_SERIES_NAME, 'get_series', { from_index:"0", limit:100 })
+    const filteredSeries = res.filter(series => series.owner_id === accountId)
+    setSeriesCreation(filteredSeries)
   }
 
   useEffect(() => {

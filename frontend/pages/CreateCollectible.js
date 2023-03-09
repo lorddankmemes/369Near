@@ -1,6 +1,8 @@
 import React from "react";
 import { images } from "../constant";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion"
+
 
 export const CreateCollectible = () => {
   const navigate = useNavigate();
@@ -15,6 +17,13 @@ export const CreateCollectible = () => {
 
   return (
     <>
+    <motion.div
+      style={{ translateY: "100px" }}
+      initial={{ opacity: 0.3 }}
+      animate={{ opacity: 0.9, translateY: "0px" }}
+      exit={{opacity: 1}}
+      transition={{ duration: 0.7 }}
+    >
       <div className="mx-16">
         <div className="grid grid-cols-3 md:grid-cols-3 py-20">
           <div className="md:col-span-2 mr-20">
@@ -69,6 +78,7 @@ export const CreateCollectible = () => {
           </div>
         </div>
       </div>
+      </motion.div>
     </>
   );
 };

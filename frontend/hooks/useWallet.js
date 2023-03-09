@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { serialize } from 'borsh';
 
 // near api js
 import { keyStores, providers } from 'near-api-js';
@@ -111,6 +112,71 @@ const startUp = async (network = 'testnet') => {
     });
   }
 
+  const callBatchMethod = async (contractId, actions) => {
+    let functions = []
+
+    for(action in actions) {
+      functions.push({
+        type: 'FunctionCall',
+          params: {
+            methodName: action.method,
+            args: action.args,
+            gas: action.gas || process.env.THIRTY_TGAS,
+            deposit: action.deposit || process.env.DEPOSIT,
+          },
+      })
+    }
+
+    return await wallet.signAndSendTransaction({
+      signerId: accountId,
+      receiverId: contractId,
+      actions: functions,
+    });
+  } 
+
+  /* const callBatchMethod = async (contractId, actions) => {
+    let functions = [];
+  
+    for (const action of actions) {
+      functions.push({
+        type: "FunctionCall",
+        params: {
+          methodName: action.method,
+          args: action.args,
+          gas: action.gas || process.env.THIRTY_TGAS,
+          deposit: action.deposit || process.env.DEPOSIT,
+        },
+      });
+    }
+  
+    if (functions.length === 0) {
+      return;
+    }
+  
+    const transaction = {
+      receiverId: contractId,
+      actions: functions,
+    };
+  
+    try {
+      const serializedTx = serialize(
+        borsh.Transaction.serialize,
+        transaction
+      );
+  
+      const { signature, transactionHash } = await wallet.signAndSendTransaction(
+        serializedTx
+      );
+  
+      console.log(`Transaction hash: ${transactionHash}`);
+      return { signature, transactionHash };
+    } catch (error) {
+      console.error(`Error sending transaction: ${error}`);
+      throw error;
+    }
+  }; */
+  
+
   const value = {
     wallet,
     accountId,
@@ -119,7 +185,8 @@ const startUp = async (network = 'testnet') => {
     signIn,
     signOut,
     viewMethod,
-    callMethod
+    callMethod,
+    callBatchMethod
   }
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
