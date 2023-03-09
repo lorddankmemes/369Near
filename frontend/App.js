@@ -79,7 +79,7 @@ export default function App() {
           <Route path="auction/:id" element={<AuctionCollection />} />
 
           {/* <Route path="creation" element={<SingleCreation />} /> */}
-          <Route path="creation">
+          <Route exact path="creation">
             <Route path=":id" element={<SingleCreation />} />
           </Route>
 
@@ -90,7 +90,7 @@ export default function App() {
             path="create/:id/multiple"
             element={<CreateMultiple />}
           />
-          
+
           <Route exact path="test">
             <Route index element={<TestSale />} />
             <Route path=":id" element={<SingleTestMarketplace/>} />

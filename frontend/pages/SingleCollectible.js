@@ -131,7 +131,7 @@ export const SingleCollectible = ({tokenId}) => {
         console.log(nftApprove);
         console.log(storageDeposit);
         setHasListed(true);
-        useNavigate(contractId === process.env.CONTRACT_NAME ? '/collection' : '/series-collection');
+        /* useNavigate(contractId === process.env.CONTRACT_NAME ? '/collection' : '/series-collection'); */
       };
 
     const updatePrice = async () => {

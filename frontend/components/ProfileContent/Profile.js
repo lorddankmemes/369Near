@@ -21,9 +21,9 @@ export const Profile = () => {
       if (accountId) {
         getInnerProfile()
       }
-    }, [accountId, created, getInnerProfile])
+    }, [accountId, created])
 
-    const [userNFT, setUserNFT] = useState([])
+  /*   const [userNFT, setUserNFT] = useState([])
 
     const getNFTProfile = async () => {
       const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_supply_by_owner', { nft_contract_id: accountId})
@@ -34,7 +34,7 @@ export const Profile = () => {
       if (accountId) {
         getNFTProfile()
       }
-    }, [accountId, userNFT, getNFTProfile])
+    }, [accountId, userNFT]) */
 
 
   /*  //returns the number of sales for a given account
@@ -97,7 +97,7 @@ export const Profile = () => {
           </div>
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-3 relative gap-8 mt-20 mx-4 w-full md:w-[90%]'>
+     {/*  <div className='grid grid-cols-1 md:grid-cols-3 relative gap-8 mt-20 mx-4 w-full md:w-[90%]'>
       {userNFT.length > 0 ? 
       userNFT.map((val,key) => {
         return (
@@ -108,7 +108,7 @@ export const Profile = () => {
 
               <div className='text-[10px] font-semibold py-4'>{val.metadata.title}</div>
               
-              {/* list price and token type */}
+              
               <div className='flex gap-12'>
                   <div className=''>
                       <p className="text-sm text-gray-500">List Price</p>
@@ -126,7 +126,7 @@ export const Profile = () => {
           <></>
         </>
         }
-      </div>
+      </div> */}
     </>
   )
 }

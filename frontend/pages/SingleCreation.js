@@ -49,15 +49,7 @@ export const SingleCreation = ({tokenId}) => {
         console.error(e);
         throw e;
       }
-    }
-    
-    useEffect(() => {
-      if (hasMinted === true) {
-        setButtonDisabled(true);
-        setButtonText('Minted');
-      }
-    }, [hasMinted]);
-          
+    }      
 
     const isListing = async () => {
             const nftApprovePromise = callMethod({
@@ -84,6 +76,7 @@ export const SingleCreation = ({tokenId}) => {
               
               console.log(nftApproveResult);
               console.log(storageDepositResult);
+              
 
               setHasListed(true)    
      }
@@ -368,12 +361,21 @@ export const SingleCreation = ({tokenId}) => {
                             <>
                             <div className='grid grid-cols-1 flex gap-x-4'>
                                 { val.series_id ?
-                                  <button 
-                                    onClick={isMinting} 
-                                    className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
+                                  (hasMinted === true ?
+                                    <button
+                                      disabled
+                                      className='opacity-50 cursor-not-allowed col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
                                     >
-                                     Mint NFT Series
-                                  </button>
+                                      Minted
+                                    </button>
+                                    :
+                                    <button
+                                      onClick={isMinting}
+                                      className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
+                                    >
+                                      Mint NFT Series
+                                    </button>
+                                  )
                                 :
                                   <button 
                                     disabled 
