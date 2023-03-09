@@ -51,15 +51,34 @@ export const SingleCollectible = ({tokenId}) => {
           setHasMinted(true)
       }
 
-    const isListing = async () => {
-            const nftApprovePromise = callMethod({
+    /* const isListing = async () => {
+        
+        const contractId = val.series_id ? process.env.CONTRACT_SERIES_NAME : process.env.CONTRACT_NAME;
+        if (!contractId) {
+          console.error(`Invalid token_id ${val.token_id}`);
+          return;
+        }
+
+            const nftApproveSinglePromise = callMethod({
                 contractId: process.env.CONTRACT_NAME,
                 method: 'nft_approve',
                 args: {
                   token_id: val.token_id,
-                  account_id: accountId,
+                  account_id: 'nft-marketplace.bonebon.testnet',
                   msg: JSON.stringify({
-					price: parseNearAmount(newPrice),
+					sale_conditions: parseNearAmount(newPrice),
+				}),
+                },
+              })
+
+              const nftApproveSeriesPromise = callMethod({
+                contractId: process.env.CONTRACT_SERIES_NAME,
+                method: 'nft_approve',
+                args: {
+                  token_id: val.token_id,
+                  account_id: 'nft-marketplace.bonebon.testnet',
+                  msg: JSON.stringify({
+					sale_conditions: parseNearAmount(newPrice),
 				}),
                 },
               })
@@ -71,14 +90,49 @@ export const SingleCollectible = ({tokenId}) => {
                   account_id: accountId,
                 },
               })
-            
-              const [nftApproveResult, storageDepositResult] = await Promise.all([nftApprovePromise, storageDepositPromise]).then(() => useNavigate('/collection'))
               
-              console.log(nftApproveResult);
-              console.log(storageDepositResult);
+              const [nftApproveSingle, storageDepositSingle] = await Promise.all([nftApproveSinglePromise, storageDepositPromise]).then(() => useNavigate('/collection'))
+              const [nftApproveSeries, storageDepositSeries] = await Promise.all([nftApproveSeriesPromise, storageDepositPromise]).then(() => useNavigate('/collection'))
+              
+              console.log(nftApproveSingle);
+              console.log(storageDepositSingle);
+
+              console.log(nftApproveSeries);
+              console.log(storageDepositSeries);
 
               setHasListed(true)    
-     }
+     } */
+
+     const isListing = async () => {
+        const contractId = val.series_id ? process.env.CONTRACT_SERIES_NAME : process.env.CONTRACT_NAME;
+        if (!contractId) {
+          console.error(`Invalid token_id ${val.token_id}`);
+          return;
+        }
+        const nftApprovePromise = callMethod({
+          contractId: contractId,
+          method: 'nft_approve',
+          args: {
+            token_id: val.token_id,
+            account_id: 'nft-marketplace.bonebon.testnet',
+            msg: JSON.stringify({
+              sale_conditions: parseNearAmount(newPrice),
+            }),
+          },
+        });
+        const storageDepositPromise = callMethod({
+          contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+          method: 'storage_deposit',
+          args: {
+            account_id: accountId,
+          },
+        });
+        const [nftApprove, storageDeposit] = await Promise.all([nftApprovePromise, storageDepositPromise]);
+        console.log(nftApprove);
+        console.log(storageDeposit);
+        setHasListed(true);
+        useNavigate(contractId === process.env.CONTRACT_NAME ? '/collection' : '/series-collection');
+      };
 
     const updatePrice = async () => {
         await callMethod({
@@ -88,7 +142,7 @@ export const SingleCollectible = ({tokenId}) => {
                 token_id: val.token_id,
                 nft_contract_id: accountId,
                 msg: JSON.stringify({
-					price: parseNearAmount(newPrice),
+					sale_conditions: parseNearAmount(newPrice),
 				}),
             }
         })

@@ -26,6 +26,8 @@ import { SingleCreation } from "./pages/SingleCreation";
 import MyBids from "./pages/MyBids";
 import FAQs from "./pages/FAQs";
 import { SingleCollectible } from "./pages/SingleCollectible";
+import { TestSale } from "./pages/TestSale";
+import { SingleTestMarketplace } from "./pages/SingleTestMarketplace";
 
 export default function App() {
   const { ipfs, ipfsInitError } = useIpfsFactory();
@@ -88,6 +90,11 @@ export default function App() {
             path="create/:id/multiple"
             element={<CreateMultiple />}
           />
+          
+          <Route exact path="test">
+            <Route index element={<TestSale />} />
+            <Route path=":id" element={<SingleTestMarketplace/>} />
+          </Route>
 
           <Route exact path="updateprofile" element={<UpdateProfile />} />
           <Route exact path="mybids" element={<MyBids />} />

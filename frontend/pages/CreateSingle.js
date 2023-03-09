@@ -4,10 +4,13 @@ import { images } from "../constant";
 import { HiPlusSm } from "react-icons/hi";
 import useIpfsFactory from "../hooks/useIpfsFactory";
 import { useWallet } from "../hooks/useWallet";
+import { parseNearAmount } from 'near-api-js/lib/utils/format';
+import { serialize } from 'borsh';
+
 
 export const CreateSingle = () => {
   const { ipfs } = useIpfsFactory();
-  const { accountId, callMethod } = useWallet();
+  const { accountId, callMethod, callBatchMethod } = useWallet();
 
   const [showModal, setShowModal] = useState(false);
   const [royalty, setRoyalty] = useState(0);
@@ -84,6 +87,10 @@ export const CreateSingle = () => {
       [evt.target.name]: value,
     });
   };
+
+  // useEffect(() => {
+  //   console.log("Updated metadata:", metadata);
+  // }, [metadata]);
 
   //select option
   const selectCategory = [
@@ -193,309 +200,301 @@ export const CreateSingle = () => {
     return () => URL.revokeObjectURL(objectUrl);
   }, [image]);
 
-    //submit function logic
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [isSubmittingOnSale, setIsSubmittingOnSale] = useState(false)
-    const [isSubmittingOnAuction, setIsSubmittingOnAuction] = useState(false)
-    const [tokenId, setTokenId] = useState(null);
+  //submit function logic
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingOnSale, setIsSubmittingOnSale] = useState(false);
+  const [isSubmittingOnAuction, setIsSubmittingOnAuction] = useState(false);
+  const [tokenId, setTokenId] = useState(null);
 
-    const onSubmit = async (e) => {
-        e.preventDefault()
+  const onSubmit = async (e) => {
+    e.preventDefault()
 
-        try {
-            const cid = await ipfs.add(image)
-            if(cid.path) {
-                // add cid
-                setMetadata({
-                    ...metadata,
-                    media: `${process.env.INFURA_GATEWAY}/${cid.path}`
-                })
-                setIsSubmitting(true)
-
-            }
-          } catch(e) {
-            console.log(e)
-          }
-    }
-
-    //upload
-    useEffect(() => {
-        if(isSubmitting && metadata.media) {
-            // add royalty
-            const meta = {
-                ...metadata
-            }
-
-            meta.perpetual_royalties[`${accountId}`] = royalty
-
-            const args = {
-                token_id: `${Date.now()}`,
-                metadata: meta,
-                receiver_id: accountId
-            }
-
-
-            console.log(args)
-            
-           const nftId  = callMethod({
-                contractId: process.env.CONTRACT_NAME,
-                method: 'nft_mint',
-                args
+    try {
+        const cid = await ipfs.add(image)
+        if(cid.path) {
+            // add cid
+            setMetadata({
+                ...metadata,
+                media: `${process.env.INFURA_GATEWAY}/${cid.path}`
             })
-            .then(() => setMetadata())
+            setIsSubmitting(true)
 
-            setTokenId(nftId);
-           
         }
-    }, [metadata])
+      } catch(e) {
+        console.log(e)
+      }
+}
+
+//upload
+useEffect(() => {
+    if(isSubmitting && metadata.media) {
+        // add royalty
+        const meta = {
+            ...metadata
+        }
+
+        meta.perpetual_royalties[`${accountId}`] = royalty
+
+        const args = {
+            token_id: `${Date.now()}`,
+            metadata: meta,
+            receiver_id: accountId
+        }
 
 
-    const onSubmitOnSale = async (e) => {
-        e.preventDefault()
+        console.log(args)
+        
+       const nftId  = callMethod({
+            contractId: process.env.CONTRACT_NAME,
+            method: 'nft_mint',
+            args
+        })
+        .then(() => setMetadata())
 
-        try {
-            const cid = await ipfs.add(image)
-            if(cid.path) {
-                // add cid
-                setMetadata({
-                    ...metadata,
-                    media: `${process.env.INFURA_GATEWAY}/${cid.path}`
-                })
-
-                setSalePrice(salePrice)
-                setIsSubmittingOnSale(true)
-
-            }
-          } catch(e) {
-            console.log(e)
-          }
+        setTokenId(nftId);
+       
     }
+}, [metadata])
 
-    //upload
-    useEffect(() => {
-        if (isSubmittingOnSale && metadata.media && salePrice) {
-          // add royalty
-          const meta = {
-            ...metadata,
-          };
-      
-          meta.perpetual_royalties[`${accountId}`] = royalty;
-      
-          const mintAndApprove = async () => {
-            try {
-              const mintResult = await callMethod({
-                contractId: process.env.CONTRACT_NAME,
-                method: "nft_mint",
-                args: {
-                  token_id: `${Date.now()}`,
-                  metadata: meta,
-                  receiver_id: accountId,
-                },
-              });
-      
-              const tokenId = mintResult.token_id;
-      
-              const approveResult = await callMethod({
-                contractId: process.env.CONTRACT_NAME,
-                method: "nft_approve",
-                args: {
-                  token_id: tokenId,
-                  account_id: accountId,
-                  msg: JSON.stringify({
-                    sale_conditions: parseNearAmount(newPrice),
-                  }),
-                  msg: JSON.stringify({
-                    price: parseNearAmount(salePrice),
-                  }),
-                },
-              });
-      
-              return { tokenId, ...approveResult };
-            } catch (e) {
-              console.error(e);
-              throw e;
-            }
-          };
-      
-          Promise.all([mintAndApprove()])
-            .then((result) => {
-              console.log("NFT minted and approved for sale:", result);
+
+const onSubmitOnSale = async (e) => {
+    e.preventDefault()
+
+    try {
+        const cid = await ipfs.add(image)
+        if(cid.path) {
+            // add cid
+            setMetadata({
+                ...metadata,
+                media: `${process.env.INFURA_GATEWAY}/${cid.path}`
             })
-            .catch((error) => {
-              console.error("Error minting and approving NFT:", error);
-            });
+
+            setSalePrice(salePrice)
+            setIsSubmittingOnSale(true)
+
         }
-      }, [metadata, salePrice]);
-      
-      
-    
+      } catch(e) {
+        console.log(e)
+      }
+}
 
-    const onSubmitOnAuction = async (e) => {
-        e.preventDefault()
+//upload
+useEffect(() => {
+  if (isSubmittingOnSale && metadata.media && salePrice) {
+    // add royalty
+    const meta = {
+      ...metadata,
+    };
+    meta.perpetual_royalties[`${accountId}`] = royalty;
 
-        try {
-            const cid = await ipfs.add(image)
-            if(cid.path) {
-                // add cid
-                setMetadata({
-                    ...metadata,
-                    media: `${process.env.INFURA_GATEWAY}/${cid.path}`
-                })
+    const mintAndApprove = async () => {
+      try {
+        const actions = [
+          {
+            method: "nft_mint",
+            args: {
+              token_id: `${Date.now()}`,
+              metadata: meta,
+              receiver_id: accountId,
+            },
+            gas: process.env.THIRTY_TGAS,
+            deposit: process.env.DEPOSIT,
+          },
+          {
+            method: "nft_approve",
+            args: {
+              token_id: `${Date.now()}`,
+              account_id: accountId,
+              msg: JSON.stringify({
+                sale_conditions: parseNearAmount(salePrice),
+              }),
+            },
+            gas: process.env.THIRTY_TGAS,
+            deposit: 0,
+          },
+        ];
 
-                setAuction({
-                    ...auction
-                })
-                setIsSubmittingOnAuction(true)
+        const result = await callBatchMethod(process.env.CONTRACT_NAME, actions);
 
-            }
-          } catch(e) {
-            console.log(e)
-          }
+        console.log("NFT minted and approved for sale:", result);
+      } catch (e) {
+        console.error("Error minting and approving NFT:", e);
+      }
+    };
+
+    mintAndApprove();
+  }
+}, [metadata, salePrice]);
+
+
+
+
+const onSubmitOnAuction = async (e) => {
+    e.preventDefault()
+
+    try {
+        const cid = await ipfs.add(image)
+        if(cid.path) {
+            // add cid
+            setMetadata({
+                ...metadata,
+                media: `${process.env.INFURA_GATEWAY}/${cid.path}`
+            })
+
+            setAuction({
+                ...auction
+            })
+            setIsSubmittingOnAuction(true)
+
+        }
+      } catch(e) {
+        console.log(e)
+      }
+}
+
+ //upload
+  useEffect(() => {
+    if(isSubmittingOnAuction && metadata.media) {
+        // add royalty
+        const meta = {
+            ...metadata
+        }
+
+        meta.perpetual_royalties[`${accountId}`] = royalty
+
+        const args = {
+            token_id: `${Date.now()}`,
+            metadata: meta,
+            salePrice,
+            receiver_id: accountId
+        }
+
+        console.log(args)
+        
+        callMethod({
+            contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+            method: 'offer',
+            args
+        })
+        .then(() => setMetadata())
     }
+}, [metadata])
 
-     //upload
-      useEffect(() => {
-        if(isSubmittingOnAuction && metadata.media) {
-            // add royalty
-            const meta = {
-                ...metadata
-            }
 
-            meta.perpetual_royalties[`${accountId}`] = royalty
-
-            const args = {
-                token_id: `${Date.now()}`,
-                metadata: meta,
-                salePrice,
-                receiver_id: accountId
-            }
-
-            console.log(args)
-            
-            callMethod({
-                contractId: process.env.CONTRACT_MARKETPLACE_NAME,
-                method: 'offer',
-                args
-            })
-            .then(() => setMetadata())
-        }
-    }, [metadata])
-    
-
-return (
+  return (
     <>
       <div className="body-container">
-         {showModal ? (
-        <div className="fixed inset-0 z-10 overflow-y-auto">
+        {showModal ? (
+          <div className="fixed inset-0 z-10 overflow-y-auto">
             <div
-                className="fixed inset-0 w-full h-full bg-black opacity-40"
-                onClick={() => setShowModal(false)}
+              className="fixed inset-0 w-full h-full bg-black opacity-40"
+              onClick={() => setShowModal(false)}
             ></div>
             <div className="flex relative justify-center items-center min-h-screen mt-40 px-4 py-8">
-                <div className="absolute w-full max-w-lg mx-auto bg-gray-100 z-99 rounded-md shadow-lg">
-                    <div className="mt-16 px-10 flex flex-col justify-center">
-
-                            <h4 className="text-3xl text-center font-bold pb-10 text-gray-800">
-                            NEP141 Collection
-                            </h4>
-                                <div className="flex flex-col gap-y-6 text-sm text-gray-400 w-full">
-
-                                    <div
-                                    type="search"
-                                    name="search-form"
-                                    id="search-form"
-                                    className="flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md text-center"
-                                    style={{ padding:"50px"}}
-                                >
-                                    <div className='text-gray-400 text-md'>Allowed png, gif, jpg 160x160px <br/> Recommended</div>
-                                </div>
-
-
-                                <label>
-                                    Name
-                                    <div>
-                                    <input
-                                        name="search-form"
-                                        id="search-form"
-                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                                        placeholder="Enter token name"
-                                        style={{ padding:"20px"}}
-                                        />
-                                        </div>
-                                </label>
-
-                                <label>
-                                    Symbol
-                                    <div>
-                                    <input
-                                        type="search"
-                                        name="search-form"
-                                        id="search-form"
-                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                                        placeholder="Enter symbol"
-                                        style={{ padding:"20px"}}
-                                        />
-                                        </div>
-                                </label>
-
-                                <label>
-                                    Description
-                                    <div>
-                                    <input
-                                        type="text"
-                                        name="description"
-                                        id="search-form"
-                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                                        placeholder="Spread some words about your token"
-                                        style={{ padding:"20px"}}
-                                        />
-                                        </div>
-                                </label>
-
-                                <label>
-                                    Short url
-                                    <div>
-                                    <input
-                                        type="search"
-                                        name="search-form"
-                                        id="search-form"
-                                        className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2"
-                                        placeholder="short-url"
-                                        style={{ padding:"20px"}}
-                                        />
-                                        </div>
-                                </label>
-                            </div>
-
-                            <div className="items-center gap-2 mt-3 sm:flex">
-                                <button
-                                    className="w-full mt-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
-                                    onClick={() =>
-                                        setShowModal(false)
-                                    }
-                                >
-                                    Create Collection
-                                </button>
-                            </div>
-                            <div className="items-center gap-2 mt-3 mb-10 sm:flex">
-                                <button
-                                    className="w-full my-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
-                                    onClick={() =>
-                                        setShowModal(false)
-                                    }
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
+              <div className="absolute w-full max-w-lg mx-auto bg-gray-100 z-99 rounded-md shadow-lg">
+                <div className="mt-16 px-10 flex flex-col justify-center">
+                  <h4 className="text-3xl text-center font-bold pb-10 text-gray-800">
+                    NEP141 Collection
+                  </h4>
+                  <div className="flex flex-col gap-y-6 text-sm text-gray-400 w-full">
+                    <div
+                      type="search"
+                      name="search-form"
+                      id="search-form"
+                      className="flex flex-col md:col-span-2 border-dashed border-[1px] border-gray-300 w-full rounded-md text-center"
+                      style={{ padding: "50px" }}
+                    >
+                      <div className="text-gray-400 text-md">
+                        Allowed png, gif, jpg 160x160px <br /> Recommended
+                      </div>
                     </div>
+
+                    <label>
+                      Name
+                      <div>
+                        <input
+                          name="search-form"
+                          id="search-form"
+                          className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                          placeholder="Enter token name"
+                          style={{ padding: "20px" }}
+                        />
+                      </div>
+                    </label>
+
+                    <label>
+                      Symbol
+                      <div>
+                        <input
+                          type="search"
+                          name="search-form"
+                          id="search-form"
+                          className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                          placeholder="Enter symbol"
+                          style={{ padding: "20px" }}
+                        />
+                      </div>
+                    </label>
+
+                    <label>
+                      Description
+                      <div>
+                        <input
+                          type="text"
+                          name="description"
+                          id="search-form"
+                          className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
+                          placeholder="Spread some words about your token"
+                          style={{ padding: "20px" }}
+                        />
+                      </div>
+                    </label>
+
+                    <label>
+                      Short url
+                      <div>
+                        <input
+                          type="search"
+                          name="search-form"
+                          id="search-form"
+                          className="bg-transparent border-[1px] border-gray-300 outline-orange-600 h-10 w-full rounded-md mt-2"
+                          placeholder="short-url"
+                          style={{ padding: "20px" }}
+                        />
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className="items-center gap-2 mt-3 sm:flex">
+                    <button
+                      className="w-full mt-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Create Collection
+                    </button>
+                  </div>
+                  <div className="items-center gap-2 mt-3 mb-10 sm:flex">
+                    <button
+                      className="w-full my-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
+              </div>
             </div>
-    ) : <></>}
+          </div>
+        ) : (
+          <></>
+        )}
 
         <div className="grid grid-cols-2 lg:grid-cols-4 pt-28 pb-12 mx-6 lg:mx-28">
           <div className="col-span-4 lg:col-span-2">
-            <Link to="/create" className="bg-white text-black font-medium rounded-lg py-2 px-10 hover:border-2 hover:border-orange-600">
+            <Link
+              to="/create"
+              className="bg-white text-black font-medium rounded-lg py-2 px-10 hover:border-2 hover:border-orange-600"
+            >
               Manage collectible type
             </Link>
             <div className="text-5xl font-semibold pt-12 pb-10">
@@ -512,7 +511,7 @@ return (
                 30mb.
               </span>
               <div>
-              <input
+                <input
                   ref={imageRef}
                   id="image"
                   accept="image/*"
@@ -532,15 +531,18 @@ return (
           </div>
 
           <div className="flex col-span-4 lg:col-span-2 mx-6">
-                <div className="relative w-full">
-                    <div className='pb-8 text-[#808080] font-semibold'>Preview</div>
-                    <div className='bg-[#808080] rounded-xl h-[90%] relative mr-20'>
-                        <img src={preview} alt="" className='object-cover h-full rounded-xl' />
-                    </div>
-                </div>
+            <div className="relative w-full">
+              <div className="pb-8 text-[#808080] font-semibold">Preview</div>
+              <div className="bg-[#808080] rounded-xl h-[90%] relative mr-20">
+                <img
+                  src={preview}
+                  alt=""
+                  className="object-cover h-full rounded-xl"
+                />
+              </div>
             </div>
+          </div>
         </div>
-
 
         {/* collection white background section */}
         <div className="grid grid-cols-2 lg:grid-cols-4 pb-20 mx-6 lg:mx-28">
@@ -591,34 +593,30 @@ return (
             <span className="pt-16 text-black font-semibold">Collection</span>
 
             <div className="relative grid grid-cols-2 text-orange-600 font-semibold text-md gap-x-6 py-10 mx-4 text-center">
-             {/*  <span className="text-gray-500 absolute right-20 top-2 text-sm">
+              {/*  <span className="text-gray-500 absolute right-20 top-2 text-sm">
                 Default
               </span> */}
               <div>
-                <span className="text-[#f4f5f7] text-sm">
-                    Default
-                </span> 
+                <span className="text-[#f4f5f7] text-sm">Default</span>
                 <div
-                    className="border-2 border-orange-600 py-11 rounded-[30px]"
-                    onClick={() => setShowModal(true)}
+                  className="border-2 border-orange-600 py-11 rounded-[30px]"
+                  onClick={() => setShowModal(true)}
                 >
-                    <HiPlusSm size={50} className="m-auto" />
-                    Create
-                    <br />
-                    Collection
+                  <HiPlusSm size={50} className="m-auto" />
+                  Create
+                  <br />
+                  Collection
                 </div>
               </div>
               <div>
-              <span className="text-gray-500 text-sm">
-                  Default
-              </span> 
-              <div className="border-2 border-orange-600 py-11 rounded-[30px]">
-                <img
-                  src={images.logo}
-                  className="rounded-full h-14 w-14 m-auto mb-4"
-                />
-                3six9 NFT
-              </div>
+                <span className="text-gray-500 text-sm">Default</span>
+                <div className="border-2 border-orange-600 py-11 rounded-[30px]">
+                  <img
+                    src={images.logo}
+                    className="rounded-full h-14 w-14 m-auto mb-4"
+                  />
+                  3six9 NFT
+                </div>
               </div>
             </div>
           </div>
@@ -645,7 +643,6 @@ return (
                       />
                     </div>
                   </label>
-
                   <label>
                     Description
                     <div>
@@ -661,7 +658,6 @@ return (
                       />
                     </div>
                   </label>
-
                   <label>
                     Royalties
                     <div className="flex gap-4 mt-2">
@@ -675,15 +671,13 @@ return (
                       />
                     </div>
                   </label>
-
                   <label>
                     Category
                     <select
                       name="category"
                       value={metadata.category}
                       onChange={onHandleChanged}
-                      className="bg-white outline-orange-600 h-10 w-full rounded-md mt-2 text-black"
-                      style={{ padding: "20px" }}
+                      className=" outline-orange-600 h-10 w-full px-2 rounded-md mt-2 text-black"
                     >
                       {selectCategory.map((option, i) => {
                         return (
@@ -743,11 +737,9 @@ return (
                         placeholder="E.g. 1200px x 2000px"
                         style={{ padding: "20px" }}
                       />
-
-                      <button onClick={addProperty}>Add</button>
+                       <button className="bg-white text-black hover:border hover:border-2 hover:border-orange-600" onClick={addProperty}>Add</button>
                     </div>
                   </label>
-
                   <div className="flex justify-between w-full mt-4 mb-2">
                     <div className="text-gray-400 font-semibold text-md">
                       Put on Sale
@@ -770,7 +762,6 @@ return (
                       </div>
                     </label>
                   </div>
-
                   <div className="flex justify-between w-full mb-2">
                     <div className="text-gray-400 font-semibold text-md">
                       Put on Auction
@@ -792,7 +783,6 @@ return (
                       </div>
                     </label>
                   </div>
-
                   {onSale === false && onAuction === false ? (
                     <div className="flex flex-col md:col-span-2 my-2">
                       <button
@@ -823,7 +813,7 @@ return (
                   <input
                     type="number"
                     name="salePrice"
-                    className="bg-[#f4f5f7] border-[1px] border-orange-600 h-10 w-1/2 rounded-lg text-black focus:outline-none" 
+                    className="bg-[#f4f5f7] border-[1px] border-orange-600 h-10 w-1/2 rounded-lg text-black focus:outline-none"
                     value={salePrice}
                     onChange={(e) => setSalePrice(e.target.value)}
                     style={{ padding: "20px" }}

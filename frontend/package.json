@@ -43,6 +43,7 @@
     "@near-wallet-selector/nightly-connect": "^7.0.0",
     "@near-wallet-selector/sender": "^7.0.0",
     "@near-wallet-selector/wallet-connect": "^7.0.0",
+    "borsh": "^0.7.0",
     "dot-prop": "^7.2.0",
     "framer-motion": "^9.1.7",
     "github-like-avatar-generator": "^1.1.10",

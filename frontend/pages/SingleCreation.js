@@ -37,7 +37,10 @@ export const SingleCreation = ({tokenId}) => {
             metadata: val,
             receiver_id: accountId
           }
-        }).then(() => setHasMinted(true));
+        }).then(() => {
+            useNavigate('/profile');
+            setHasMinted(true);
+          });
     
         const a = {
           token_id: result.args.token_id
@@ -77,7 +80,7 @@ export const SingleCreation = ({tokenId}) => {
                 },
               })
             
-              const [nftApproveResult, storageDepositResult] = await Promise.all([nftApprovePromise, storageDepositPromise]).then(() => useNavigate('/collection'))
+              const [nftApproveResult, storageDepositResult] = await Promise.all([nftApprovePromise, storageDepositPromise]).then(() => useNavigate('/profile'))
               
               console.log(nftApproveResult);
               console.log(storageDepositResult);
@@ -361,34 +364,30 @@ export const SingleCreation = ({tokenId}) => {
 
                         </div>
 
-                        { !hasListed ?
+                        { accountId ?
                             <>
-                            <div className='grid grid-cols-2 flex gap-x-4'>
-                            {val.series_id && !hasMinted && (
-                                <button
-                                    onClick={isMinting}
+                            <div className='grid grid-cols-1 flex gap-x-4'>
+                                { val.series_id ?
+                                  <button 
+                                    onClick={isMinting} 
                                     className='col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
-                                    disabled={buttonDisabled}
-                                >
-                                    {buttonText}
-                                </button>
-                                )}
-                                {val.series_id && hasMinted && (
-                                <button
-                                    id='mintedButton'
+                                    >
+                                     Mint NFT Series
+                                  </button>
+                                :
+                                  <button 
+                                    disabled 
                                     className='opacity-50 cursor-not-allowed col-span-1 bg-white py-2 px-10 text-black rounded-lg text-center font-semibold'
-                                    disabled={buttonDisabled}
-                                >
-                                    {buttonText}
-                                </button>
-                                )}
-
-                               <button 
+                                    >
+                                     Minted
+                                  </button>
+                                }
+                                {/* <button 
                                     onClick={() => setModalUpdatePrice(true)} 
                                     className='bg-white col-span-1 py-2 px-10 text-black rounded-lg text-center font-semibold'
                                     >
                                     List NFT
-                                </button>
+                                </button> */}
                             </div> 
                             </>
                         :
@@ -404,6 +403,7 @@ export const SingleCreation = ({tokenId}) => {
 
                     </div>
                 </div>
+
 
                 <div className="flex lg:col-span-1 justify-center pt-10 md:pt-0">
                 <div className='flex md:flex-col gap-y-4 gap-x-10 mx-10'>

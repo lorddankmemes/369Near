@@ -40,9 +40,9 @@ export const OnSale = () => {
     if (accountId && !isLoaded) {
       getProfileOnSale()
     }
-   }, [accountId, sales, isLoaded]) */
+   }, [accountId, sales, isLoaded]) 
    
-   useEffect(() => {
+  /* useEffect(() => {
 
     const getProfileOnSale = async () => {
       const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_sales_by_owner_id', { account_id: accountId, from_index:"0", limit:100})
@@ -76,23 +76,39 @@ export const OnSale = () => {
     if (accountId && !isLoaded) {
       getProfileOnSale()
     }
-  }, [accountId, sales, isLoaded])
+  }, [accountId, sales, isLoaded]) */
   
-
    //onSale real smart contract, get the val from marketplace metadata
    //method to retrieve information about all the NFTs that are currently for sale and owned by a specific account. 
    //This information can be useful when building a marketplace frontend and showing the NFTs that a specific account is selling.
    
-  /*const getProfileOnSale= async () => {
-    const res = await viewMethod(process.env.CONTRACT_MARKETPLACE, 'get_sales_by_owner_id', { account_id: accountId})
-    setOnSale(res)
-  }
 
-  useEffect(() => {
-    if (accountId) {
-      getProfileOnSale()
+   useEffect(() => {
+  const getProfileOnSale = async () => {
+    const sales = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_sales_by_owner_id', { account_id: accountId, from_index: '0', limit: 100 });
+    setSales(sales);
+    const nfts = [];
+    for (const sale of sales) {
+      const tokens = await viewMethod(sale.nft_contract_id, 'nft_tokens_for_owner', { account_id: accountId, from_index: '0', limit: 100 });
+      const filteredTokens = tokens.filter(token => token.token_id === sale.token_id);
+      if (filteredTokens.length > 0) {
+        nfts.push({
+          contract_id: sale.nft_contract_id,
+          metadata: filteredTokens[0].metadata,
+          tokenId: filteredTokens[0].token_id,
+          price: sale.sale_conditions
+        });
+      }
     }
-   }, [accountId, onSale, getProfileOnSale]) */
+    setNfts(nfts);
+    setIsLoaded(true);
+  };
+
+  if (accountId && !isLoaded) {
+    getProfileOnSale();
+  }
+}, [accountId, sales, isLoaded]);
+
 
 
   return (
@@ -121,7 +137,7 @@ export const OnSale = () => {
                 </div>
   
                 <div className="py-4 text-lg font-semibold">
-                  {/* {val.metadata.title} */}
+                  {val.metadata.title}
                 </div>
   
                 <div className="flex justify-between">
@@ -130,24 +146,24 @@ export const OnSale = () => {
                     NEP171
                     </span>
                     <p className="text-sm font-semibold">
-                    {/*  Edition {onSale.quantity} /{" "}
-                      {onSale.noOfCopies} */}
+                    Edition {val.quantity} /{" "}
+                      {val.copies}
                     </p>
                   </div>
                   <div className="flex">
                     <img
                      /*  onClick={() => handleCollectionClick(data)} */
-                      /* src={val.metadata.media} */
+                      src={val.metadata.media}
                       className="market-size z-10 cursor-pointer"
                     />
                     <img
                       /* onClick={() => handleCreatorClick(data)} */
-                      /* src={val.metadata.media} */
+                      src={val.metadata.media}
                       className="market1-size z-20 cursor-pointer"
                     />
                     <img
                      /*  onClick={() => handleOwnerClick(data)} */
-                      /* src={val.metadata.media} */
+                      src={val.metadata.media}
                       className="market2-size z-30 cursor-pointer"
                     />
                   </div>
