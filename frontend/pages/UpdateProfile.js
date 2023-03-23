@@ -308,12 +308,14 @@ export const UpdateProfile = () => {
   const { ipfs } = useIpfsFactory();
   const { accountId, viewMethod, callMethod } = useWallet();
 
+  const [username, setUsername] = useState(accountId)
+  const [submitted, setSubmitted] = useState(false)
+
   const [profile, setProfile] = useState({
     avatar: "",
     email: "",
     firstname: "",
     lastname: "",
-    username: "",
     bio: "",
     twitter: "",
     website: "",
@@ -345,20 +347,9 @@ export const UpdateProfile = () => {
   }, [profileImg]);
 
   const onHandleChanged = (evt) => {
-    const { type, value, name } = evt.target.value;
-
-    let val;
-    switch (type) {
-      case "checkbox":
-        val = !profile[name];
-        break;
-      default:
-        val = value;
-    }
-
     setProfile({
       ...profile,
-      [evt.target.name]: value,
+      [evt.target.name]: evt.target.value,
     });
   };
 
@@ -366,41 +357,78 @@ export const UpdateProfile = () => {
     e.preventDefault();
     try {
       if (profileImg) {
-        const cid = await ipfs.add(profileImg);
+        const result = await ipfs.add(profileImg);
         setProfile({
           ...profile,
-          [avatar]: `ipfs://${cid}`,
+          avatar: `ipfs://${result.cid}`,
         });
       }
 
-      await callMethod({
-        contractId: process.env.CONTRACT_NAME,
-        method: "nft_mint",
-        args,
-      });
-
-      console.log(profile);
+      setSubmitted(true)
     } catch (e) {
       console.log(e);
     }
   };
 
-  const getProfile = async () => {
+  const getUsername = async () => {
     const res = await viewMethod(
-      process.env.CONTRACT_NAME,
-      "nft_tokens_for_owner",
-      { account_id: accountId }
+      process.env.CONTRACT_PROFILE,
+      "getUsername",
+      { accountId: accountId }
     );
+
     if (res) {
-      setProfile(res);
+      setUsername(res);
+      getProfile(res)
+    }
+  };
+
+  const getProfile = async (username) => {
+    const res = await viewMethod(
+      process.env.CONTRACT_PROFILE,
+      "getUserInfo",
+      { username }
+    );
+
+    if (res) {
+      if(res[2]) {
+        let response = await fetch(`${process.env.INFURA_GATEWAY}/${res[2]}`)
+        let data = await response.json()
+        setProfile(data)
+      }
     }
   };
 
   useEffect(() => {
-    if (accountId && !profile.handler) {
-      getProfile();
+
+    const submitProfile = async () => {
+      const result = await ipfs.add(JSON.stringify(profile))
+
+      if(!username) {
+        await callMethod({
+          contractId: process.env.CONTRACT_PROFILE,
+          method: "setUserInfo",
+          args: { username: username, metadata: result.path },
+        });
+      } else {
+        await callMethod({
+          contractId: process.env.CONTRACT_PROFILE,
+          method: "setUserMetadata",
+          args: { accountId: accountId, cid: result.path },
+        });
+      }
+
+      setSubmitted(false)
     }
-  }, [accountId, profile, getProfile]);
+
+    if(!username) {
+      getUsername()
+    }
+
+    if(submitted) {
+      submitProfile()
+    }
+  }, [accountId, profile, getProfile, submitted]);
 
   //remove cover image logic
   const handleRemoveImage = () => {
@@ -542,8 +570,8 @@ export const UpdateProfile = () => {
                     <input
                       type="text"
                       name="username"
-                      value={profile.username}
-                      onChange={onHandleChanged}
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       className="h-12 w-full rounded-md mt-2 border-[1px] border-gray-200 focus:outline-none"
                       placeholder="Name your artwork"
                       style={{

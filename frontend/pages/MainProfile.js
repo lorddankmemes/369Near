@@ -18,6 +18,7 @@ export const MainProfile = () => {
   const navigate = useNavigate();
 
   const { accountId } = useWallet();
+  const { username } = useProfile();
   const { avatar } = useProfile();
 
   /*  const padFunction = (number) => {
@@ -45,7 +46,7 @@ export const MainProfile = () => {
               </div>
               <div className="text-2xl font-semibold text-center">
                 {/* @{profile.user_public_address.slice(-4).padStart(profile.user_public_address.length, ".")} */}
-                {accountId}
+                {username}
               </div>
               <div className="text-center text-sm py-4">{accountId}</div>
 
