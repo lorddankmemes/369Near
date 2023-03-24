@@ -309,7 +309,7 @@ return (
     ) : null}
 
     {/* left container */}
-    <div className="flex flex-col md:col-span-3 justify-end ml-20 xl:ml:28">
+    <div className="flex flex-col md:col-span-3 justify-end ml-10 xl:ml-28">
       <div className="flex gap-x-4">
         <span>
           <img

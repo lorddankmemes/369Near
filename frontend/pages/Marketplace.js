@@ -173,8 +173,8 @@ function Marketplace() {
   
 
   return (
-    <div className='pt-10 mx-28 min-[1920px]:mx-48'>
-
+    <div className='pt-10 mx-20 min-[1920px]:mx-48'>
+        <div className="font-bold pt-6 text-3xl">Explore Marketplace</div>
         <div className="grid">
         <div className="flex my-16 items-center">
           <div
@@ -245,7 +245,7 @@ function Marketplace() {
           {open ? (
             <div
               id="dropdownAvatar"
-              className="z-20 w-56 absolute mt-4 bg-white  rounded-xl"
+              className="z-20 w-56 absolute mt-4 bg-white rounded-xl"
             >
               <ul className="flex flex-col p-6 text-sm font-medium text-black">
                 <div className="cursor-default text-gray-500">Sort by</div>
@@ -269,7 +269,7 @@ function Marketplace() {
         </div>
       </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-20">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 pt-20">
       {
         nfts.map((data, i) => (
            /*  <>

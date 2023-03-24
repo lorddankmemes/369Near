@@ -108,7 +108,7 @@ export const SingleCreation = ({tokenId}) => {
 
   return (
     <>
-    <div className='pl-24'>
+    <div className='body-container'>
         <div className="grid grid-cols-1 md:grid-cols-6 mx-4 content-center text-white pt-20">
 
             {/* modal for checkout */}
@@ -283,7 +283,7 @@ export const SingleCreation = ({tokenId}) => {
                 {/* left container */}
                 {val && (
                 <>
-                <div className="flex flex-col md:col-span-3 justify-center mx-10">
+                <div className="flex flex-col md:col-span-3 justify-center mx-10 ml-20 xl:ml-28">
                     <div className='flex gap-x-4'>
                         <span><img src={val.metadata.media} className="creator-size"/></span>
                         <span className='font-extrabold pt-2 text-gray-400'>{val.owner_id}</span>
