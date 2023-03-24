@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useProfile } from "../../hooks/useProfile";
 import { useWallet } from "../../hooks/useWallet";
 
 export const Profile = () => {
   const { accountId, viewMethod } = useWallet();
+  
+  const  { profile } = useProfile()
 
     const [created, setCreated] = useState(0)
     const [sold, setSold] = useState(0)
@@ -91,8 +94,10 @@ export const Profile = () => {
 
           <div className="flex flex-col md:col-span-1 mx-6 md:mx-0">
             <div className=''>
-                <div>About</div>
-                <div>Contact Me</div>
+                <div className="font-medium">About</div>
+                <div>{profile.bio}</div>
+                <div className="mt-4 font-medium">Contact Me</div>
+                <div>{profile.email}</div>
             </div>
           </div>
       </div>
