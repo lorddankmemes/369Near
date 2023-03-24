@@ -33,7 +33,12 @@ export const SingleNFTMarketplace = (props) => {
         'get_sale',
         { nft_contract_token: `${params.contract_id}.${params.id}` }
       );
-      setSale(res);
+
+      if (res) {
+        setSale(res);
+      } else {
+        navigate('/marketplace');
+      }
     };
 
     if (data) {
