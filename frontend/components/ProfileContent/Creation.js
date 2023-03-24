@@ -108,12 +108,12 @@ export const Creation = () => {
           </div>
       </div>
       {
-        [...creation, ...seriesCreation].map((val,key) => {
+        [...creation, ...seriesCreation].map((val, i) => {
 
           return (
             <>
               <div 
-                key={key} 
+                key={i} 
                 className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative"
               >
                   <div>      

@@ -10,17 +10,22 @@ export const SingleNFTMarketplace = (props) => {
   const location = useLocation();
   const data = location.state ? location.state.data : null;
   console.log(data)
-  const id = location.state ? location.state.id : null;
   const [currentComponent, setCurrentComponent] = useState("A");
   const [showModal, setShowModal] = useState(false);
   const [modalUpdatePrice, setModalUpdatePrice] = useState(false);
   const [showModalShare, setShowModalShare] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState(null);
-  const [newPrice, setNewPrice] = useState()
+  const [newPrice, setNewPrice] = useState('')
   const { accountId, contractId, viewMethod, callMethod} = useWallet()
   const { avatar } = useProfile();
 
   const navigate = useNavigate();
+
+  
+  if (!data) {
+    navigate('/marketplace')
+  }
+  
 
   const handleCollectionClick = (data) => {
     setSelectedNFT(data);
@@ -129,7 +134,7 @@ console.log(args)
 
 return (
   <>
-  <div className="pl-24">
+  <div className="body-container">
   <div className="grid grid-cols-1 md:grid-cols-6 mx-4 content-center text-white pt-20">
     {/* modal for checkout */}
     {showModal ? (
@@ -159,10 +164,10 @@ return (
                     <span className="text-gray-400">{data.price / 10 ** 24} Ⓝ</span>
                   </div>
                   <hr />
-                  <div className="flex justify-between text-black text-sm pt-2 px-4">
+                 {/*  <div className="flex justify-between text-black text-sm pt-2 px-4">
                     <span>Your Balance</span>
                     <span className="text-gray-400">{}</span>
-                  </div>
+                  </div> */}
                   {/* <div className="flex justify-between text-black text-sm pt-2 px-4">
                     <span>Service Fee (2.5%)</span>
                     <span className="text-gray-400">abc</span>
@@ -292,7 +297,7 @@ return (
                       {/* {{this.sharing.url}} */}
                     </div>
                     <div className="link-copy-btn" onClick={copyUrl}>
-                      <div class="m-auto">copy</div>
+                      <div className="m-auto">copy</div>
                     </div>
                   </div>
                 </div>
@@ -304,7 +309,7 @@ return (
     ) : null}
 
     {/* left container */}
-    <div className="flex flex-col md:col-span-3 justify-center mx-10">
+    <div className="flex flex-col md:col-span-3 justify-end ml-20 xl:ml:28">
       <div className="flex gap-x-4">
         <span>
           <img
@@ -330,7 +335,7 @@ return (
     </div>
 
     {/* right container */}
-    <div class="flex md:col-span-2 justify-center md:min-w-[450px]">
+    <div className="flex md:col-span-2 justify-center md:min-w-[450px]">
       <div className="flex flex-col w-full">
         <div className="text-orange-600 font-bold text-4xl pb-6 pt-10">
           {`${(data.price / 10 ** 24).toFixed(2)} Ⓝ`}
@@ -526,35 +531,35 @@ return (
     </div>
   </div>
 
-  {/* Description part */}
-  <div className="grid grid-cols-1 md:grid-cols-1 mx-4 text-white pt-20">
-    <div className="flex justify-center p-2 rounded-full m-auto font-medium bg-white w-40 text-orange-600">
-      Description
+    {/* Description part */}
+    <div className="grid grid-cols-1 md:grid-cols-1 mx-4 text-white pt-20">
+      <div className="flex justify-center p-2 rounded-full m-auto font-medium bg-white w-40 text-orange-600">
+        Description
+      </div>
+
+      <div className="flex flex-col gap-y-8 justify-center bg-white rounded-lg text-black my-6 p-20 mx-1 lg:mx-48">
+        <div>
+          <span className="font-medium text-lg">Description</span>
+          <div className="font-medium text-md text-gray-500 pt-8">
+            {data.metadata.description}
+          </div>
+        </div>
+
+        <div>
+          <span className="font-medium">Token Address</span>
+          <div className="font-medium text-md text-gray-500 pt-2">
+            {data.contract_id}
+          </div>
+        </div>
+
+        <div>
+          <span className="font-medium">Token Id</span>
+          <div className="font-medium text-md text-gray-500 pt-2">
+            {data.tokenId}
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div className="flex flex-col gap-y-8 justify-center bg-white rounded-lg text-black my-6 p-20 mx-1 lg:mx-48">
-      <div>
-        <span className="font-medium text-lg">Description</span>
-        <div className="font-medium text-md text-gray-500 pt-8">
-          {data.metadata.description}
-        </div>
-      </div>
-
-      <div>
-        <span className="font-medium">Token Address</span>
-        <div className="font-medium text-md text-gray-500 pt-2">
-          {data.contract_id}
-        </div>
-      </div>
-
-      <div>
-        <span className="font-medium">Token Id</span>
-        <div className="font-medium text-md text-gray-500 pt-2">
-          {data.tokenId}
-        </div>
-      </div>
-    </div>
-  </div>
   </div>
 </>
 )

@@ -25,7 +25,7 @@ export const MainProfile = () => {
   const [currentComponent, setCurrentComponent] = useState(1);
 
   return (
-    <div className="lg:mx-16 mt-4 mx-0">
+    <div className="mt-4 mx-20 min-[1920px]:mx-48">
       <div>
         <div>
           <CoverProfile />

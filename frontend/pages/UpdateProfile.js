@@ -504,7 +504,7 @@ export const UpdateProfile = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-1 body-container mx-6 lg:mx-56">
+      <div className="grid grid-cols-1 md:grid-cols-1 body-container mx-56 min-[1920px]:mx-96">
         <div className="my-12 text-5xl font-semibold">Edit your profile</div>
 
         <div className="grid bg-white rounded-lg my-6 p-10 ">

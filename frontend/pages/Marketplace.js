@@ -173,7 +173,7 @@ function Marketplace() {
   
 
   return (
-    <div className='pt-10 mx-28'>
+    <div className='pt-10 mx-28 min-[1920px]:mx-48'>
 
         <div className="grid">
         <div className="flex my-16 items-center">
