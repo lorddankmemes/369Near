@@ -1,11 +1,10 @@
-import React, {useState, useEffect, useCallback} from 'react'
-import { images } from '../constant';
-import { useLocation } from 'react-router-dom';
-import {useNavigate} from "react-router-dom"
+import React, { useState, useEffect, useCallback } from "react";
+import { images } from "../constant";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useWallet } from "../hooks/useWallet";
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
-
-import { useWallet } from '../hooks/useWallet';
-
+import { useProfile } from "../hooks/useProfile";
 
 export const SingleCreation = ({tokenId}) => {
 
@@ -18,14 +17,10 @@ export const SingleCreation = ({tokenId}) => {
     const [modalUpdatePrice, setModalUpdatePrice] = useState(false);
     const [selectedNFT, setSelectedNFT] = useState(null)
     const [newPrice, setNewPrice] = useState()
-
+    const { avatar } = useProfile();
     const { accountId, callMethod} = useWallet()
-
     const [hasMinted, setHasMinted] = useState(false)
     const [hasListed, setHasListed] = useState(false)
-
-    const [buttonDisabled, setButtonDisabled] = useState(false);
-    const [buttonText, setButtonText] = useState('Mint NFT Series');
     
     const isMinting = async () => {
       try {
@@ -291,7 +286,7 @@ export const SingleCreation = ({tokenId}) => {
                 <div className="flex flex-col md:col-span-3 justify-center mx-10">
                     <div className='flex gap-x-4'>
                         <span><img src={val.metadata.media} className="creator-size"/></span>
-                        <span className='font-extrabold pt-2 text-gray-400'>{val.metadata.title}</span>
+                        <span className='font-extrabold pt-2 text-gray-400'>{val.owner_id}</span>
                     </div>
                     <div>
                         <div className='text-5xl font-bold pt-4 pb-10'>{val.metadata.title}</div> 
@@ -302,7 +297,7 @@ export const SingleCreation = ({tokenId}) => {
                 </div>
                 
 
-                <div class="flex md:col-span-2 justify-center md:min-w-[450px]">
+               {/*  <div class="flex md:col-span-2 justify-center md:min-w-[450px]">
                     <div className='flex flex-col w-full'>
                         <div className='text-orange-600 font-bold text-4xl pb-6 pt-10'>0.005ETH</div>
                         <div className='text-gray-500 pb-4 text-medium'>$60.5905 (Edition 1 of 1)</div>
@@ -310,9 +305,9 @@ export const SingleCreation = ({tokenId}) => {
                             <button className='button-slide rounded-full h-10 px-8' onClick={() => setCurrentComponent('A')}>Info</button>
                             <button className='button-slide rounded-full h-10 px-4' onClick={() => setCurrentComponent('B')}>Owners</button>
                             <button className='button-slide rounded-full h-10 px-4' onClick={() => setCurrentComponent('C')}>History</button>
-                        </div>
+                        </div> */}
 
-                        <div className='py-10 my-4 bg-gray-200 text-black rounded-xl'>
+                        {/* <div className='py-10 my-4 bg-gray-200 text-black rounded-xl'>
                             {currentComponent === 'A' ? 
                                 <div className='grid gap-6 px-6'>
                                     <div className='flex gap-x-4'>
@@ -324,7 +319,7 @@ export const SingleCreation = ({tokenId}) => {
                                             />
                                         </span>
                                         <span>Owner
-                                            <div className='font-extrabold w-80 block truncate '>{val.metadata.title}</div>
+                                            <div className='font-extrabold w-80 block truncate '>{val.owner_id}</div>
                                         </span>
                                     </div>
                                     <div className='flex gap-x-4'>
@@ -336,7 +331,7 @@ export const SingleCreation = ({tokenId}) => {
                                             />
                                         </span>
                                         <span>Creator
-                                                <div className='font-extrabold w-80 block truncate '>{val.metadata.title}</div>
+                                                <div className='font-extrabold w-80 block truncate '>{val.owner_id}</div>
                                         </span>
                                     </div>
                                     <div className='bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg'>20.00% of sales will be paid to the original artist</div>
@@ -355,7 +350,156 @@ export const SingleCreation = ({tokenId}) => {
                                 </div>
                             : null}
 
-                        </div>
+                        </div> */}
+                    <div class="flex md:col-span-2 justify-center md:min-w-[450px]">
+                        <div className="flex flex-col w-full">
+                            <div className="text-orange-600 font-bold text-4xl pb-6 pt-10">
+                            Not listed
+                            </div>
+                            {/* <div className="text-gray-500 pb-4 text-medium">
+                                $60.5905 (Edition 1 of 1)
+                            </div> */}
+                            <div className="bg-white flex flex-row text-black  rounded-full font-semibold items-center ">
+                                <div
+                                className={`rounded-full px-4 py-2 cursor-pointer  ${
+                                    currentComponent === "A" ? "bg-orange-600" : "text-gray-500"
+                                }`}
+                                onClick={() => setCurrentComponent("A")}
+                                >
+                                Info
+                                </div>
+                                <div
+                                className={`rounded-full px-4 py-2 cursor-pointer ${
+                                    currentComponent === "B" ? "bg-orange-600" : "text-gray-500"
+                                }`}
+                                onClick={() => setCurrentComponent("B")}
+                                >
+                                Owners
+                                </div>
+                                <div
+                                className={`rounded-full px-4 py-2 cursor-pointer ${
+                                    currentComponent === "C" ? "bg-orange-600" : "text-gray-500"
+                                }`}
+                                onClick={() => setCurrentComponent("C")}
+                                >
+                                History
+                                </div>
+                            </div>
+
+                            <div className="py-10 my-4 bg-gray-200 text-black rounded-xl font-medium">
+                                {currentComponent === "A" ? (
+                                <div className="grid gap-6 px-6">
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={avatar}
+                                        className="creator-size"
+                                        onClick={() => handleCreatorClick(val)}
+                                        />
+                                    </span>
+                                    <span>
+                                        Owner
+                                        <div className="font-extrabold w-80 block truncate ">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={avatar}
+                                        className="creator-size"
+                                        onClick={() => handleOwnerClick(data)}
+                                        />
+                                    </span>
+                                    <span>
+                                        Creator
+                                        <div className="font-extrabold w-80 block truncate ">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                    <div className="bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg">
+                                    20.00% of sales will be paid to the original artist
+                                    </div>
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={val.metadata.media}
+                                        className="creator-size"
+                                        onClick={() => handleCollectionClick(data)}
+                                        />
+                                    </span>
+                                    <span>
+                                        Collection (ERC721)
+                                        <div className="font-extrabold">
+                                        {
+                                            val.token_id
+                                        }
+                                        </div>
+                                    </span>
+                                    </div>
+                                </div>
+                                ) : null}
+
+                                {currentComponent === "B" ? (
+                                <div className="grid gap-6 px-6">
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={
+                                            val.metadata.media
+                                        }
+                                        className="creator-size"
+                                        />
+                                    </span>
+                                    <span>
+                                        Is selling for 0.001 ETH
+                                        <div className="font-extrabold">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                </div>
+                                ) : null}
+
+                                {currentComponent === "C" ? (
+                                <div className="grid gap-6 px-6">
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={
+                                            val.metadata.media
+                                        }
+                                        className="creator-size"
+                                        />
+                                    </span>
+                                    <span>
+                                        Is selling for 0.001 ETH
+                                        <div className="font-extrabold">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={
+                                            val.metadata.media
+                                        }
+                                        className="creator-size"
+                                        />
+                                    </span>
+                                    <span>
+                                        Is selling for 0.001 ETH
+                                        <div className="font-extrabold">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                </div>
+                                ) : null}
+                            </div>
 
                         { accountId ?
                             <>
@@ -403,8 +547,8 @@ export const SingleCreation = ({tokenId}) => {
                             </>
                         }
 
+                        </div>
                     </div>
-                </div>
 
 
                 <div className="flex lg:col-span-1 justify-center pt-10 md:pt-0">

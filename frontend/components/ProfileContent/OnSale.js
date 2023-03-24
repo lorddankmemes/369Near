@@ -1,10 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useWallet } from '../../hooks/useWallet';
+import { useNavigate } from "react-router-dom";
 
-// const nft  = {
-//   contractId,
-//   metadata
-// }
 export const OnSale = () => {
   const { accountId, viewMethod} = useWallet()
 
@@ -12,6 +9,7 @@ export const OnSale = () => {
   const [nfts, setNfts] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const [isNftsAdded, setIsNftsAdded] = useState(false)
+  const [selectedNFT, setSelectedNFT] = useState(null);
 
   /* useEffect(() => {
 
@@ -96,7 +94,8 @@ export const OnSale = () => {
           contract_id: sale.nft_contract_id,
           metadata: filteredTokens[0].metadata,
           tokenId: filteredTokens[0].token_id,
-          price: sale.sale_conditions
+          price: sale.sale_conditions,
+          owner_id: sale.owner_id,
         });
       }
     }
@@ -109,6 +108,14 @@ export const OnSale = () => {
   }
 }, [accountId, sales, isLoaded]);
 
+const navigate = useNavigate();
+
+const handleNFTClick = (data) => {
+  setSelectedNFT(data);
+  navigate(`/marketplace/${data.tokenId}`, {
+    state: { data },
+  });
+};
 
 
   return (
@@ -118,7 +125,7 @@ export const OnSale = () => {
          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
           { 
-            nfts.map((val,key) => {
+            nfts.map((data,key) => {
               return (
                 <div
                 key={key}
@@ -127,17 +134,18 @@ export const OnSale = () => {
                 <div className="rounded-lg">
                   <div
                     /* onClick={() => handleNFTClick(data)} */
+                    onClick={() => handleNFTClick(data)}
                     className="bg-white rounded-lg"
                     >
                       <img
-                        src={val.metadata.media}
+                        src={data.metadata.media}
                         className="object-cover object-center h-40 md:h-60 w-full rounded-lg cursor-pointer"
                       />
                   </div>
                 </div>
   
                 <div className="py-4 text-lg font-semibold">
-                  {val.metadata.title}
+                  {data.metadata.title}
                 </div>
   
                 <div className="flex justify-between">
@@ -146,24 +154,24 @@ export const OnSale = () => {
                     NEP171
                     </span>
                     <p className="text-sm font-semibold">
-                    Edition {val.quantity} /{" "}
-                      {val.copies}
+                    Edition {data.metadata.quantity} /{" "}
+                      {data.copies}
                     </p>
                   </div>
                   <div className="flex">
                     <img
                      /*  onClick={() => handleCollectionClick(data)} */
-                      src={val.metadata.media}
+                      src={data.metadata.media}
                       className="market-size z-10 cursor-pointer"
                     />
                     <img
                       /* onClick={() => handleCreatorClick(data)} */
-                      src={val.metadata.media}
+                      src={data.metadata.media}
                       className="market1-size z-20 cursor-pointer"
                     />
                     <img
                      /*  onClick={() => handleOwnerClick(data)} */
-                      src={val.metadata.media}
+                      src={data.metadata.media}
                       className="market2-size z-30 cursor-pointer"
                     />
                   </div>
@@ -174,7 +182,7 @@ export const OnSale = () => {
                 <p className="text-sm text-gray-400">List Price</p>
                   <span className="text-md font-semibold">
                   {`${
-                    val.price / 10 ** 24
+                    data.price / 10 ** 24
                   } Ⓝ`}
                   </span>
               </div>

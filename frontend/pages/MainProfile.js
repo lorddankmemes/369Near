@@ -21,14 +21,38 @@ export const MainProfile = () => {
   const { username } = useProfile();
   const { avatar } = useProfile();
 
-  /*  const padFunction = (number) => {
-        let string = String(number)
-        let sliced = string.slice(-4);
-        let mask = String(sliced).padStart(string.length, ".")
-        return mask;
-      } */
+  const [profile, setProfile] = useState({
+    avatar: "",
+    email: "",
+    firstname: "",
+    lastname: "",
+    bio: "",
+    twitter: "",
+    website: "",
+    telegram: "",
+    instagram: "",
+    linkedin: "",
+    dribble: "",
+    youtube: "",
+  });
 
   const [currentComponent, setCurrentComponent] = useState(1);
+
+  const getProfile = async (username) => {
+    const res = await viewMethod(
+      process.env.CONTRACT_PROFILE,
+      "getUserInfo",
+      {avatar, username, bio, twitter }
+    );
+
+    if (res) {
+      if(res[2]) {
+        let response = await fetch(`${process.env.INFURA_GATEWAY}/${res[2]}`)
+        let data = await response.json()
+        setProfile(data)
+      }
+    }
+  };
 
   return (
     <div className="lg:mx-16 mt-4 mx-0">
