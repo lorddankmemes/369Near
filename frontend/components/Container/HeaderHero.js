@@ -1,9 +1,46 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { images } from '../../constant'
-import {useNavigate} from "react-router-dom"
+import {useNavigate} from 'react-router-dom'
+import { useWallet } from '../../hooks/useWallet';
+
 
 function HeaderHero() {
   const navigate = useNavigate();
+
+  const {accountId, signIn} = useWallet();
+  const [loaded, setLoaded] = useState(false)
+  
+  useEffect(() => {
+    if(accountId) { console.log(accountId); setLoaded(true)}
+  }, [accountId, loaded])
+
+
+  const handleClickCreate = async () => {
+    let signedIn = false;
+    if (!accountId) {
+      signedIn = await signIn(process.env.CONTRACT_NAME || "seed.bonebon.testnet");
+    } 
+    navigate("/Create");
+    
+    if (signedIn || accountId) {
+      navigate("/Create");
+    }
+  }
+
+
+/* onst [isSignedIn, setIsSignedIn] = useState(false);
+const handleClickCreate = async () => {
+    if (!isSignedIn) {
+        try {
+          await signIn(process.env.CONTRACT_NAME || "seed.bonebon.testnet");
+          setIsSignedIn(true);
+        } catch (error) {
+          console.log("Error occured during signIn:", error);
+          return;
+        }
+    } 
+    if(isSignedIn) navigate("/Create");
+  } */
 
   return (
     <>
@@ -18,7 +55,7 @@ function HeaderHero() {
 
             <div className='flex font-light text-sm my-8 gap-4'>
               <button className="py-3 px-6" onClick={()=>navigate("/Marketplace")}>Explore</button>
-              <button className="py-3 px-6" onClick={()=>navigate("/ConnectWallet")}>Create</button>
+              <button className="py-3 px-6" onClick={handleClickCreate}>Create</button>
             </div>
 
         </div>

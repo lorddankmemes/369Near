@@ -1,9 +1,5 @@
 [
     {
-      "value": "",
-      "label": "Filter & Sort"
-    },
-    {
       "value": "recent",
       "label": "Recently added"
     },

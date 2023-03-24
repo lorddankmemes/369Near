@@ -91,11 +91,11 @@ const handleNFTClick = (data) => {
   return (
     <>
     <div>
-          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 my-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 my-16">
             
           {auction.result.map((data) => (
       
-              <div class="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
+              <div className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
                 <div
                   onClick={() => handleNFTClick(data)} 
                   className='bg-white rounded-lg'
@@ -107,14 +107,14 @@ const handleNFTClick = (data) => {
 
                 <div className='text-md text-gray-400'>{data.auctions_of_collectible.collectible_type.toUpperCase()}</div>
 
-                <p class="font-semibold">Edition { data.quantity } / { data.quantity}</p>
+                <p className="font-semibold">Edition { data.quantity } / { data.quantity}</p>
 
                 <hr className='my-4'/>
 
-                <p class="text-md text-gray-400 ">Starting Price</p>
+                <p className="text-md text-gray-400 ">Starting Price</p>
                 <span className='font-semibold'>{data.starting_price}</span>
 
-                <p class="text-md text-gray-400 pt-4">Ending In</p>
+                <p className="text-md text-gray-400 pt-4">Ending In</p>
                 {timer}
               </div>
 

@@ -9,7 +9,7 @@ function FeaturedCreators() {
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 my-16 mx-20 lg:min-h-[40%]">
 
           {artist.result.map((data, index) => (
-           <div className="flex flex-col md:col-span-1 bg-white text-black border-2 border-orange-600 text-center rounded-xl">
+           <div key={index} className="flex flex-col md:col-span-1 bg-white text-black border-2 border-orange-600 text-center rounded-xl">
 
               <div>
                 <img src={data.curated_info_of_user.cover_photo_path} className="w-full h-28 xl:max-h-44 rounded-t-xl"></img>
@@ -17,7 +17,7 @@ function FeaturedCreators() {
 
               <div className="relative">
                 <div className="bg-avatar absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
-                <img src={data.curated_info_of_user.profile_photo_path} class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 avatar-size"></img>
+                <img src={data.curated_info_of_user.profile_photo_path} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 avatar-size"></img>
               </div>
 
               <div>           

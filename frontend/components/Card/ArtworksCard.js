@@ -4,10 +4,10 @@ import artwork from "../../data/landing/artwork";
 function ArtworksCard() {
   return (
     <div>
-    <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-14 my-16">
+    <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-14 my-16">
 
        {artwork.rows.map((data, index) => (
-         <div class="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
+         <div className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
            <div>      
             <img className="object-cover object-center h-60 w-96 rounded-lg" src={data.featured_collectible_info.alternative_media_path} />
           </div>

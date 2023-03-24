@@ -1,147 +1,294 @@
-import React, { useRef, useState, useEffect } from 'react'
-import auction from '../data/auction.json'
-import {useNavigate} from "react-router-dom"
-import SliderButton from '../components/SliderButton/SliderButton'
-import Filter from '../components/SearchFilter/Filter'
-
+import React, { useRef, useState, useEffect, useRef } from "react";
+import auction from "../data/auction.json";
+import { useNavigate } from "react-router-dom";
+import SliderButton from "../components/SliderButton/SliderButton";
+import { images } from "../constant";
+import AuctionCountdown from "../components/Container/Countdown";
+import slideOption from "../data/filter/slideOption.json";
+import LazyLoad from "react-lazyload";
+// import { BsChevronDown } from "react-icons/io";
+import { BsChevronDown } from "react-icons/bs";
 
 function Auctions() {
-
   const Ref = useRef(null);
-  
-  const [timer, setTimer] = useState('00:00:00');
 
-  const getTimeRemaining = (e) => {
-    const total = Date.parse(e) - Date.parse(new Date());
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-    return {
-        total, hours, minutes, seconds
-    };
-}
+  //filter function
+  const dropdownAuction = [
+    {
+      value: "recent",
+      label: "Recently added",
+    },
+    {
+      value: "highest",
+      label: "Highest Bid",
+    },
+    {
+      value: "lowest",
+      label: "Lowest Bid",
+    },
+  ];
 
-const startTimer = (e) => {
-  let { total, hours, minutes, seconds } 
-              = getTimeRemaining(e);
-  if (total >= 0) {
+  const [open, setOpen] = useState(false);
+  const onToggleDropdown = () => {
+    setOpen(!open);
+  };
 
-      // update the timer
-      // check if less than 10 then we need to 
-      // add '0' at the beginning of the variable
-      setTimer(
-          (hours > 9 ? hours : '0' + hours) + ':' +
-          (minutes > 9 ? minutes : '0' + minutes) + ':'
-          + (seconds > 9 ? seconds : '0' + seconds)
-      )
-  }
-}
+  const handleOptionSelection = (value) => {
+    setFilterOption(value);
+    setOpen(false);
+  };
 
+  //slider button logic
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-const clearTimer = (e) => {
-  
-  // If you adjust it you should also need to
-  // adjust the Endtime formula we are about
-  // to code next    
-  setTimer('00:00:10');
+  const handleNext = () => {
+    setCurrentIndex(
+      currentIndex === slideOption.length - 5 ? currentIndex : currentIndex + 5
+    );
+  };
 
-  // If you try to remove this line the 
-  // updating of timer Variable will be
-  // after 1000ms or 1sec
-  if (Ref.current) clearInterval(Ref.current);
-  const id = setInterval(() => {
-      startTimer(e);
-  }, 1000)
-  Ref.current = id;
-}
+  const handlePrev = () => {
+    setCurrentIndex(currentIndex === 0 ? 0 : currentIndex - 5);
+  };
 
-const getDeadTime = () => {
-  let deadline = new Date();
+  //filter function
+  const [filterOption, setFilterOption] = useState("");
+  const [slideSelected, setSlideSelected] = useState(slideOption[0].value);
 
-  // This is where you need to adjust if 
-  // you entend to add more time
-  deadline.setSeconds(deadline.getSeconds() + 10);
-  return deadline;
-}
+  const filteredData = {
+    //for filter function
+    lowest: (data) => data.sort((a, b) => a.reserved_price - b.reserved_price),
+    highest: (data) => data.sort((a, b) => b.reserved_price - a.reserved_price),
+    recent: (data) =>
+      data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
 
-// We can use useEffect so that when the component
-// mount the timer will start as soon as possible
+    //for filter using slider button
+    collectibles: (data) =>
+      data.filter(
+        (d) => d.auctions_of_collectible.collectible_category === "Collectibles"
+      ),
+    membership: (data) =>
+      data.filter(
+        (d) => d.auctions_of_collectible.collectible_category === "Membership"
+      ),
+    arts: (data) =>
+      data.filter(
+        (d) => d.auctions_of_collectible.collectible_category === "Art"
+      ),
+    ticketing: (data) =>
+      data.filter(
+        (d) => d.auctions_of_collectible.collectible_category === "Ticketing"
+      ),
+    animation: (data) =>
+      data.filter(
+        (d) => d.auctions_of_collectible.collectible_category === "Animation"
+      ),
+    IrlArt: (data) =>
+      data.filter(
+        (d) => d.auctions_of_collectible.collectible_category === "IrlArt"
+      ),
+  };
 
-// We put empty array to act as componentDid
-// mount only
-useEffect(() => {
-  clearTimer(getDeadTime());
-}, []);
+  const filteredNft = () => {
+    const data = auction.result;
 
-// Another way to call the clearTimer() to start
-// the countdown is via action event from the
-// button first we create function to be called
-// by the button
-const onClickReset = () => {
-  clearTimer(getDeadTime());
-}
+    if (filteredData[filterOption]) {
+      return filteredData[filterOption](data);
+    } else if (filteredData[slideSelected]) {
+      return filteredData[slideSelected](data);
+    } else {
+      return data;
+    }
+  };
 
-const [selectedNFT, setSelectedNFT] = useState(null)
+  //navigate to the respective page based on data
+  const [selectedNFT, setSelectedNFT] = useState(null);
+  const navigate = useNavigate();
 
-const navigate = useNavigate();
+  const handleNFTClick = (data) => {
+    setSelectedNFT(data);
+    navigate(`/auctions/${data.auctions_of_collectible.collectible_uuid}`, {
+      state: { data },
+    });
+  };
 
-const handleNFTClick = (data) => {
-  setSelectedNFT(data)
-  navigate(`/auctions/${data.auctions_of_collectible.collectible_uuid}`)
-}
+  const handleCollectionClick = (data) => {
+    setSelectedNFT(data);
+    navigate(`/auction/${data.auctions_of_collectible.collectible_uuid}`, {
+      state: { data },
+    });
+  };
+
+  const handleCreatorClick = (data) => {
+    setSelectedNFT(data);
+    navigate(
+      `/profile/${data.auctions_of_collectible.collectibles_user.user_public_address}`,
+      { state: { data, type: "auction" } }
+    );
+  };
+
+  const handleOwnerClick = (data) => {
+    setSelectedNFT(data);
+    navigate(`/profile/${data.user_public_address}`, { state: { data } });
+  };
 
   return (
     <>
-    <div className='body-container'>
-     <div className='font-bold pt-10 text-3xl'>Auctions</div>
-    <SliderButton />
-    <Filter />
-    <div>
+      <div className="body-container">
+        <div className="font-bold pt-10 text-3xl">Auctions</div>
+
+        <div className="grid">
+          <div className="flex my-16 items-center">
+            <div
+              className="cursor-pointer"
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+            >
+              <img src={images.arrow} className="" />
+            </div>
+            <div className="flex mx-4 gap-4 overflow-x-hidden w-full justify-around">
+              {slideOption
+                .slice(currentIndex, currentIndex + 5)
+                .map((option, index) => (
+                  <button
+                    key={index}
+                    className={`w-[18%] flex-nowrap flex-none rounded-full text-center py-3 border-2 ${
+                      slideSelected === option.value
+                        ? "bg-orange-600 text-white border-orange-600"
+                        : "bg-white text-orange-600 border-orange-600 hover:bg-orange-600 hover:text-white"
+                    } cursor-pointer`}
+                    onClick={() => {
+                      setSlideSelected(option.value);
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={handleNext}
+              disabled={currentIndex === slideOption.length - 5}
+            >
+              <img className="rotate-180 " src={images.arrow} />
+            </div>
+          </div>
+        </div>
+
+        {/* filter function */}
+        <div className="flex justify-start items-center w-full mx-auto ">
+          <div onClick={() => onToggleDropdown()}>
+            <div className="text-black text-sm font-medium border-2 bg-white border-orange-600 rounded-xl px-6 py-4 w-56 flex justify-between items-center cursor-pointer">
+              {filterOption
+                ? dropdownAuction.find(
+                    (option) => option.value === filterOption
+                  ).label
+                : "Filter & Sort"}
+              <BsChevronDown
+                className={`${
+                  open ? "rotate-180 transform" : ""
+                }  text-black text-xl`}
+              />
+            </div>
+
+            {open ? (
+              <div
+                id="dropdownAvatar"
+                className="z-20 w-56 absolute mt-4 bg-white text-black rounded-xl"
+              >
+                <ul className="flex flex-col p-6 text-sm text-black">
+                  <div className="cursor-default text-gray-500">Sort by</div>
+                  {dropdownAuction.map((option, i) => {
+                    return (
+                      <li className="flex pt-2 cursor-pointer" key={i}>
+                        <a
+                          onClick={() => handleOptionSelection(option.value)}
+                          className="block pt-1"
+                        >
+                          {option.label}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+
+        <div>
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-14 my-16">
-            
-          {auction.result.map((data) => (
-      
-              <div className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
+            {filteredNft().map((data, i) => (
+              <div
+                key={i}
+                className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative"
+              >
                 <div
-                  onClick={() => handleNFTClick(data)} 
-                  className='bg-white rounded-lg'
+                  onClick={() => handleNFTClick(data)}
+                  className="bg-white rounded-lg"
                 >
-                  <img className="object-cover object-center h-60 w-96 rounded-lg" src={data.auctions_of_collectible.ipfs_media_path} />
+                  <LazyLoad placeholder={<img src={images.loadNft} />}>
+                    <img
+                      className="object-cover object-center h-60 w-96 rounded-lg"
+                      src={data.auctions_of_collectible.ipfs_media_path}
+                    />
+                  </LazyLoad>
                 </div>
 
-                <div className='py-4 text-lg font-semibold'>{data.auctions_of_collectible.collectible_name}</div>
+                <div className="py-4 text-lg font-semibold">
+                  {data.auctions_of_collectible.collectible_name}
+                </div>
 
                 <div className="flex justify-between">
                   <div>
-                  <div className='text-md text-gray-400'>{data.auctions_of_collectible.collectible_type.toUpperCase()}</div>
-                    <p className="text-sm font-semibold">
-                      <p className="font-semibold">Edition { data.quantity } / { data.quantity}</p>
-                    </p>
+                    <div className="text-md text-gray-400">
+                      {data.auctions_of_collectible.collectible_type.toUpperCase()}
+                    </div>
+                    <div className="text-sm font-semibold">
+                      <span className="font-semibold">
+                        Edition {data.quantity} / {data.quantity}
+                      </span>
+                    </div>
                   </div>
-                  <div className='flex'>
-                      <img src={data.auctions_of_collectible.ipfs_media_path} className="market-size z-10"/> 
-                      <img src={data.auctions_of_collectible.ipfs_media_path} className="market1-size z-20"/> 
-                      <img src={data.auctions_of_collectible.ipfs_media_path} className="market2-size z-30"/> 
+                  <div className="flex">
+                    <img
+                      onClick={() => handleCollectionClick(data)}
+                      src={`https://ipfs.io/ipfs/${data.auctions_of_collectible.collectible_collection.tokenLogo}`}
+                      className="market-size z-10 cursor-pointer"
+                    />
+                    <img
+                      onClick={() => handleCreatorClick(data)}
+                      src={`https://ipfs.io/ipfs/${data.auctions_of_collectible.collectibles_user.profile_photo_path}`}
+                      className="market1-size z-20 cursor-pointer"
+                    />
+                    <img
+                      onClick={() => handleOwnerClick(data)}
+                      src={`https://ipfs.io/ipfs/${data.auctions_of_collectible.collectibles_user.profile_photo_path}`}
+                      className="market2-size z-30 cursor-pointer"
+                    />
                   </div>
                 </div>
 
-
-                <hr className='my-4'/>
+                <hr className="my-4" />
 
                 <p className="text-md text-gray-400 ">Starting Price</p>
-                <span className='font-semibold'>{data.starting_price}</span>
+                <span className="font-semibold">{`${
+                  data.starting_price / 10 ** 18
+                } Ⓝ`}</span>
 
                 <p className="text-md text-gray-400 pt-4">Ending In</p>
-                {timer}
+                {/* {new Date(data.auction_end).toLocaleString()} */}
+                {/* <div>{days}d {hours}h {minutes}m {seconds}s</div> */}
+                <AuctionCountdown data={data} />
               </div>
-
-          ))}
+            ))}
           </div>
-          </div>
-    </div>
+        </div>
+      </div>
     </>
-  )
+  );
 }
 
-
-export default Auctions
+export default Auctions;

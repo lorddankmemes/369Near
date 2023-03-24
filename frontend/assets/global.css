@@ -17,6 +17,7 @@ body {
   padding: 1em 6em;
 }
 
+
 @media (min-width: 1900px) {
   .body-container {
     padding: 1em 12em;
@@ -38,6 +39,22 @@ footer {
   padding: 2em 6em;
 }
 
+.community-icon-div {
+  width: 25px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.rounded-liked {
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+  width: 50px;
+  border-top-left-radius: 120%;
+  border-top-right-radius: 120%;
+  border-bottom-right-radius: 130%;
+  border-bottom-left-radius: 130%;
+  border: 2px solid #f05124;
+}
 
 @font-face {
   font-family: 'Inter';
@@ -341,6 +358,12 @@ button:hover, button:focus {
   color: black;
 }
 
+.button-slide:active {
+  background-color: #f05124;
+  color: black;
+}
+
+
 .button-profile {
   background-color: rgba(255, 255, 255, 0);
   color:rgb(255, 255, 255);
@@ -358,6 +381,20 @@ button:hover, button:focus {
   color: rgb(255, 255, 255);
 }
 
+.button-glass {
+	cursor: pointer;
+	background: #f4f5f7;
+	border: none;
+	border-radius: 10px;
+	box-shadow: -5px -5px 15px rgb(250, 250, 250), 5px 5px 15px rgb(211, 209, 209), inset 5px 5px 10px rgb(236, 236, 236), inset -5px -5px 10px rgb(240, 238, 238);
+	color: #222;
+	font-size: 16px;
+}
+
+.button-glass:hover {
+	box-shadow: -5px -5px 15px rgb(245, 245, 245), 5px 5px 15px rgb(216, 216, 216), inset 5px 5px 10px rgb(221, 220, 220), inset -5px -5px 10px rgb(235, 233, 233);
+	transition: 500ms;
+}
 .bg-avatar {
   background-color: rgb(255, 255, 255);
   height: 95px;
@@ -395,7 +432,8 @@ button:hover, button:focus {
    border-bottom-right-radius: 130%;
    border-bottom-left-radius: 130%;
    background-color: #ffffff;
-   
+   padding: 2px;
+
  }
 
  .market-size {
@@ -451,7 +489,7 @@ button:hover, button:focus {
 input:checked ~ .dot {
   transform: translateX(100%);
   background-color: #48bb78;
-} 
+}
 
 
 @media (prefers-color-scheme: dark) {
@@ -516,4 +554,19 @@ main.please-wait .loader:after{
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+
+.slider {
+  transition: transform 0.5s ease-in-out;
+}
+
+.slider-slide {
+  flex: 0 0 100%;
+}
+
+.slider-navigator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
