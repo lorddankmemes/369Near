@@ -427,9 +427,9 @@ export const SingleCollectible = ({tokenId}) => {
                             <>
                                 <div 
                                     onClick={isPurchasing}  
-                                    className='bg-white py-2 text-black rounded-lg text-center font-semibold'
+                                    className='bg-white py-2 text-black rounded-lg text-center font-semibold cursor-pointer'
                                     >
-                                    Buy 1 for 0.1N
+                                    Buy
                                 </div>
                             </>
                         }

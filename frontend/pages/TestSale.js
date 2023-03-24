@@ -147,12 +147,13 @@ export const TestSale = () => {
    }, [accountId, saleItem, isLoaded]) */
 
    useEffect(() => {
-    const getSaleMarketplace = async () => {
-      const contractNftSale = ['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet'];
+    const getSaleMarketplace = async (contractNftSale) => {
       const sales = [];
       for (let i = 0; i < contractNftSale.length; i++) {
         const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_sales_by_nft_contract_id', { nft_contract_id: contractNftSale[i], from_index:"0", limit:100 });
-        sales.push(...res);
+        if(res) {
+          sales.push(...res);
+        }
       }
       setSales(sales);
       console.log(sales)
@@ -176,7 +177,7 @@ export const TestSale = () => {
     };
     
     if (accountId || !isLoaded) {
-      getSaleMarketplace();
+      getSaleMarketplace(['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet']);
     }
   }, [accountId, isLoaded]);
   

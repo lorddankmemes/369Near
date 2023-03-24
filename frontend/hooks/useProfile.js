@@ -37,6 +37,9 @@ export const ProfileProvider = ({ children }) => {
             let response = await fetch(`${process.env.INFURA_GATEWAY}/${res[2]}`)
             let data = await response.json()
             setProfile(data)
+
+            let avatar = data.avatar.split("://")
+            setAvatar(`${process.env.INFURA_GATEWAY}/${avatar[1]}`)
           }
         }
       };

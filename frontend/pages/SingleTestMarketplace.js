@@ -372,9 +372,9 @@ export const SingleTestMarketplace = (props) => {
 
           <div
             onClick={() => setShowModal(true)}
-            className="bg-white py-2 text-black rounded-lg text-center font-semibold"
+            className="bg-white py-4 text-black rounded-lg text-center font-semibold cursor-pointer"
           >
-            Buy 1 for 0.001 ETH
+            Buy
           </div>
         </div>
       </div>
