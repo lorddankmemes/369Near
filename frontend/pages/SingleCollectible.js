@@ -168,7 +168,7 @@ export const SingleCollectible = ({tokenId}) => {
 
   return (
     <>
-    <div className='pl-24'>
+    <div className='body-container'>
         <div className="grid grid-cols-1 md:grid-cols-6 mx-4 content-center text-white pt-20">
 
             {/* modal for checkout */}

@@ -383,7 +383,7 @@ const onSubmitOnAuction = async (e) => {
 
   return (
     <>
-      <div className="body-container">
+      <div className="body-container ">
         {showModal ? (
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div
@@ -489,7 +489,7 @@ const onSubmitOnAuction = async (e) => {
           <></>
         )}
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 pt-28 pb-12 mx-6 lg:mx-28">
+        <div className="grid grid-cols-2 lg:grid-cols-4 pt-28 pb-12 ml-32 min-[1920px]:ml-48 min-[1920px]:mr-20 min-[1920px]:mt-20">
           <div className="col-span-4 lg:col-span-2">
             <Link
               to="/create"
@@ -531,9 +531,9 @@ const onSubmitOnAuction = async (e) => {
           </div>
 
           <div className="flex col-span-4 lg:col-span-2 mx-6">
-            <div className="relative w-full">
+            <div className="relative w-full min-[1920px]:mr-36">
               <div className="pb-8 text-[#808080] font-semibold">Preview</div>
-              <div className="bg-[#808080] rounded-xl h-[90%] relative mr-20">
+              <div className="bg-[#808080] rounded-xl h-[90%] min-[1920px]:h-[100%] relative mr-20">
                 <img
                   src={preview}
                   alt=""
@@ -545,7 +545,7 @@ const onSubmitOnAuction = async (e) => {
         </div>
 
         {/* collection white background section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 pb-20 mx-6 lg:mx-28">
+        <div className="grid grid-cols-2 lg:grid-cols-4 pb-20 mx-6 ml-32 min-[1920px]:ml-48 min-[1920px]:mr-20 min-[1920px]:mt-20">
           <div className="col-span-4 lg:col-span-2 flex flex-col bg-[#f4f5f7] rounded-xl px-10 py-6 font-normal">
             <div className="flex justify-between w-full mt-4 mb-2">
               <div className="text-black font-semibold text-md">
