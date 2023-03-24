@@ -120,7 +120,7 @@ export const SingleNFTMarketplace = (props) => {
       contractId: process.env.CONTRACT_MARKETPLACE_NAME,
       method: 'update_price',
       args: {
-        token_id: data.tokenId,
+        token_id: params.id,
         nft_contract_id: params.contract_id,
         price: parseNearAmount(newPrice),
       },
@@ -134,7 +134,7 @@ export const SingleNFTMarketplace = (props) => {
       contractId: process.env.CONTRACT_MARKETPLACE_NAME,
       method: 'offer',
       args: {
-        token_id: data.tokenId,
+        token_id: params.id,
         nft_contract_id: params.contract_id,
       },
       gas: process.env.THIRTY_TGAS,
@@ -149,7 +149,7 @@ export const SingleNFTMarketplace = (props) => {
       contractId: process.env.CONTRACT_MARKETPLACE_NAME,
       method: 'remove_sale',
       args: {
-        token_id: data.tokenId,
+        token_id: params.id,
         nft_contract_id: params.contract_id,
       },
       gas: process.env.THIRTY_TGAS,
