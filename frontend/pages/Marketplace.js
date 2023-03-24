@@ -2,7 +2,6 @@ import React from "react";
 import React, { useState, useEffect, useRef } from "react";
 import SliderButton from "../components/SliderButton/SliderButton";
 import Filter from "../components/SearchFilter/Filter";
-import test from "../data/test.json";
 import { useNavigate } from "react-router-dom";
 import dropdownOption from "../data/filter/marketOption.json";
 import { images } from "../constant";
@@ -42,7 +41,7 @@ function Marketplace() {
 
   const handleNFTClick = (data) => {
     setSelectedNFT(data);
-    navigate(`/marketplace/${data.tokenId}`, {
+    navigate(`/marketplace/${data.contract_id}/${data.tokenId}`, {
       state: { data },
     });
   };
@@ -162,7 +161,8 @@ function Marketplace() {
           });
         }
       }
-  
+      
+      console.log(nfts)
       setSales(sales);
       setNfts(nfts);
       setIsLoaded(true);

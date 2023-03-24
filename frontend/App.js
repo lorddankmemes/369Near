@@ -53,7 +53,7 @@ export default function App() {
 
           <Route exact path="marketplace">
             <Route index element={<Marketplace />} />
-            <Route path=":id" element={<SingleNFTMarketplace />} />
+            <Route path=":contract_id/:id" element={<SingleNFTMarketplace />} />
           </Route>
 
           <Route strict exact path="activity" element={<Activity />} />
