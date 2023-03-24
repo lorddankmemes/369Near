@@ -1,16 +1,33 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { images } from "../constant";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "../hooks/useWallet";
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
 import { useProfile } from "../hooks/useProfile";
 
 export const SingleNFTMarketplace = (props) => {
-  const location = useLocation();
-  const data = location.state ? location.state.data : null;
-  console.log(data)
-  const id = location.state ? location.state.id : null;
+  const params = useParams();
+  const navigate = useNavigate()
+
+  const [data, setData] = useState({})
+  
+  useEffect(() => {
+    const getNFT = async () => {
+      const tokens = await viewMethod(params.contract_id, 'nft_tokens', { from_index: '0', limit: 100 });
+      if(tokens) {
+        const nft = tokens.find(token => token.token_id === params.id);
+        setData(nft)
+      } else {
+        navigate('/marketplace')
+      }
+    }
+
+    if(data) {
+      getNFT()
+    }
+  }, [params])
+  
   const [currentComponent, setCurrentComponent] = useState("A");
   const [showModal, setShowModal] = useState(false);
   const [modalUpdatePrice, setModalUpdatePrice] = useState(false);
@@ -19,8 +36,6 @@ export const SingleNFTMarketplace = (props) => {
   const [newPrice, setNewPrice] = useState()
   const { accountId, contractId, viewMethod, callMethod} = useWallet()
   const { avatar } = useProfile();
-
-  const navigate = useNavigate();
 
   const handleCollectionClick = (data) => {
     setSelectedNFT(data);
@@ -87,7 +102,7 @@ export const SingleNFTMarketplace = (props) => {
         method: 'update_price',
         args: {
             token_id: data.tokenId,
-            nft_contract_id: data.contract_id,
+            nft_contract_id: params.contract_id,
             price: parseNearAmount(newPrice),
         },
         gas: process.env.THIRTY_TGAS,
@@ -101,7 +116,7 @@ const onPurchase = async () => {
       method: 'offer',
       args: {
           token_id: data.tokenId,
-          nft_contract_id: data.contract_id,
+          nft_contract_id: params.contract_id,
       },
       gas: process.env.THIRTY_TGAS,
       deposit: process.env.DEPOSIT 
@@ -116,20 +131,18 @@ const isRemovingSale = async () => {
     method: 'remove_sale',
     args: {
         token_id: data.tokenId,
-        nft_contract_id: data.contract_id,
+        nft_contract_id: params.contract_id,
     },
     gas: process.env.THIRTY_TGAS,
     deposit: '1' 
-})
-
-console.log(args)
+  })
 }
 
 
 
 return (
   <>
-  <div className="pl-24">
+  {data && data.metadata && <div className="pl-24">
   <div className="grid grid-cols-1 md:grid-cols-6 mx-4 content-center text-white pt-20">
     {/* modal for checkout */}
     {showModal ? (
@@ -543,19 +556,19 @@ return (
       <div>
         <span className="font-medium">Token Address</span>
         <div className="font-medium text-md text-gray-500 pt-2">
-          {data.contract_id}
+          {params.contract_id}
         </div>
       </div>
 
       <div>
         <span className="font-medium">Token Id</span>
         <div className="font-medium text-md text-gray-500 pt-2">
-          {data.tokenId}
+          {data.token_id}
         </div>
       </div>
     </div>
   </div>
-  </div>
+  </div>}
 </>
 )
 }
