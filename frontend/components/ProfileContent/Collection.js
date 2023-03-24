@@ -79,7 +79,7 @@ export const Collection = () => {
                     <div className='text-[10px] font-semibold py-4'>{val.metadata.title}</div>
                     
                     {/* list price and token type */}
-                    <div className='flex gap-12'>
+                    {/* <div className='flex gap-12'>
                         <div className=''>
                             <p className="text-sm text-gray-500">List Price</p>
                             <span className="text-sm font-semibold text-orange-600">0.041 ETH </span>
@@ -89,8 +89,8 @@ export const Collection = () => {
                             <span className="text-sm font-semibold text-black">Edition 1 / 1</span>
                         </div>
                     </div>
-
-                    <hr className='mt-8 mb-4'/>
+ */}
+                    {/* <hr className='mt-8 mb-4'/> */}
 
                     {/* creator and owner section */}
                     <div className='flex gap-4'>
