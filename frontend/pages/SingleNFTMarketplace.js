@@ -9,6 +9,7 @@ import { useProfile } from "../hooks/useProfile";
 export const SingleNFTMarketplace = (props) => {
   const location = useLocation();
   const data = location.state ? location.state.data : null;
+  console.log(data)
   const id = location.state ? location.state.id : null;
   const [currentComponent, setCurrentComponent] = useState("A");
   const [showModal, setShowModal] = useState(false);
@@ -86,26 +87,42 @@ export const SingleNFTMarketplace = (props) => {
         method: 'update_price',
         args: {
             token_id: data.tokenId,
-            nft_contract_id: 'nft-marketplace.bonebon.testnet',
+            nft_contract_id: data.contract_id,
             price: parseNearAmount(newPrice),
-            deposit: '1' // attach 1 yoctoNEAR
-        }
+        },
+        gas: process.env.THIRTY_TGAS,
+        deposit: '1' 
     })
-
-    console.log(args)
 }
 
-const isPurchasing = async () => {
+const onPurchase = async () => {
   await callMethod({
       contractId: process.env.CONTRACT_MARKETPLACE_NAME,
       method: 'offer',
       args: {
           token_id: data.tokenId,
-          nft_contract_id: 'nft-marketplace.bonebon.testnet',
-      }
+          nft_contract_id: data.contract_id,
+      },
+      gas: process.env.THIRTY_TGAS,
+      deposit: process.env.DEPOSIT 
   })
 
   console.log(args)
+}
+
+const isRemovingSale = async () => {
+  await callMethod({
+    contractId: process.env.CONTRACT_MARKETPLACE_NAME,
+    method: 'remove_sale',
+    args: {
+        token_id: data.tokenId,
+        nft_contract_id: data.contract_id,
+    },
+    gas: process.env.THIRTY_TGAS,
+    deposit: '1' 
+})
+
+console.log(args)
 }
 
 
@@ -146,11 +163,11 @@ return (
                     <span>Your Balance</span>
                     <span className="text-gray-400">{}</span>
                   </div>
-                  <div className="flex justify-between text-black text-sm pt-2 px-4">
+                  {/* <div className="flex justify-between text-black text-sm pt-2 px-4">
                     <span>Service Fee (2.5%)</span>
                     <span className="text-gray-400">abc</span>
-                  </div>
-                  <div className="flex justify-between text-black text-sm pt-2 px-4">
+                  </div> */}
+                  <div className="flex justify-between text-black text-sm pt-2 pb-10 px-4">
                     <span>You will pay</span>
                     <span className="text-gray-400">{data.price / 10 ** 24} Ⓝ</span>
                   </div>
@@ -158,7 +175,7 @@ return (
                   <div className="items-center gap-2 mt-3 sm:flex">
                     <button
                       className="w-full mt-2 p-2.5 flex-1 text-black bg-transparent hover:ring-offset-2 hover:ring-orange-600 hover:ring-2"
-                      onClick={isPurchasing}
+                      onClick={onPurchase()}
                     >
                       Proceed to payment
                     </button>
@@ -210,10 +227,10 @@ return (
                                       </div>
                                   </div>
 
-                                  <div className='text-xs text-gray-800 pt-2'>
+                                  {/* <div className='text-xs text-gray-800 pt-2'>
                                   Platform Fee: 0% <br/>
                                   You will receive Ξ 0 (~$0.000)
-                                  </div>
+                                  </div> */}
 
                                   <div className='pt-14'>
                                       <div className='text-black text-sm mx-10 text-center'>You will be redirected to your wallet to confirm your transaction.</div>
@@ -291,7 +308,7 @@ return (
       <div className="flex gap-x-4">
         <span>
           <img
-            src={data.metadata.media}
+            src={avatar}
             className="creator-size"
           />
         </span>
@@ -316,13 +333,11 @@ return (
     <div class="flex md:col-span-2 justify-center md:min-w-[450px]">
       <div className="flex flex-col w-full">
         <div className="text-orange-600 font-bold text-4xl pb-6 pt-10">
-          {`${
-              data.price / 10 ** 24
-            } Ⓝ`}
+          {`${(data.price / 10 ** 24).toFixed(2)} Ⓝ`}
         </div>
-        <div className="text-gray-500 pb-4 text-medium">
+        {/* <div className="text-gray-500 pb-4 text-medium">
           $60.5905 (Edition 1 of 1)
-        </div>
+        </div> */}
         <div className="bg-white flex flex-row text-black  rounded-full font-semibold items-center ">
           <div
             className={`rounded-full px-4 py-2 cursor-pointer  ${
@@ -383,19 +398,19 @@ return (
                   </div>
                 </span>
               </div>
-              <div className="bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg">
+              {/* <div className="bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg">
                 20.00% of sales will be paid to the original artist
-              </div>
+              </div> */}
               <div className="flex gap-x-4">
                 <span>
                   <img
-                    src={data.metadata.media}
+                    src={images.logo}
                     className="creator-size"
                     onClick={() => handleCollectionClick(data)}
                   />
                 </span>
                 <span>
-                  Collection (ERC721)
+                  Collection
                   <div className="font-extrabold">
                     {
                       data.token_id
@@ -418,7 +433,7 @@ return (
                   />
                 </span>
                 <span>
-                  Is selling for 0.001 ETH
+                  Owner
                   <div className="font-extrabold">
                     {data.owner_id}
                   </div>
@@ -439,49 +454,59 @@ return (
                   />
                 </span>
                 <span>
-                  Is selling for 0.001 ETH
+                  Owner
                   <div className="font-extrabold">
                     {data.owner_id}
                   </div>
                 </span>
               </div>
               <div className="flex gap-x-4">
-                <span>
+                {/* <span>
                   <img
                     src={
                       data.metadata.media
                     }
                     className="creator-size"
                   />
-                </span>
-                <span>
+                </span> */}
+               {/*  <span>
                   Is selling for 0.001 ETH
                   <div className="font-extrabold">
                     {data.owner_id}
                   </div>
-                </span>
+                </span> */}
               </div>
             </div>
           ) : null}
         </div>
 
         { data.owner_id === accountId ?
-        <div
-          onClick={() => setModalUpdatePrice(true)}
+          <div className="grid grid-cols-2">
+            <div
+              onClick={() => setModalUpdatePrice(true)}
+              className="bg-white py-2 text-black rounded-lg text-center font-semibold mr-4 cursor-pointer"
+            >
+              Update price
+            </div>
+            <div
+            className="bg-white py-2 text-black rounded-lg text-center font-semibold"
+            onClick={isRemovingSale}
+          >
+            Remove sale
+          </div>
+        </div>
+
+          :
+          <div
+          onClick={() => setShowModal(true)}
           className="bg-white py-2 text-black rounded-lg text-center font-semibold"
         >
-          Update price
+           {/* Buy 1 for {`${
+                data.price / 10 ** 24
+              } Ⓝ`} */}
+              Buy
         </div>
-        :
-        <div
-        onClick={() => setShowModal(true)}
-        className="bg-white py-2 text-black rounded-lg text-center font-semibold"
-      >
-         Buy {/* 1 for {`${
-              data.price / 10 ** 24
-            } Ⓝ`} */}
-      </div>
-      }
+        }
       </div>
     </div>
    
@@ -518,7 +543,7 @@ return (
       <div>
         <span className="font-medium">Token Address</span>
         <div className="font-medium text-md text-gray-500 pt-2">
-          {data.tokenId}
+          {data.contract_id}
         </div>
       </div>
 

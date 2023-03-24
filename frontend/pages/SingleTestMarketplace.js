@@ -131,27 +131,31 @@ export const SingleTestMarketplace = (props) => {
                       Checkout
                     </h4>
                     <p className="mt-2 text-center text-[16px] leading-relaxed text-gray-400">
-                      You are about to purchase CAT 1010 from
-                      <br />
-                      0x2dc7fec828327542b7b6d67ef277660cab329c11
-                    </p>
-                    <div className="flex justify-between text-black text-sm py-4 mt-4">
-                      <span>List price</span>
-                      <span className="text-gray-400">abc</span>
-                    </div>
-                    <hr />
-                    <div className="flex justify-between text-black text-sm pt-2">
-                      <span>Your Balance</span>
-                      <span className="text-gray-400">abc</span>
-                    </div>
-                    <div className="flex justify-between text-black text-sm pt-2">
-                      <span>Service Fee (2.5%)</span>
-                      <span className="text-gray-400">abc</span>
-                    </div>
-                    <div className="flex justify-between text-black text-sm pt-2">
-                      <span>You will pay</span>
-                      <span className="text-gray-400">abc</span>
-                    </div>
+                    You are about to purchase 
+                    <span className="text-black font-semibold"> {data.metadata.title} </span> 
+                    from 
+                    <span className="text-black font-semibold"> {data.owner_id} </span>
+                    <br />
+                    
+                  </p>
+                  <div className="flex justify-between text-black text-sm py-4 mt-4 px-4">
+                    <span>List price</span>
+                    <span className="text-gray-400">{data.price / 10 ** 24} Ⓝ</span>
+                  </div>
+                  <hr />
+                  <div className="flex justify-between text-black text-sm pt-2 px-4">
+                    <span>Your Balance</span>
+                    <span className="text-gray-400">{}</span>
+                  </div>
+                  {/* <div className="flex justify-between text-black text-sm pt-2 px-4">
+                    <span>Service Fee (2.5%)</span>
+                    <span className="text-gray-400">abc</span>
+                  </div> */}
+                  <div className="flex justify-between text-black text-sm pt-2 px-4">
+                    <span>You will pay</span>
+                    <span className="text-gray-400">{data.price / 10 ** 24} Ⓝ</span>
+                  </div>
+
 
                     <div className="items-center gap-2 mt-3 sm:flex">
                       <button
@@ -208,10 +212,10 @@ export const SingleTestMarketplace = (props) => {
                                         </div>
                                     </div>
 
-                                    <div className='text-xs text-gray-800 pt-2'>
+                                    {/* <div className='text-xs text-gray-800 pt-2'>
                                     Platform Fee: 0% <br/>
                                     You will receive Ξ 0 (~$0.000)
-                                    </div>
+                                    </div> */}
 
                                     <div className='pt-14'>
                                         <div className='text-black text-sm mx-10 text-center'>You will be redirected to your wallet to confirm your transaction.</div>
@@ -314,9 +318,7 @@ export const SingleTestMarketplace = (props) => {
       <div class="flex md:col-span-2 justify-center md:min-w-[450px]">
         <div className="flex flex-col w-full">
           <div className="text-orange-600 font-bold text-4xl pb-6 pt-10">
-            {`${
-                data.price / 10 ** 24
-              } Ⓝ`}
+          {`${(data.price / 10 ** 24).toFixed(2)} Ⓝ`}
           </div>
           <div className="text-gray-500 pb-4 text-medium">
             $60.5905 (Edition 1 of 1)
@@ -381,9 +383,9 @@ export const SingleTestMarketplace = (props) => {
                     </div>
                   </span>
                 </div>
-                <div className="bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg">
+                {/* <div className="bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg">
                   20.00% of sales will be paid to the original artist
-                </div>
+                </div> */}
                 <div className="flex gap-x-4">
                   <span>
                     <img
@@ -464,20 +466,29 @@ export const SingleTestMarketplace = (props) => {
           </div>
 
           { data.owner_id === accountId ?
-          <div
-            onClick={() => setModalUpdatePrice(true)}
+          <div className="flex">
+            <div
+              onClick={() => setModalUpdatePrice(true)}
+              className="bg-white py-2 text-black rounded-lg text-center font-semibold"
+            >
+              Update price
+            </div>
+            <div
             className="bg-white py-2 text-black rounded-lg text-center font-semibold"
           >
-            Update price
+            Remove sale
           </div>
+        </div>
+
           :
           <div
           onClick={() => setShowModal(true)}
           className="bg-white py-2 text-black rounded-lg text-center font-semibold"
         >
-           Buy 1 for {`${
+           {/* Buy 1 for {`${
                 data.price / 10 ** 24
-              } Ⓝ`}
+              } Ⓝ`} */}
+              Buy
         </div>
         }
         </div>

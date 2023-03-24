@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useWallet } from '../../hooks/useWallet';
 import {useNavigate} from "react-router-dom"
+import { useProfile } from "../../hooks/useProfile";
+
 
 export const Creation = () => {
 
@@ -13,6 +15,7 @@ export const Creation = () => {
   const { accountId, viewMethod} = useWallet()
 
   const [creation, setCreation] = useState([])
+  const { avatar } = useProfile();
 
   //single creation
   const getProfileCreation= async () => {
@@ -125,7 +128,7 @@ export const Creation = () => {
 
                   <div className='flex gap-x-2'>
                           <div>
-                            <img src={val.metadata.media} className="market2-size"/>
+                            <img src={avatar} className="market2-size"/>
                           </div>
                           <div>
                             <span className='text-black text-sm'>Creator</span>

@@ -135,36 +135,23 @@ function Marketplace() {
   };
   
   useEffect(() => {
-  const getSaleMarketplace = async () => {
-    const contractNftSale = ['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet'];
-    let sales = localStorage.getItem('sales');
-    let nfts = localStorage.getItem('nfts');
+    const getSaleMarketplace = async () => {
+      const contractNftSale = ['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet'];
+      const sales = [];
   
-    if (sales) {
-      sales = JSON.parse(sales);
-      setSales(sales);
-    } else {
-      sales = [];
       for (let i = 0; i < contractNftSale.length; i++) {
         const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_sales_by_nft_contract_id', { nft_contract_id: contractNftSale[i], from_index:"0", limit:100 });
         if (res) {
           sales.push(...res);
         }
       }
-      setSales(sales);
-      localStorage.setItem('sales', JSON.stringify(sales));
-    }
   
-    if (nfts) {
-      nfts = JSON.parse(nfts);
-      setNfts(nfts);
-      setIsLoaded(true);
-    } else {
-      nfts = [];
+      const nfts = [];
+  
       for (const sale of sales) {
         const tokens = await viewMethod(sale.nft_contract_id, 'nft_tokens', { from_index: '0', limit: 100 });
         const filteredTokens = tokens.filter(token => token.token_id === sale.token_id);
-        
+  
         if (filteredTokens.length > 0) {
           nfts.push({
             contract_id: sale.nft_contract_id,
@@ -176,11 +163,11 @@ function Marketplace() {
         }
       }
   
+      setSales(sales);
       setNfts(nfts);
       setIsLoaded(true);
-      localStorage.setItem('nfts', JSON.stringify(nfts));
-    }
-  }
+    };
+  
     getSaleMarketplace();
   }, []);
   
@@ -339,10 +326,11 @@ function Marketplace() {
               <div className="flex justify-between">
                 <div>
                   <span className="text-sm text-gray-400">
-                    ERC721
+                   {/*  ERC721 to display NFT standard type */}
+                   NFT SERIES
                   </span>
                   <p className="text-sm font-semibold">
-                    Edition 1/1
+                    {/* Edition 1/1 to display edition number in future */}
                   </p>
                 </div>
                 <div className="flex">
@@ -367,9 +355,9 @@ function Marketplace() {
               <hr className="my-4" />
 
               <p className="text-sm text-gray-400">List Price</p>
-              <span className="text-md font-semibold">{`${
-                data.price / 10 ** 24
-              } Ⓝ`}</span>
+              <span className="text-md font-semibold">
+              {`${(data.price / 10 ** 24).toFixed(2)} Ⓝ`}
+              </span>
             </div>
         )) 
       }

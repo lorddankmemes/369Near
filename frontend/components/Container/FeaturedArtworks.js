@@ -25,9 +25,16 @@ function FeaturedArtworks() {
 
   const navigate = useNavigate();
   
-  const handleNFTClick = (data) => {
+  /* const handleNFTClick = (data) => {
     setSelectedNFT(data);
     navigate(`/test/${data.tokenId}`, {
+      state: { data },
+    });
+  }; */
+
+  const handleNFTClick = (data) => {
+    setSelectedNFT(data);
+    navigate(`/marketplace/${data.tokenId}`, {
       state: { data },
     });
   };
@@ -55,36 +62,23 @@ function FeaturedArtworks() {
   };
   
   useEffect(() => {
-  const getSaleMarketplace = async () => {
-    const contractNftSale = ['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet'];
-    let sales = localStorage.getItem('sales');
-    let nfts = localStorage.getItem('nfts');
+    const getSaleMarketplace = async () => {
+      const contractNftSale = ['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet'];
+      const sales = [];
   
-    if (sales) {
-      sales = JSON.parse(sales);
-      setSales(sales);
-    } else {
-      sales = [];
       for (let i = 0; i < contractNftSale.length; i++) {
         const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_sales_by_nft_contract_id', { nft_contract_id: contractNftSale[i], from_index:"0", limit:100 });
         if (res) {
           sales.push(...res);
         }
       }
-      setSales(sales);
-      localStorage.setItem('sales', JSON.stringify(sales));
-    }
   
-    if (nfts) {
-      nfts = JSON.parse(nfts);
-      setNfts(nfts);
-      setIsLoaded(true);
-    } else {
-      nfts = [];
+      const nfts = [];
+  
       for (const sale of sales) {
         const tokens = await viewMethod(sale.nft_contract_id, 'nft_tokens', { from_index: '0', limit: 100 });
         const filteredTokens = tokens.filter(token => token.token_id === sale.token_id);
-        
+  
         if (filteredTokens.length > 0) {
           nfts.push({
             contract_id: sale.nft_contract_id,
@@ -96,11 +90,11 @@ function FeaturedArtworks() {
         }
       }
   
+      setSales(sales);
       setNfts(nfts);
       setIsLoaded(true);
-      localStorage.setItem('nfts', JSON.stringify(nfts));
-    }
-  }
+    };
+  
     getSaleMarketplace();
   }, []);
 
