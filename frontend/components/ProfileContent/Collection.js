@@ -3,12 +3,14 @@ import React, {useState, useEffect} from 'react'
 import artwork from "../../data/landing/artwork";
 import { useWallet } from '../../hooks/useWallet';
 import {useNavigate} from "react-router-dom"
+import { useProfile } from "../../hooks/useProfile";
 
 export const Collection = () => {
 
   const { accountId, viewMethod} = useWallet()
 
   const [collection, setCollection] = useState([])
+  const { avatar } = useProfile();
 
  /*  const getProfileCollection = async () => {
     const res = await viewMethod(process.env.CONTRACT_NAME, 'nft_tokens_for_owner', { account_id: accountId})
@@ -96,7 +98,7 @@ export const Collection = () => {
                     <div className='flex gap-4'>
                       <div className='flex gap-2'>
                             <div>
-                              <img src={val.metadata.media} className="market2-size"/>
+                              <img src={avatar}  className="market2-size"/>
                             </div>
                             <div>
                               <span className='text-gray-500 font-normal text-sm'>Creator</span>
@@ -105,10 +107,10 @@ export const Collection = () => {
                       </div>
                       <div className='flex gap-2'>
                           <div>
-                            <img src={val.metadata.media} className="market2-size"/>
+                            <img src={avatar}  className="market2-size"/>
                           </div>
                           <div>
-                            <span className='text-gray-500 font-normal text-sm'>Creator</span>
+                            <span className='text-gray-500 font-normal text-sm'>Owner</span>
                             <div className='font-normal text-sm block w-[64px] truncate'>{val.owner_id}</div>
                           </div>
                       </div>

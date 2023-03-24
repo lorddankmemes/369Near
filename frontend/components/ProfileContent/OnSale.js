@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useWallet } from '../../hooks/useWallet';
 import { useNavigate } from "react-router-dom";
+import { useProfile } from "../../hooks/useProfile";
 
 export const OnSale = () => {
   const { accountId, viewMethod} = useWallet()
@@ -10,6 +11,7 @@ export const OnSale = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isNftsAdded, setIsNftsAdded] = useState(false)
   const [selectedNFT, setSelectedNFT] = useState(null);
+  const { avatar } = useProfile();
 
   /* useEffect(() => {
 
@@ -151,27 +153,27 @@ const handleNFTClick = (data) => {
                 <div className="flex justify-between">
                   <div>
                     <span className="text-sm text-gray-400">
-                    NEP171
+                    NFT SERIES
                     </span>
-                    <p className="text-sm font-semibold">
+                    {/* <p className="text-sm font-semibold">
                     Edition {data.metadata.quantity} /{" "}
                       {data.copies}
-                    </p>
+                    </p> */}
                   </div>
                   <div className="flex">
                     <img
                      /*  onClick={() => handleCollectionClick(data)} */
-                      src={data.metadata.media}
+                      src={avatar}
                       className="market-size z-10 cursor-pointer"
                     />
                     <img
                       /* onClick={() => handleCreatorClick(data)} */
-                      src={data.metadata.media}
+                      src={avatar}
                       className="market1-size z-20 cursor-pointer"
                     />
                     <img
                      /*  onClick={() => handleOwnerClick(data)} */
-                      src={data.metadata.media}
+                      src={avatar}
                       className="market2-size z-30 cursor-pointer"
                     />
                   </div>
@@ -181,9 +183,7 @@ const handleNFTClick = (data) => {
   
                 <p className="text-sm text-gray-400">List Price</p>
                   <span className="text-md font-semibold">
-                  {`${
-                    data.price / 10 ** 24
-                  } Ⓝ`}
+                  {`${(data.price / 10 ** 24).toFixed(2)} Ⓝ`}
                   </span>
               </div>
                )})

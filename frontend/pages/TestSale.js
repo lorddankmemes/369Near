@@ -353,9 +353,7 @@ export const TestSale = () => {
               <hr className="my-4" />
 
               <p className="text-sm text-gray-400">List Price</p>
-              <span className="text-md font-semibold">{`${
-                data.price / 10 ** 24
-              } Ⓝ`}</span>
+              <span className="text-md font-semibold">{`${(data.price / 10 ** 24).toFixed(2)} Ⓝ`}</span>
             </div>
         )) 
       }

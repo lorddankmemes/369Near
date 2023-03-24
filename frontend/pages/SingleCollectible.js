@@ -319,10 +319,10 @@ export const SingleCollectible = ({tokenId}) => {
                                         </div>
                                     </div>
 
-                                    <div className='text-xs text-gray-800 pt-2'>
+                                    {/* <div className='text-xs text-gray-800 pt-2'>
                                     Platform Fee: 0% <br/>
                                     You will receive Ξ 0 (~$0.000)
-                                    </div>
+                                    </div> */}
 
                                     <div className='pt-14'>
                                         <div className='text-black text-sm mx-10 text-center'>You will be redirected to your wallet to confirm your transaction.</div>
@@ -425,23 +425,23 @@ export const SingleCollectible = ({tokenId}) => {
                                         </div>
                                     </span>
                                     </div>
-                                    <div className="bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg">
+                                    {/* <div className="bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg">
                                     20.00% of sales will be paid to the original artist
-                                    </div>
+                                    </div> */}
                                     <div className="flex gap-x-4">
                                     <span>
                                         <img
-                                        src={val.metadata.media}
+                                        src={images.logo}
                                         className="creator-size"
                                         onClick={() => handleCollectionClick(data)}
                                         />
                                     </span>
                                     <span>
-                                        Collection (ERC721)
+                                        Collection
                                         <div className="font-extrabold">
-                                        {
+                                       {/*  {
                                             val.token_id
-                                        }
+                                        } */}
                                         </div>
                                     </span>
                                     </div>
@@ -460,7 +460,7 @@ export const SingleCollectible = ({tokenId}) => {
                                         />
                                     </span>
                                     <span>
-                                        Is selling for 0.001 ETH
+                                        Owner
                                         <div className="font-extrabold">
                                         {val.owner_id}
                                         </div>
@@ -481,14 +481,14 @@ export const SingleCollectible = ({tokenId}) => {
                                         />
                                     </span>
                                     <span>
-                                        Is selling for 0.001 ETH
+                                        Owner
                                         <div className="font-extrabold">
                                         {val.owner_id}
                                         </div>
                                     </span>
                                     </div>
                                     <div className="flex gap-x-4">
-                                    <span>
+                                   {/*  <span>
                                         <img
                                         src={
                                             val.metadata.media
@@ -501,7 +501,7 @@ export const SingleCollectible = ({tokenId}) => {
                                         <div className="font-extrabold">
                                         {val.owner_id}
                                         </div>
-                                    </span>
+                                    </span> */}
                                     </div>
                                 </div>
                                 ) : null}
