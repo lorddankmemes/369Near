@@ -54,9 +54,9 @@ export const Collection = () => {
      const navigate = useNavigate();
      const [selectedNFT, setSelectedNFT] = useState(null)
    
-   const handleCreation = (val) => {
-    setSelectedNFT(val)
-    navigate(`/collectible/${val.token_id}`, { state: { val } })
+   const handleCreation = (data) => {
+    setSelectedNFT(data)
+    navigate(`/collectible/${data.token_id}`, { state: { data } })
   }
   
 
@@ -67,18 +67,18 @@ export const Collection = () => {
          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
          {
-        [...collection, ...seriesCollection].map((val,key) => {
+        [...collection, ...seriesCollection].map((data,key) => {
               return (
                 <div key={key} className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
                     <div>      
                       <img 
                         className="object-cover object-center h-60 w-96 rounded-lg" 
-                        src={val.metadata.media} 
-                        onClick={() => handleCreation(val)} 
+                        src={data.metadata.media} 
+                        onClick={() => handleCreation(data)} 
                       />
                     </div>
 
-                    <div className='text-[10px] font-semibold py-4'>{val.metadata.title}</div>
+                    <div className='text-[10px] font-semibold py-4'>{data.metadata.title}</div>
                     
                     {/* list price and token type */}
                     {/* <div className='flex gap-12'>
@@ -102,7 +102,7 @@ export const Collection = () => {
                             </div>
                             <div>
                               <span className='text-gray-500 font-normal text-sm'>Creator</span>
-                              <div className='font-normal text-sm block w-[64px] truncate'>{val.owner_id}</div>
+                              <div className='font-normal text-sm block w-[64px] truncate'>{data.owner_id}</div>
                             </div>
                       </div>
                       <div className='flex gap-2'>
@@ -111,7 +111,7 @@ export const Collection = () => {
                           </div>
                           <div>
                             <span className='text-gray-500 font-normal text-sm'>Owner</span>
-                            <div className='font-normal text-sm block w-[64px] truncate'>{val.owner_id}</div>
+                            <div className='font-normal text-sm block w-[64px] truncate'>{data.owner_id}</div>
                           </div>
                       </div>
                     </div>

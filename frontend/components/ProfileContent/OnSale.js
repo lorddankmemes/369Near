@@ -114,7 +114,7 @@ const navigate = useNavigate();
 
 const handleNFTClick = (data) => {
   setSelectedNFT(data);
-  navigate(`/marketplace/${data.tokenId}`, {
+  navigate(`/marketplace/${data.contract_id}/${data.tokenId}`, {
     state: { data },
   });
 };
