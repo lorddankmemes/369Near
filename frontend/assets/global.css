@@ -20,7 +20,7 @@ body {
 
 @media (min-width: 1900px) {
   .body-container {
-    padding: 1em 12em;
+    padding: 1em 8em 1em 12em;
   }
 }
 
@@ -478,7 +478,7 @@ button:hover, button:focus {
    border-top-right-radius: 120%;
    border-bottom-right-radius: 130%;
    border-bottom-left-radius: 130%;
-   background-color: #007da3;
+   background-color: #ebe9e9;
    margin: auto;
    margin-bottom: 30px;
  }

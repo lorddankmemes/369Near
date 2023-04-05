@@ -24,7 +24,7 @@ export const CreateCollectible = () => {
       exit={{opacity: 1}}
       transition={{ duration: 0.7 }}
     >
-      <div className="mx-16">
+      <div className="mx-16 min-[1920px]:mx-48">
         <div className="grid grid-cols-3 md:grid-cols-3 py-20">
           <div className="md:col-span-2 mr-20">
             <a

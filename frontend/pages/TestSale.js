@@ -98,7 +98,7 @@ export const TestSale = () => {
         (d) => d.sale_collectibles.collectible_category === "Membership"
       ),
     arts: (data) =>
-      data.filter((d) => d.metadata.category === "Art"),
+      data.filter((d) => d.metadata.category === "Arts"),
     ticketing: (data) =>
       data.filter(
         (d) => d.sale_collectibles.collectible_category === "Ticketing"
@@ -133,53 +133,42 @@ export const TestSale = () => {
     setOpen(false);
   };
 
-/*   useEffect(() => {
-  const getSaleMarketplace= async () => {
-    const contractNftSale = ['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet'];
-    const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_sales_by_nft_contract_id', { nft_contract_id: contractNftSale, from_index:"0", limit:100 })
-    setSaleItem(res)
-    setIsLoaded(true);
-  }
-    if (accountId && !isLoaded) {
-        getSaleMarketplace()
-    }
-      
-   }, [accountId, saleItem, isLoaded]) */
-
-   useEffect(() => {
-    const getSaleMarketplace = async (contractNftSale) => {
+  useEffect(() => {
+    const getSaleMarketplace = async () => {
+      const contractNftSale = ['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet'];
       const sales = [];
+  
       for (let i = 0; i < contractNftSale.length; i++) {
         const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_sales_by_nft_contract_id', { nft_contract_id: contractNftSale[i], from_index:"0", limit:100 });
-        if(res) {
+        if (res) {
           sales.push(...res);
         }
       }
-      setSales(sales);
-      console.log(sales)
-
-    const nfts = [];
-    for (const sale of sales) {
-      const tokens = await viewMethod(sale.nft_contract_id, 'nft_tokens', { from_index: '0', limit: 100 });
-      const filteredTokens = tokens.filter(token => token.token_id === sale.token_id);
-      if (filteredTokens.length > 0) {
-        nfts.push({
-          contract_id: sale.nft_contract_id,
-          metadata: filteredTokens[0].metadata,
-          tokenId: filteredTokens[0].token_id,
-          price: sale.sale_conditions,
-          owner_id: sale.owner_id,
-        });
+  
+      const nfts = [];
+  
+      for (const sale of sales) {
+        const tokens = await viewMethod(sale.nft_contract_id, 'nft_tokens', { from_index: '0', limit: 100 });
+        const filteredTokens = tokens.filter(token => token.token_id === sale.token_id);
+  
+        if (filteredTokens.length > 0) {
+          nfts.push({
+            contract_id: sale.nft_contract_id,
+            metadata: filteredTokens[0].metadata,
+            tokenId: filteredTokens[0].token_id,
+            price: sale.sale_conditions,
+            owner_id: sale.owner_id,
+          });
+        }
       }
-    }
-    setNfts(nfts);
-    setIsLoaded(true);
+  
+      setSales(sales);
+      setNfts(nfts);
+      setIsLoaded(true);
     };
-    
-    if (accountId || !isLoaded) {
-      getSaleMarketplace(['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet']);
-    }
-  }, [accountId, isLoaded]);
+  
+    getSaleMarketplace();
+  }, []);
   
 
   return (
@@ -364,9 +353,7 @@ export const TestSale = () => {
               <hr className="my-4" />
 
               <p className="text-sm text-gray-400">List Price</p>
-              <span className="text-md font-semibold">{`${
-                data.price / 10 ** 24
-              } Ⓝ`}</span>
+              <span className="text-md font-semibold">{`${(data.price / 10 ** 24).toFixed(2)} Ⓝ`}</span>
             </div>
         )) 
       }

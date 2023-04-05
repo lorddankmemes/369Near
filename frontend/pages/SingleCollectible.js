@@ -3,6 +3,7 @@ import { images } from '../constant';
 import { useLocation } from 'react-router-dom';
 import {useNavigate} from "react-router-dom"
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
+import { useProfile } from "../hooks/useProfile";
 
 import { useWallet } from '../hooks/useWallet';
 
@@ -18,6 +19,7 @@ export const SingleCollectible = ({tokenId}) => {
     const [modalUpdatePrice, setModalUpdatePrice] = useState(false);
     const [selectedNFT, setSelectedNFT] = useState(null)
     const [newPrice, setNewPrice] = useState()
+    const { avatar } = useProfile();
 
     const { accountId, callMethod} = useWallet()
 
@@ -114,7 +116,7 @@ export const SingleCollectible = ({tokenId}) => {
           method: 'nft_approve',
           args: {
             token_id: val.token_id,
-            account_id: 'nft-marketplace.bonebon.testnet',
+            account_id: process.env.CONTRACT_MARKETPLACE_NAME,
             msg: JSON.stringify({
               sale_conditions: parseNearAmount(newPrice),
             }),
@@ -166,7 +168,7 @@ export const SingleCollectible = ({tokenId}) => {
 
   return (
     <>
-    <div className='pl-24'>
+    <div className='body-container'>
         <div className="grid grid-cols-1 md:grid-cols-6 mx-4 content-center text-white pt-20">
 
             {/* modal for checkout */}
@@ -299,7 +301,7 @@ export const SingleCollectible = ({tokenId}) => {
                             <div className="mt-3 flex justify-center">
                                 <div className="mt-4 mb-10 px-10">
                                     <div className="text-3xl text-center font-bold text-gray-800">
-                                        Update Price
+                                         State Price
                                     </div>
                                     <div className='mt-10 relative text-black'>
                                     <input
@@ -317,10 +319,10 @@ export const SingleCollectible = ({tokenId}) => {
                                         </div>
                                     </div>
 
-                                    <div className='text-xs text-gray-800 pt-2'>
+                                    {/* <div className='text-xs text-gray-800 pt-2'>
                                     Platform Fee: 0% <br/>
                                     You will receive Ξ 0 (~$0.000)
-                                    </div>
+                                    </div> */}
 
                                     <div className='pt-14'>
                                         <div className='text-black text-sm mx-10 text-center'>You will be redirected to your wallet to confirm your transaction.</div>
@@ -356,59 +358,155 @@ export const SingleCollectible = ({tokenId}) => {
                 
 
                 <div class="flex md:col-span-2 justify-center md:min-w-[450px]">
-                    <div className='flex flex-col w-full'>
-                        <div className='text-orange-600 font-bold text-4xl pb-6 pt-10'>0.005ETH</div>
-                        <div className='text-gray-500 pb-4 text-medium'>$60.5905 (Edition 1 of 1)</div>
-                        <div className='bg-white rounded-full h-10'>
-                            <button className='button-slide rounded-full h-10 px-8' onClick={() => setCurrentComponent('A')}>Info</button>
-                            <button className='button-slide rounded-full h-10 px-4' onClick={() => setCurrentComponent('B')}>Owners</button>
-                            <button className='button-slide rounded-full h-10 px-4' onClick={() => setCurrentComponent('C')}>History</button>
-                        </div>
-
-                        <div className='py-10 my-4 bg-gray-200 text-black rounded-xl'>
-                            {currentComponent === 'A' ? 
-                                <div className='grid gap-6 px-6'>
-                                    <div className='flex gap-x-4'>
-                                        <span>
-                                            <img 
-                                                src={val.metadata.media} 
-                                                className="creator-size"
-                                                onClick={() => handleCreatorClick(data)} 
-                                            />
-                                        </span>
-                                        <span>Owner
-                                            <div className='font-extrabold w-80 block truncate '>{val.owner_id}</div>
-                                        </span>
-                                    </div>
-                                    <div className='flex gap-x-4'>
-                                        <span>
-                                            <img 
-                                                src={val.metadata.media}
-                                                className="creator-size"
-                                                onClick={() => handleOwnerClick(data)} 
-                                            />
-                                        </span>
-                                        <span>Creator
-                                                <div className='font-extrabold w-80 block truncate '>{val.owner_id}</div>
-                                        </span>
-                                    </div>
-                                    <div className='bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg'>20.00% of sales will be paid to the original artist</div>
-                                    <div className='flex gap-x-4'>
-                                        <span>
-                                            <img 
-                                                src={val.metadata.media} 
-                                                className="creator-size"
-                                                onClick={() => handleCollectionClick(data)} 
-                                            />
-                                        </span>
-                                        <span>Collection (ERC721)
-                                                <div className='font-extrabold'>{val.metadata.title}</div>
-                                        </span>
-                                    </div> 
+                        <div className="flex flex-col w-full">
+                            <div className="text-orange-600 font-bold text-4xl pb-6 pt-10">
+                            Not listed
+                            </div>
+                            {/* <div className="text-gray-500 pb-4 text-medium">
+                                $60.5905 (Edition 1 of 1)
+                            </div> */}
+                            <div className="bg-white flex flex-row text-black  rounded-full font-semibold items-center ">
+                                <div
+                                className={`rounded-full px-4 py-2 cursor-pointer  ${
+                                    currentComponent === "A" ? "bg-orange-600" : "text-gray-500"
+                                }`}
+                                onClick={() => setCurrentComponent("A")}
+                                >
+                                Info
                                 </div>
-                            : null}
+                                <div
+                                className={`rounded-full px-4 py-2 cursor-pointer ${
+                                    currentComponent === "B" ? "bg-orange-600" : "text-gray-500"
+                                }`}
+                                onClick={() => setCurrentComponent("B")}
+                                >
+                                Owners
+                                </div>
+                                <div
+                                className={`rounded-full px-4 py-2 cursor-pointer ${
+                                    currentComponent === "C" ? "bg-orange-600" : "text-gray-500"
+                                }`}
+                                onClick={() => setCurrentComponent("C")}
+                                >
+                                History
+                                </div>
+                            </div>
 
-                        </div>
+                            <div className="py-10 my-4 bg-gray-200 text-black rounded-xl font-medium">
+                                {currentComponent === "A" ? (
+                                <div className="grid gap-6 px-6">
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={avatar}
+                                        className="creator-size"
+                                        onClick={() => handleCreatorClick(val)}
+                                        />
+                                    </span>
+                                    <span>
+                                        Owner
+                                        <div className="font-extrabold w-80 block truncate ">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={avatar}
+                                        className="creator-size"
+                                        onClick={() => handleOwnerClick(data)}
+                                        />
+                                    </span>
+                                    <span>
+                                        Creator
+                                        <div className="font-extrabold w-80 block truncate ">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                    {/* <div className="bg-orange-100 px-10 py-4 text-gray-500 font-medium rounded-lg">
+                                    20.00% of sales will be paid to the original artist
+                                    </div> */}
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={images.logo}
+                                        className="creator-size"
+                                        onClick={() => handleCollectionClick(data)}
+                                        />
+                                    </span>
+                                    <span>
+                                        Collection
+                                        <div className="font-extrabold">
+                                       {/*  {
+                                            val.token_id
+                                        } */}
+                                        </div>
+                                    </span>
+                                    </div>
+                                </div>
+                                ) : null}
+
+                                {currentComponent === "B" ? (
+                                <div className="grid gap-6 px-6">
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={
+                                            val.metadata.media
+                                        }
+                                        className="creator-size"
+                                        />
+                                    </span>
+                                    <span>
+                                        Owner
+                                        <div className="font-extrabold">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                </div>
+                                ) : null}
+
+                                {currentComponent === "C" ? (
+                                <div className="grid gap-6 px-6">
+                                    <div className="flex gap-x-4">
+                                    <span>
+                                        <img
+                                        src={
+                                            val.metadata.media
+                                        }
+                                        className="creator-size"
+                                        />
+                                    </span>
+                                    <span>
+                                        Owner
+                                        <div className="font-extrabold">
+                                        {val.owner_id}
+                                        </div>
+                                    </span>
+                                    </div>
+                                    <div className="flex gap-x-4">
+                                   {/*  <span>
+                                        <img
+                                        src={
+                                            val.metadata.media
+                                        }
+                                        className="creator-size"
+                                        />
+                                    </span>
+                                    <span>
+                                        Is selling for 0.001 ETH
+                                        <div className="font-extrabold">
+                                        {val.owner_id}
+                                        </div>
+                                    </span> */}
+                                    </div>
+                                </div>
+                                ) : null}
+                            </div>
+
 
                         { !hasListed ?
                             <>

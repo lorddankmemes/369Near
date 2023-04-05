@@ -20,18 +20,12 @@ export const MainProfile = () => {
   const { accountId } = useWallet();
   const { username } = useProfile();
   const { avatar } = useProfile();
-
-  /*  const padFunction = (number) => {
-        let string = String(number)
-        let sliced = string.slice(-4);
-        let mask = String(sliced).padStart(string.length, ".")
-        return mask;
-      } */
+  const  { profile } = useProfile()
 
   const [currentComponent, setCurrentComponent] = useState(1);
 
   return (
-    <div className="lg:mx-16 mt-4 mx-0">
+    <div className="mt-4 mx-20 min-[1920px]:mx-48">
       <div>
         <div>
           <CoverProfile />
@@ -58,12 +52,13 @@ export const MainProfile = () => {
               </div>
 
               <div className="flex justify-between pb-6">
-                <div className="flex text-sm font-medium flex-col gap-y-3">
-                  <span>Project Views</span>
-                  <span>Favourites</span>
-                  <span>Followers</span>
-                  <span>Following</span>
-                  <span className="font-semibold">Contact Me</span>
+                <div className="flex text-sm flex-col gap-y-3">
+                  <span className="font-medium">Project Views</span>
+                  <span className="font-medium">Favourites</span>
+                  <span className="font-medium">Followers</span>
+                  <span className="font-medium">Following</span>
+                  <div className="font-semibold pt-10">Contact Me</div>
+                  <div className="">{profile.email}</div>
                 </div>
 
                 <div className="flex flex-col text-sm font-medium text-gray-400 gap-y-3 text-right">
@@ -74,9 +69,9 @@ export const MainProfile = () => {
                 </div>
               </div>
 
-              <div className="py-10 text-sm font-semibold">
-                <span>About</span>
-                <span></span>
+              <div className="py-10 text-sm ">
+                <div className="font-semibold">About</div>
+                <div className="pt-2">{profile.bio}</div>
               </div>
 
               <div className="flex mt-48 mb-10 gap-x-4 justify-center">
@@ -85,9 +80,9 @@ export const MainProfile = () => {
                 </span>
               </div>
 
-              <div className="my-8 text-xs text-center">
+              {/* <div className="my-8 text-xs text-center">
                 Member Since: November 4, 2022
-              </div>
+              </div> */}
             </div>
           </div>
 
