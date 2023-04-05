@@ -67,7 +67,7 @@ export const Collection = () => {
          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
          {
-        [...collection, ...seriesCollection].map((val,key) => {
+        [...seriesCollection].map((val,key) => {
               return (
                 <div key={key} className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative">
                     <div>      

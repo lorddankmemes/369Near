@@ -108,7 +108,7 @@ export const Creation = () => {
           </div>
       </div>
       {
-        [...creation, ...seriesCreation].map((val, i) => {
+        [...seriesCreation].map((val, i) => {
 
           return (
             <>

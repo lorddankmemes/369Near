@@ -29,7 +29,7 @@ export const WalletProvider = ({ children }) => {
 
   useEffect(() => {
     if(!walletSelector) {
-      startUp()
+      startUp('mainnet')
     }
   }, [walletSelector])
 

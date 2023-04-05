@@ -236,7 +236,7 @@ useEffect(() => {
         meta.perpetual_royalties[`${accountId}`] = royalty
 
         const args = {
-            token_id: `${Date.now()}`,
+            id: parseInt(Date.now()),
             metadata: meta,
             receiver_id: accountId
         }
@@ -246,7 +246,7 @@ useEffect(() => {
         
        const nftId  = callMethod({
             contractId: process.env.CONTRACT_NAME,
-            method: 'nft_mint',
+            method: 'create_series',
             args
         })
         .then(() => setMetadata())

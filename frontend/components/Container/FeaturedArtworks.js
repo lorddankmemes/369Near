@@ -63,7 +63,7 @@ function FeaturedArtworks() {
   
   useEffect(() => {
     const getSaleMarketplace = async () => {
-      const contractNftSale = ['369-nft.bonebon.testnet', 'nft-series.bonebon.testnet'];
+      const contractNftSale = ['nft.3six9space.near'];
       const sales = [];
   
       for (let i = 0; i < contractNftSale.length; i++) {

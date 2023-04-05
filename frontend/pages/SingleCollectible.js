@@ -116,7 +116,7 @@ export const SingleCollectible = ({tokenId}) => {
           method: 'nft_approve',
           args: {
             token_id: val.token_id,
-            account_id: 'nft-marketplace.bonebon.testnet',
+            account_id: process.env.CONTRACT_MARKETPLACE_NAME,
             msg: JSON.stringify({
               sale_conditions: parseNearAmount(newPrice),
             }),
