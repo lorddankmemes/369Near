@@ -2,6 +2,6 @@ import React from 'react'
 
 export const Favourite = () => {
   return (
-    <div>Favourite</div>
+    <div className='mx-10'>Favourite</div>
   )
 }

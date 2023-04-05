@@ -308,8 +308,9 @@ export const UpdateProfile = () => {
   const { ipfs } = useIpfsFactory();
   const { accountId, viewMethod, callMethod } = useWallet();
 
-  const [username, setUsername] = useState(accountId)
+  const [username, setUsername] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [haveUserRecord, setUserRecord] = useState(false)
 
   const [profile, setProfile] = useState({
     avatar: "",
@@ -380,6 +381,9 @@ export const UpdateProfile = () => {
     if (res) {
       setUsername(res);
       getProfile(res)
+      setUserRecord(true)
+    } else {
+      setUserRecord(false)
     }
   };
 
@@ -404,7 +408,7 @@ export const UpdateProfile = () => {
     const submitProfile = async () => {
       const result = await ipfs.add(JSON.stringify(profile))
 
-      if(!username) {
+      if(!haveUserRecord) {
         await callMethod({
           contractId: process.env.CONTRACT_PROFILE,
           method: "setUserInfo",
@@ -500,7 +504,7 @@ export const UpdateProfile = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-1 body-container mx-6 lg:mx-56">
+      <div className="grid grid-cols-1 md:grid-cols-1 body-container mx-56 min-[1920px]:mx-96">
         <div className="my-12 text-5xl font-semibold">Edit your profile</div>
 
         <div className="grid bg-white rounded-lg my-6 p-10 ">

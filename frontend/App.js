@@ -27,7 +27,6 @@ import MyBids from "./pages/MyBids";
 import FAQs from "./pages/FAQs";
 import { SingleCollectible } from "./pages/SingleCollectible";
 import { TestSale } from "./pages/TestSale";
-import { SingleTestMarketplace } from "./pages/SingleTestMarketplace";
 
 export default function App() {
   const { ipfs, ipfsInitError } = useIpfsFactory();
@@ -53,7 +52,7 @@ export default function App() {
 
           <Route exact path="marketplace">
             <Route index element={<Marketplace />} />
-            <Route path=":id" element={<SingleNFTMarketplace />} />
+            <Route path=":contract_id/:id" element={<SingleNFTMarketplace />} />
           </Route>
 
           <Route strict exact path="activity" element={<Activity />} />
@@ -90,12 +89,7 @@ export default function App() {
             path="create/:id/multiple"
             element={<CreateMultiple />}
           />
-
-          <Route exact path="test">
-            <Route index element={<TestSale />} />
-            <Route path=":id" element={<SingleTestMarketplace/>} />
-          </Route>
-
+          
           <Route exact path="updateprofile" element={<UpdateProfile />} />
           <Route exact path="mybids" element={<MyBids />} />
           <Route exact path="faqs" element={<FAQs />} />

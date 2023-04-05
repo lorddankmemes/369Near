@@ -2,7 +2,6 @@ import React from "react";
 import React, { useState, useEffect, useRef } from "react";
 import SliderButton from "../components/SliderButton/SliderButton";
 import Filter from "../components/SearchFilter/Filter";
-import test from "../data/test.json";
 import { useNavigate } from "react-router-dom";
 import dropdownOption from "../data/filter/marketOption.json";
 import { images } from "../constant";
@@ -11,28 +10,17 @@ import ReactImageAppear from "react-image-appear";
 import InfiniteScroll from "react-infinite-scroller";
 import LazyLoad from "react-lazyload";
 import { BsChevronDown } from "react-icons/bs";
+import { useWallet } from "../hooks/useWallet";
+import { useProfile } from "../hooks/useProfile";
 
 function Marketplace() {
+  const { accountId, contractId, viewMethod} = useWallet()
+  const { avatar } = useProfile();
+  const [saleItem, setSaleItem] = useState([])
+  const [sales, setSales] = useState([])
+  const [nfts, setNfts] = useState([])
+  const [isLoaded, setIsLoaded] = useState(false)
   const [selectedNFT, setSelectedNFT] = useState(null);
-
-  // const elementRef = useRef(null);
-  // const [arrowDisable, setArrowDisable] = useState(true);
-
-  // const handleHorizantalScroll = (element, speed, distance, step) => {
-  //   let scrollAmount = 0;
-  //   const slideTimer = setInterval(() => {
-  //     element.scrollLeft += step;
-  //     scrollAmount += Math.abs(step);
-  //     if (scrollAmount >= distance) {
-  //       clearInterval(slideTimer);
-  //     }
-  //     if (element.scrollLeft === 0) {
-  //       setArrowDisable(true);
-  //     } else {
-  //       setArrowDisable(false);
-  //     }
-  //   }, speed);
-  // };
 
   //slider component
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -53,7 +41,7 @@ function Marketplace() {
 
   const handleNFTClick = (data) => {
     setSelectedNFT(data);
-    navigate(`/marketplace/${data.sale_collectibles.collectible_uuid}`, {
+    navigate(`/marketplace/${data.contract_id}/${data.tokenId}`, {
       state: { data },
     });
   };
@@ -103,14 +91,14 @@ function Marketplace() {
     //for filter using slider button
     collectibles: (data) =>
       data.filter(
-        (d) => d.sale_collectibles.collectible_category === "Collectibles"
+        (d) => d.metadata.category === "Collectibles"
       ),
     membership: (data) =>
       data.filter(
         (d) => d.sale_collectibles.collectible_category === "Membership"
       ),
     arts: (data) =>
-      data.filter((d) => d.sale_collectibles.collectible_category === "Art"),
+      data.filter((d) => d.metadata.category === "Art"),
     ticketing: (data) =>
       data.filter(
         (d) => d.sale_collectibles.collectible_category === "Ticketing"
@@ -144,54 +132,50 @@ function Marketplace() {
     setFilterOption(value);
     setOpen(false);
   };
-
-  //smart contract marketplace
+  
+  useEffect(() => {
+    const getSaleMarketplace = async () => {
+      const contractNftSale = ['nft.3six9space.near'];
+      const sales = [];
+  
+      for (let i = 0; i < contractNftSale.length; i++) {
+        const res = await viewMethod(process.env.CONTRACT_MARKETPLACE_NAME, 'get_sales_by_nft_contract_id', { nft_contract_id: contractNftSale[i], from_index:"0", limit:100 });
+        if (res) {
+          sales.push(...res);
+        }
+      }
+  
+      const nfts = [];
+  
+      for (const sale of sales) {
+        const tokens = await viewMethod(sale.nft_contract_id, 'nft_tokens', { from_index: '0', limit: 100 });
+        const filteredTokens = tokens.filter(token => token.token_id === sale.token_id);
+  
+        if (filteredTokens.length > 0) {
+          nfts.push({
+            contract_id: sale.nft_contract_id,
+            metadata: filteredTokens[0].metadata,
+            tokenId: filteredTokens[0].token_id,
+            price: sale.sale_conditions,
+            owner_id: sale.owner_id,
+          });
+        }
+      }
+      
+      console.log(nfts)
+      setSales(sales);
+      setNfts(nfts);
+      setIsLoaded(true);
+    };
+  
+    getSaleMarketplace();
+  }, []);
+  
 
   return (
-    <div className="body-container">
-      <div className="font-bold pt-10 text-3xl">Explore Marketplace</div>
-
-      {/* slider button */}
-      {/* <div className="grid">
-        <div className="flex my-16 items-center">
-          <div
-            onClick={() => {
-              handleHorizantalScroll(elementRef.current, 25, 100, -10);
-            }}
-            disabled={arrowDisable}
-            className="cursor-pointer"
-          >
-            <img src={images.arrow} />
-          </div>
-
-          <div
-            className="flex mx-4 gap-6 overflow-x-hidden w-full"
-            ref={elementRef}
-          >
-            {slideOption.map((slide, i) => (
-              <div
-                key={i}
-                className=" w-1/5 flex-nowrap flex-none p-2 rounded-full bg-white text-orange-600 py-3 text-center border-2 border-orange-600 hover:bg-orange-600 hover:text-white cursor-pointer"
-                onClick={() => {
-                  setSlideSelected(slide.value);
-                }}
-              >
-                {slide.label}
-              </div>
-            ))}
-          </div>
-
-          <div
-            onClick={() => {
-              handleHorizantalScroll(elementRef.current, 25, 100, 10);
-            }}
-          >
-            <img className="rotate-180 cursor-pointer" src={images.arrow} />
-          </div>
-        </div>
-      </div> */}
-
-      <div className="grid">
+    <div className='pt-10 mx-20 min-[1920px]:mx-48'>
+        <div className="font-bold pt-6 text-3xl">Explore Marketplace</div>
+        <div className="grid">
         <div className="flex my-16 items-center">
           <div
             className="cursor-pointer"
@@ -261,7 +245,7 @@ function Marketplace() {
           {open ? (
             <div
               id="dropdownAvatar"
-              className="z-20 w-56 absolute mt-4 bg-white  rounded-xl"
+              className="z-20 w-56 absolute mt-4 bg-white rounded-xl"
             >
               <ul className="flex flex-col p-6 text-sm font-medium text-black">
                 <div className="cursor-default text-gray-500">Sort by</div>
@@ -285,9 +269,38 @@ function Marketplace() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-14 my-16">
-        <>
-          {filteredNft().map((data, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 pt-20">
+      {
+        nfts.map((data, i) => (
+           /*  <>
+              <div 
+                key={i} 
+                className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative"
+              >
+                  <div>
+                  <LazyLoad placeholder={<img src={images.loadNft} />}>       
+                    <img 
+                      className="object-cover object-center h-60 w-96 rounded-lg" 
+                      src={data.metadata.media}
+                      onClick={() => handleNFTClick(data)}
+                    />
+                    </LazyLoad>
+                  </div>
+
+                  <div className='text-lg font-semibold py-4'>{data.metadata.title}</div>
+
+                  <div className='flex gap-x-2'>
+                    <div>
+                        <img src={data.metadata.media} className="market2-size"/>
+                    </div>
+                    <div>
+                        <span className='text-black text-sm'>Creator</span>
+                        <div className='text-black font-semibold text-sm'>{data.owner_id}</div>
+                    </div>
+                </div>
+                  
+              </div>
+            </> */
             <div
               key={i}
               className="flex flex-col md:col-span-1 bg-gray-100 text-black border-2 border-orange-600 p-4 rounded-lg relative"
@@ -299,7 +312,7 @@ function Marketplace() {
                 >
                   <LazyLoad placeholder={<img src={images.loadNft} />}>
                     <img
-                      src={data.sale_collectibles.ipfs_media_path}
+                      src={data.metadata.media}
                       className="object-cover object-center h-40 md:h-60 w-full rounded-lg cursor-pointer"
                     />
                   </LazyLoad>
@@ -307,33 +320,33 @@ function Marketplace() {
               </div>
 
               <div className="py-4 text-lg font-semibold">
-                {data.sale_collectibles.collectible_name}
+                {data.metadata.title}
               </div>
 
               <div className="flex justify-between">
                 <div>
                   <span className="text-sm text-gray-400">
-                    {data.sale_collectibles.collectible_type.toUpperCase()}
+                   {/*  ERC721 to display NFT standard type */}
+                   NFT SERIES
                   </span>
                   <p className="text-sm font-semibold">
-                    Edition {data.quantity} /{" "}
-                    {data.sale_collectibles.noOfCopies}
+                    {/* Edition 1/1 to display edition number in future */}
                   </p>
                 </div>
                 <div className="flex">
                   <img
                     onClick={() => handleCollectionClick(data)}
-                    src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectible_collection.tokenLogo}`}
+                    src={avatar}
                     className="market-size z-10 cursor-pointer"
                   />
                   <img
                     onClick={() => handleCreatorClick(data)}
-                    src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`}
+                    src={avatar}
                     className="market1-size z-20 cursor-pointer"
                   />
                   <img
                     onClick={() => handleOwnerClick(data)}
-                    src={`https://ipfs.io/ipfs/${data.sale_collectibles.collectibles_user.profile_photo_path}`}
+                    src={data.metadata.media}
                     className="market2-size z-30 cursor-pointer"
                   />
                 </div>
@@ -342,16 +355,15 @@ function Marketplace() {
               <hr className="my-4" />
 
               <p className="text-sm text-gray-400">List Price</p>
-              <span className="text-md font-semibold">{`${
-                data.onsale_current_price / 10 ** 18
-              } Ⓝ`}</span>
+              <span className="text-md font-semibold">
+              {`${(data.price / 10 ** 24).toFixed(2)} Ⓝ`}
+              </span>
             </div>
-          ))}
-          {/*  {loading && <p>Loading...</p>} */}
-        </>
-      </div>
+        )) 
+      }
     </div>
-  );
+    </div>
+  )
 }
 
 export default Marketplace;
